@@ -143,10 +143,10 @@
                     <!-- Status Pulse Indicator -->
 <div class="flex items-center space-x-1.5 text-xs text-slate-400 bg-slate-900 px-2 py-1.5 rounded-lg border border-slate-800" title="Daily Market Data">
     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-    <span class="hidden lg:inline text-[11px] font-medium text-emerald-400">DAILY DATA</span>
+    <span class="hidden lg:inline text-[11px] font-medium text-emerald-400">YAHOO FINANCE</span>
 </div>
     <div class="text-[10px] text-slate-500 mt-1 text-right"> 
-    ข้อมูล: Demo Daily Data | ยังไม่ได้เชื่อมข้อมูลตลาดจริง
+    ข้อมูล: Yahoo Finance (Delayed Market Data) | SET
 </div>
                 </div>
 
@@ -170,13 +170,13 @@
         </div>
     </header>
 
-    <!-- LIVE SET TICKER BANNER -->
+    <!-- SET TICKER BANNER -->
     <div class="bg-slate-950 border-b border-slate-800 py-1.5 px-4 text-xs overflow-x-auto whitespace-nowrap scrollbar-none flex items-center space-x-6 text-slate-300">
         <div class="flex items-center space-x-1.5 font-bold text-cyan-400">
             <i class="fa-solid fa-bolt text-amber-400 text-xs"></i>
             <span>SET HD INDEX:</span>
-            <span class="text-slate-100">1,184.20</span>
-            <span class="text-emerald-400 text-[11px]"><i class="fa-solid fa-caret-up"></i> +0.42%</span>
+            <span class="text-slate-500">Data Not Available</span>
+            <span class="text-slate-500 text-[11px]">N/A</span>
         </div>
         <div class="h-3 w-px bg-slate-800"></div>
         <div id="ticker-items" class="flex items-center space-x-6">
@@ -198,7 +198,7 @@
                         <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">SET High Dividend 30</span>
                     </h1>
                     <p class="text-sm text-slate-400 mt-1">
-    Track latest daily prices, dividend yield %, upcoming XD dates, and dividend risk analytics.
+    ติดตามราคาหุ้น อัตราผลตอบแทนเงินปันผล วันขึ้นเครื่องหมาย XD และข้อมูลความเสี่ยงล่าสุด
 </p>
             <div class="flex flex-wrap items-center gap-2 mt-3">
     <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800 text-[11px] font-bold">
@@ -206,11 +206,11 @@
     </span>
 
     <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
-        DAILY DATA
+        YAHOO FINANCE
     </span>
 
     <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
-        SOURCE: SET
+        SOURCE: YAHOO FINANCE
     </span>
 </div>
                 </div>
@@ -329,7 +329,7 @@
     </span>
 
     <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
-        DAILY DATA
+        DELAYED DATA
     </span>
 </div>
                 </div>
@@ -536,8 +536,8 @@
         <th class="py-4 px-4 font-bold text-right" data-i18n="divYield">Div Yield (%)</th>
         <th class="py-4 px-4 font-bold text-right" data-i18n="dps">DPS (THB)</th>
         <th class="py-4 px-4 font-bold text-center" data-i18n="daysToXd">Days to XD</th>
-        <th class="py-4 px-4 font-bold text-center" data-i18n="riskLevel">Risk Level</th>
-        <th class="py-4 px-4 font-bold text-center" data-i18n="action">Action</th>
+        <th class="py-4 px-4 font-bold text-center">Investment</th>
+        <th class="py-4 px-4 font-bold text-center">Net Dividend</th>
     </tr>
 </thead>
                                         <tbody id="ai-breakdown-body" class="divide-y divide-slate-800 text-sm">
@@ -787,9 +787,9 @@
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-shield-halved text-amber-400"></i> Investment Risk Guidance
                         </h4>
-                        <span id="m-detail-risk-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                            Medium Risk
-                        </span>
+                        <span id="m-detail-risk-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-900 text-slate-400 border border-slate-800">
+    Data Pending
+</span>
                     </div>
                     <div id="m-detail-risk-points" class="text-xs text-slate-300 space-y-2">
                         <!-- Populated with detailed risk items -->
@@ -1187,6 +1187,70 @@
     'TTB',
     'WHA'
 ];
+    
+    function getXDStatus(stock) {
+    const xdDate = stock.nextXDDate;
+
+    if (stock.xdDataError) {
+    return {
+        type: 'error',
+        text: 'Data Error'
+    };
+}
+
+if (!xdDate) {
+    return {
+        type: 'pending',
+        text: 'No Upcoming XD'
+    };
+}
+
+    const today = new Date();
+    const xd = new Date(xdDate);
+
+    today.setHours(0, 0, 0, 0);
+    xd.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.ceil(
+        (xd - today) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays === 0) {
+        return {
+            type: 'today',
+            text: 'XD Today'
+        };
+    }
+
+    if (diffDays > 0) {
+        return {
+            type: 'upcoming',
+            text: `${diffDays} ${diffDays === 1 ? 'Day' : 'Days'}`
+        };
+    }
+
+    return {
+        type: 'passed',
+        text: 'XD Passed'
+    };
+}
+    function getDaysToXD(dateString) {
+    if (!dateString) {
+        return null;
+    }
+
+    const today = new Date();
+    const xd = new Date(dateString);
+
+    today.setHours(0, 0, 0, 0);
+    xd.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.ceil(
+        (xd - today) / (1000 * 60 * 60 * 24)
+    );
+
+    return diffDays >= 0 ? diffDays : null;
+}
         function calculateDividendYield(price, dps) {
     if (!price || !dps || price <= 0) return 0;
     return (dps / price) * 100;
@@ -1235,9 +1299,20 @@ loadYahooStockData();
 
             const SETHD_DATA_STATUS = {
     totalStocks: SETHD_UNIVERSE.length,
-    stocksWithData: thaiDividendStocks.length,
-    dataDate: 'Demo Daily Data',
-    source: 'SET'
+
+    stocksWithData: SETHD_UNIVERSE.filter(symbol => {
+    const stock = thaiDividendStocks.find(
+        s => s.symbol === symbol
+    );
+
+    return stock &&
+        stock.price !== null &&
+        stock.yield !== null &&
+        stock.dps !== null;
+}).length,
+
+    dataDate: 'Yahoo Finance (Delayed Market Data)',
+    source: 'Yahoo Finance'
 };
         // SET Dividend News & XD Calendar Articles Data
         const newsData = [
@@ -1348,6 +1423,7 @@ loadYahooStockData();
 
 
         // Render Market Stock Table
+        let lastYahooSnapshot = null;
         async function loadYahooStockData() {
     try {
         const response = await fetch('/api/stocks');
@@ -1357,6 +1433,19 @@ loadYahooStockData();
         }
 
         const result = await response.json();
+        const newYahooSnapshot = result.stocks.map(stock => ({
+    symbol: stock.symbol,
+    price: stock.price,
+    change: stock.change,
+    changePct: stock.changePct,
+    dividendRate: stock.dividendRate,
+    dividendYield: stock.dividendYield,
+    marketCap: stock.marketCap,
+    volume: stock.volume,
+    nextXDDate: stock.nextXDDate
+}));
+const yahooDataChanged =
+    JSON.stringify(newYahooSnapshot) !== JSON.stringify(lastYahooSnapshot);
 
         result.stocks.forEach(apiStock => {
             const stock = thaiDividendStocks.find(
@@ -1376,17 +1465,32 @@ loadYahooStockData();
             stock.marketCap = apiStock.marketCap;
             stock.volume = apiStock.volume;
             stock.marketTime = apiStock.marketTime;
+            stock.nextXDDate = apiStock.nextXDDate;
+            stock.xdDataError = apiStock.xdDataError;
+            stock.sector = apiStock.sector;
+            stock.industry = apiStock.industry;
         });
 
         console.log('Yahoo Finance data loaded:', result.count, 'stocks');
 
-        renderMarketTable();
-        renderLiveTicker();
+if (yahooDataChanged) {
+    lastYahooSnapshot = newYahooSnapshot;
+
+    renderMarketTable();
+    renderLiveTicker();
+
+    console.log('Yahoo data changed → Market Table and Ticker updated');
+} else {
+    console.log('Yahoo data unchanged → No re-render');
+}
 
     } catch (error) {
         console.error('Yahoo Finance API Error:', error);
     }
 }
+setInterval(() => {
+    loadYahooStockData();
+}, 60 * 1000);
 
         function renderMarketTable() {
     console.log('renderMarketTable called');
@@ -1462,19 +1566,17 @@ const changeSign = isUp ? '+' : '';
     </td>
 
     <td class="py-3.5 px-4 text-center">
-        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 border border-slate-800 text-emerald-400">
-            <i class="fa-regular fa-calendar-check mr-1 text-[10px]"></i>
-            ${stk.xdDays !== null
-    ? `${Number(String(stk.xdDays).replace(/[฿,\s]/g, ''))} Days`
-    : 'Data Pending'}
-        </span>
-    </td>
+    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 border border-slate-800 text-emerald-400">
+        <i class="fa-regular fa-calendar-check mr-1 text-[10px]"></i>
+        ${getXDStatus(stk).text}
+    </span>
+</td>
 
     <td class="py-3.5 px-4 text-center">
-        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${riskBadgeClass}">
-            ${stk.riskLevel}
-        </span>
-    </td>
+    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border bg-slate-900 text-slate-400 border-slate-800">
+        DATA PENDING
+    </span>
+</td>
 
     <td class="py-3.5 px-4 text-center">
         <div class="flex items-center justify-center space-x-1.5">
@@ -1508,7 +1610,10 @@ const changeSign = isUp ? '+' : '';
 
     let html = '';
 
-    thaiDividendStocks.forEach(stk => {
+    SETHD_UNIVERSE
+    .map(symbol => thaiDividendStocks.find(stk => stk.symbol === symbol))
+    .filter(stk => stk)
+    .forEach(stk => {
         const hasPrice = stk.price !== null && stk.price !== undefined;
         const hasChange = stk.change !== null && stk.change !== undefined;
         const hasChangePct = stk.changePct !== null && stk.changePct !== undefined;
@@ -1567,7 +1672,7 @@ const changeSign = isUp ? '+' : '';
            document.getElementById('m-detail-symbol-box').innerText = stk.symbol;
 document.getElementById('m-detail-title').innerText = stk.name;
 document.getElementById('m-detail-sector').innerText =
-    `${stk.sector} Sector • P/E: ${stk.pe ?? 'Data Pending'}`;
+    `${stk.sector} Sector • P/E: Data Pending`;
 
 document.getElementById('m-detail-price').innerText =
     stk.price !== null ? `฿${stk.price.toFixed(2)}` : 'Data Pending';
@@ -1576,37 +1681,34 @@ document.getElementById('m-detail-yield').innerText =
     stk.yield !== null ? `${stk.yield.toFixed(2)}%` : 'Data Pending';
 
 document.getElementById('m-detail-payout').innerText =
-    stk.payoutRatio ?? 'Data Pending';
+    'Data Pending';
+
+const daysToXD = getDaysToXD(stk.nextXDDate);
 
 document.getElementById('m-detail-xd').innerText =
-    stk.xdDays !== null ? `${stk.xdDays} Days` : 'Data Pending';
+    daysToXD !== null ? `${daysToXD} Days` : 'N/A';
 
 document.getElementById('m-detail-desc').innerText =
     stk.desc ?? 'Daily market and dividend data not yet available.';
 
             // Risk badge styling
-            const riskBadge = document.getElementById('m-detail-risk-badge');
-            riskBadge.innerText = `${stk.riskLevel} RISK`;
-            if (stk.riskLevel.includes('LOW')) {
-                riskBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-            } else if (stk.riskLevel.includes('HIGH')) {
-                riskBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30';
-            } else {
-                riskBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30';
-            }
+const riskBadge = document.getElementById('m-detail-risk-badge');
+
+riskBadge.innerText = 'Data Pending';
+
+riskBadge.className =
+    'px-2.5 py-1 rounded-full text-xs font-bold bg-slate-900 text-slate-400 border border-slate-800';
 
             // Risk Points List
             const riskContainer = document.getElementById('m-detail-risk-points');
             let riskHtml = '';
-            stk.riskPoints.forEach((pt, i) => {
-                riskHtml += `
-                    <div class="flex items-start space-x-2">
-                        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-xs mt-0.5"></i>
-                        <span>${pt}</span>
-                    </div>
-                `;
-            });
-            riskContainer.innerHTML = riskHtml;
+            riskContainer.innerHTML = `
+    <div class="flex items-start space-x-2">
+        <i class="fa-solid fa-circle-info text-slate-400 text-xs mt-0.5"></i>
+        <span>Risk guidance data is currently unavailable.</span>
+    </div>
+`;
+            
 
             // Show Modal
             document.getElementById('modal-detail').classList.remove('hidden');
@@ -1825,21 +1927,34 @@ document.getElementById('m-detail-desc').innerText =
         stock.yield !== null
 );
             if (strategy === 'CONSERVATIVE') {
-                strategyDescription = 'เน้นหุ้นที่มีความเสี่ยงต่ำถึงปานกลาง และให้ความสำคัญกับความสม่ำเสมอของธุรกิจและระดับ P/E';
-                candidates = candidates.filter(s => s.riskLevel.includes('LOW') || s.riskLevel.includes('MEDIUM'));
-                candidates.sort((a,b) => a.pe - b.pe); // Quality focus
-            } else if (strategy === 'MAX_YIELD') {
-                strategyDescription = 'เน้นหุ้นที่มีอัตราผลตอบแทนเงินปันผลสูง โดยตัดหุ้นที่มีความเสี่ยงระดับ HIGH ออก';
-                candidates = candidates.filter(s => s.riskLevel !== 'HIGH');
-                candidates.sort((a,b) => b.yield - a.yield);
+    strategyDescription = 'เน้นหุ้นที่มี Dividend Yield และขนาดบริษัทสูง โดยใช้ข้อมูลตลาดล่าสุดจาก Yahoo Finance';
+
+    candidates.sort((a, b) => {
+        const scoreA = (a.yield * 0.6) + (Math.log10(a.marketCap || 1) * 0.4);
+        const scoreB = (b.yield * 0.6) + (Math.log10(b.marketCap || 1) * 0.4);
+
+        return scoreB - scoreA;
+    });
+
+} else if (strategy === 'MAX_YIELD') {
+    strategyDescription = 'เน้นหุ้นที่มี Dividend Yield สูง โดยใช้ข้อมูลล่าสุดจาก Yahoo Finance';
+
+    candidates.sort((a, b) => b.yield - a.yield);
             } else { // BALANCED
-                strategyDescription = 'สมดุลระหว่าง Dividend Yield, P/E และระดับความเสี่ยง เพื่อสร้างพอร์ตปันผลระยะยาว';
-                candidates.sort((a,b) => {
-                    const scoreA = (a.yield * 0.5) + ((100 - a.pe) * 0.3) + (a.riskLevel.includes('LOW') ? 20 : a.riskLevel.includes('MEDIUM') ? 10 : 0);
-                    const scoreB = (b.yield * 0.5) + ((100 - b.pe) * 0.3) + (b.riskLevel.includes('LOW') ? 20 : b.riskLevel.includes('MEDIUM') ? 10 : 0);
-                    return scoreB - scoreA;
-                });
-            }
+    strategyDescription = 'สมดุลระหว่าง Dividend Yield และขนาดบริษัท โดยใช้ข้อมูลตลาดล่าสุดจาก Yahoo Finance';
+
+    candidates.sort((a, b) => {
+        const scoreA =
+            (a.yield * 0.5) +
+            (Math.log10(a.marketCap || 1) * 0.5);
+
+        const scoreB =
+            (b.yield * 0.5) +
+            (Math.log10(b.marketCap || 1) * 0.5);
+
+        return scoreB - scoreA;
+    });
+}
             strategyDescriptionElement.innerText = strategyDescription;
 
             // Pick Top 4 diversified dividend stocks across different sectors
@@ -1855,7 +1970,47 @@ document.getElementById('m-detail-desc').innerText =
             }
 
             // Weight distribution: 35%, 25%, 20%, 20%
-            const weights = [0.35, 0.25, 0.20, 0.20];
+            const yields = selectedBasket.map(stk => stk.yield);
+const marketCaps = selectedBasket.map(stk =>
+    Math.log10(stk.marketCap || 1)
+);
+
+const minYield = Math.min(...yields);
+const maxYield = Math.max(...yields);
+
+const minMarketCap = Math.min(...marketCaps);
+const maxMarketCap = Math.max(...marketCaps);
+
+const scores = selectedBasket.map(stk => {
+    const yieldScore =
+        (stk.yield - minYield) /
+        (maxYield - minYield || 1);
+
+    const marketCapScore =
+        (Math.log10(stk.marketCap || 1) - minMarketCap) /
+        (maxMarketCap - minMarketCap || 1);
+
+    if (strategy === 'MAX_YIELD') {
+        return yieldScore;
+    }
+
+    if (strategy === 'CONSERVATIVE') {
+        return (yieldScore * 0.6) + (marketCapScore * 0.4);
+    }
+
+    return (yieldScore * 0.5) + (marketCapScore * 0.5);
+});
+
+const totalScore = scores.reduce(
+    (sum, score) => sum + score,
+    0
+);
+
+const weights = scores.map(score =>
+    totalScore > 0
+        ? score / totalScore
+        : 1 / scores.length
+);
             let totalEstDiv = 0;
             const allocationItems = [];
 
@@ -1866,25 +2021,28 @@ document.getElementById('m-detail-desc').innerText =
                 const grossDiv = shares * stk.dps;
                 const tax = grossDiv * dividendTaxRate;
                 const netDiv = grossDiv - tax;
+   
                 totalEstDiv += netDiv;
 
                 allocationItems.push({
-                    symbol: stk.symbol,
-                    name: stk.name,
-                    price: stk.price,
-                    weightPct: (weights[idx] * 100).toFixed(0),
-                    shares: shares,
-                    investment: actualInv,
-                    grossDiv: grossDiv,
-                    tax: tax,
-                    netDiv: netDiv,
-                    dps: stk.dps,
-                    yield: stk.yield,
+                        symbol: stk.symbol,
+                        name: stk.name,
+                        price: stk.price,
+                        changePct: stk.changePct,
+                        daysToXD: getDaysToXD(stk.nextXDDate),
+                        weightPct: (weights[idx] * 100).toFixed(0),
+                        shares: shares,
+                        investment: actualInv,
+                        grossDiv: grossDiv,
+                        tax: tax,
+                        netDiv: netDiv,
+                        dps: stk.dps,
+                        yield: stk.yield,
                     reason: strategy === 'CONSERVATIVE'
-    ? `เน้นความเสี่ยง ${stk.riskLevel} พร้อม Dividend Yield ${stk.yield}% และ P/E ${stk.pe} ในกลุ่ม ${stk.sector}`
+    ? `เน้น Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
     : strategy === 'MAX_YIELD'
-        ? `เน้น Dividend Yield สูง ${stk.yield}% และ Payout Ratio ${stk.payoutRatio} ในกลุ่ม ${stk.sector}`
-        : `สมดุลระหว่าง Dividend Yield ${stk.yield}%, P/E ${stk.pe} และความเสี่ยง ${stk.riskLevel} พร้อมกระจายไปยังกลุ่ม ${stk.sector}`
+        ? `เน้น Dividend Yield สูง ${stk.yield.toFixed(2)}%`
+        : `สมดุลระหว่าง Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
                 });
             });
 
@@ -1972,23 +2130,48 @@ if (reinvestDividends) {
             const tbody = document.getElementById('ai-breakdown-body');
             let tbodyHtml = '';
             allocationItems.forEach(item => {
-                tbodyHtml += `
-                    <tr>
-                        <td class="p-2 font-bold text-white flex items-center gap-1.5">
-                            <span class="text-cyan-400">${item.symbol}</span>
-                            <span class="text-[10px] text-slate-400">(${item.weightPct}%)</span>
-                        </td>
-                        <td class="p-2 text-xs text-slate-400">
-                            ${item.reason}
-                    </td>
-                        <td class="p-2 text-right text-slate-200 font-semibold">${item.shares.toLocaleString()}</td>
-<td class="p-2 text-right text-emerald-400 font-semibold">฿${item.investment.toLocaleString('en-US', {maximumFractionDigits:0})}</td>
-<td class="p-2 text-right text-slate-300">฿${item.grossDiv.toLocaleString('en-US', {maximumFractionDigits:0})}</td>
-<td class="p-2 text-right text-rose-400">฿${item.tax.toLocaleString('en-US', {maximumFractionDigits:0})}</td>
-<td class="p-2 text-right text-cyan-400 font-bold">฿${item.netDiv.toLocaleString('en-US', {maximumFractionDigits:0})}</td>
-                    </tr>
-                `;
-            });
+                
+    tbodyHtml += `
+        <tr>
+            <td class="p-2 font-bold text-white">
+                <span class="text-cyan-400">${item.symbol}</span>
+                <span class="text-[10px] text-slate-400">(${item.weightPct}%)</span>
+            </td>
+
+            <td class="p-2 text-right text-slate-200 font-semibold">
+                ฿${item.price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+            </td>
+
+            <td class="p-2 text-right text-slate-300">
+                ${item.changePct !== null && item.changePct !== undefined
+                    ? `${item.changePct.toFixed(2)}%`
+                    : 'N/A'}
+            </td>
+
+            <td class="p-2 text-right text-cyan-400 font-semibold">
+                ${item.yield.toFixed(2)}%
+            </td>
+
+            <td class="p-2 text-right text-slate-200">
+                ฿${item.dps.toFixed(2)}
+            </td>
+
+            <td class="p-2 text-center text-slate-300">
+                ${item.daysToXD !== null && item.daysToXD !== undefined
+                    ? `${item.daysToXD} Days`
+                    : 'N/A'}
+            </td>
+
+            <td class="p-2 text-right text-emerald-400 font-semibold">
+                ฿${item.investment.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+            </td>
+
+            <td class="p-2 text-right text-cyan-400 font-bold">
+                ฿${item.netDiv.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+            </td>
+        </tr>
+    `;
+});
             tbody.innerHTML = tbodyHtml;
 
             // Render Chart.js Pie
