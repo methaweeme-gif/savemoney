@@ -205,12 +205,9 @@
         SET HIGH DIVIDEND 30
     </span>
 
-    <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
+    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         YAHOO FINANCE
-    </span>
-
-    <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 text-[11px] font-medium">
-        SOURCE: YAHOO FINANCE
     </span>
 </div>
                 </div>
@@ -236,16 +233,15 @@
             <!-- Dividend Stock Table Container -->
             <div class="bg-cardbg rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-slate-300">
+                    <table class="w-full min-w-[1050px] text-sm text-left text-slate-300">
                         <thead class="bg-slate-900 text-slate-400 uppercase font-semibold">
                             <tr>
                                 <th id="th-stock-ticker" class="py-4 px-4 font-bold">Stock Ticker</th>
-                                <th id="th-latest-price" class="py-4 px-4 font-bold text-right">Latest Price</th>
+                                <th id="th-latest-price" class="py-4 px-4 font-bold text-right">Price (THB)</th>
                                 <th id="th-daily-change" class="py-4 px-4 font-bold text-right">Daily Change</th>
                                 <th id="th-div-yield" class="py-4 px-4 font-bold text-right">Div Yield (%)</th>
                                 <th id="th-dps" class="py-4 px-4 font-bold text-right">DPS (THB)</th>
                                 <th id="th-days-xd" class="py-4 px-4 font-bold text-center">Days to XD</th>
-                                <th id="th-risk-level" class="py-4 px-4 font-bold text-center">Risk Level</th>
                                 <th id="th-action" class="py-4 px-4 font-bold text-center">Action</th>
                             </tr>
                         </thead>
@@ -276,7 +272,7 @@
             </span>
             <p class="text-sm text-slate-300 mt-2 leading-relaxed">
                 วันที่ขึ้นเครื่องหมาย XD
-                ผู้ซื้อหุ้นตั้งแต่วันนี้จะไม่มีสิทธิได้รับเงินปันผลรอบนั้น
+                ผู้ซื้อหุ้นในวัน XD หรือหลังจากนั้นจะไม่มีสิทธิได้รับเงินปันผลรอบนั้น
             </p>
         </div>
 
@@ -468,9 +464,49 @@
                                     <span id="res-avg-yield" class="text-base font-bold text-cyan-400">7.25%</span>
                                 </div>
                                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                                    <span class="text-[11px] text-slate-400 font-semibold block uppercase">Est. Annual Income</span>
-                                    <span id="res-est-income" class="text-base font-bold text-emerald-400">฿7,250</span>
-                                </div>
+    <div class="flex items-center gap-1.5">
+        <span class="text-[11px] text-slate-400 font-semibold uppercase">
+            Est. Annual Income
+        </span>
+
+        <div class="info-wrapper relative">
+            <button
+                type="button"
+                onclick="event.stopPropagation(); toggleInfoPopover('info-dividend-calculation')"
+                class="w-4 h-4 rounded-full border border-slate-600 text-slate-400 hover:text-cyan-400 hover:border-cyan-400 text-[9px] font-bold flex items-center justify-center transition-all"
+            >
+                i
+            </button>
+
+            <div
+                id="info-dividend-calculation"
+                class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+            >
+                <div class="font-bold text-white mb-2">
+                    Dividend Calculation
+                </div>
+
+                <p class="leading-relaxed">
+                    ระบบคำนวณเงินปันผลโดยอ้างอิงจากจำนวนหุ้นที่ถือ
+                    และเงินปันผลต่อหุ้น (DPS)
+                </p>
+
+                <div class="mt-3 pt-3 border-t border-slate-800 text-slate-400">
+                    เงินปันผลต่อปี = จำนวนหุ้น × DPS
+                </div>
+
+                <p class="mt-2 text-slate-500 leading-relaxed">
+                    ตัวเลขเป็นค่าประมาณจากข้อมูลที่ใช้ในระบบจำลอง
+                    และเงินปันผลจริงอาจแตกต่างกัน
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <span id="res-est-income" class="text-base font-bold text-emerald-400">
+        ฿7,250
+    </span>
+</div>
 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
     <span class="text-[11px] text-slate-400 font-semibold block uppercase">Year 3 Est. Net Dividend</span>
     <span id="res-year3-income" class="text-base font-bold text-emerald-400">฿0</span>
@@ -503,7 +539,41 @@
     <span id="res-horizon" class="text-base font-bold text-amber-400">Long-Term</span>
 </div>
 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-    <span class="text-[11px] text-slate-400 font-semibold block uppercase">Dividend Reinvestment</span>
+    <div class="flex items-center gap-1.5">
+        <span class="text-[11px] text-slate-400 font-semibold uppercase">
+            Dividend Reinvestment
+        </span>
+
+        <div class="info-wrapper relative">
+            <button
+                type="button"
+                onclick="event.stopPropagation(); toggleInfoPopover('info-dividend-reinvestment')"
+                class="w-4 h-4 rounded-full border border-slate-600 text-slate-400 hover:text-cyan-400 hover:border-cyan-400 text-[9px] font-bold flex items-center justify-center transition-all"
+            >
+                i
+            </button>
+
+            <div
+                id="info-dividend-reinvestment"
+                class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+            >
+                <div class="font-bold text-white mb-2">
+                    Dividend Reinvestment
+                </div>
+
+                <p class="leading-relaxed">
+                    เมื่อเปิดใช้งาน เงินปันผลที่ได้รับจะถูกนำกลับไปลงทุน
+                    เพื่อเพิ่มจำนวนหุ้นและสร้างเงินปันผลในอนาคต
+                </p>
+
+                <div class="mt-3 pt-3 border-t border-slate-800 text-slate-400 leading-relaxed">
+                    ON: นำเงินปันผลกลับไปลงทุน<br>
+                    OFF: รับเงินปันผลเป็นเงินสด
+                </div>
+            </div>
+        </div>
+    </div>
+
     <span id="res-reinvest-status" class="text-xs text-slate-400 font-semibold">
         รับเงินปันผลเป็นเงินสด
     </span>
@@ -523,7 +593,41 @@
                             
                             <!-- Stock Basket Breakdown Table -->
                             <div class="bg-cardbg p-5 rounded-2xl border border-slate-800">
-                                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Recommended Allocation Basket</h4>
+                                <div class="flex items-center gap-1.5 mb-3">
+    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        Recommended Allocation Basket
+    </h4>
+
+    <div class="info-wrapper relative">
+        <button
+            type="button"
+            onclick="event.stopPropagation(); toggleInfoPopover('info-portfolio-allocation')"
+            class="w-4 h-4 rounded-full border border-slate-600 text-slate-400 hover:text-cyan-400 hover:border-cyan-400 text-[9px] font-bold flex items-center justify-center transition-all"
+        >
+            i
+        </button>
+
+        <div
+            id="info-portfolio-allocation"
+            class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+        >
+            <div class="font-bold text-white mb-2">
+                Portfolio Allocation
+            </div>
+
+            <p class="leading-relaxed">
+                ระบบจัดสรรเงินลงทุนตามสัดส่วนที่ AI แนะนำ
+                โดยพิจารณาจากเป้าหมายเงินปันผล กลยุทธ์ที่เลือก
+                และอัตราผลตอบแทนเงินปันผลของหุ้นแต่ละตัว
+            </p>
+
+            <div class="mt-3 pt-3 border-t border-slate-800 text-slate-400 leading-relaxed">
+                สัดส่วน (%) แสดงน้ำหนักของหุ้นแต่ละตัว
+                เมื่อเทียบกับเงินลงทุนทั้งหมด
+            </div>
+        </div>
+    </div>
+</div>
                                 <div class="overflow-x-auto">
                                     <table class="w-full table-fixed text-[9px] text-left text-slate-300">
                                         <thead class="bg-slate-900 text-slate-400 uppercase font-semibold">
@@ -632,7 +736,7 @@
                         <h2 class="text-lg font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-list-check text-cyan-400"></i> Active Stock Positions
                         </h2>
-                        <p class="text-xs text-slate-400">Real-time valuation based on SET market live feed</p>
+                        <p class="text-xs text-slate-400">Portfolio valuation based on Yahoo Finance delayed market data</p>
                     </div>
                     <button onclick="switchTab('market')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 font-semibold text-xs border border-slate-700 transition-all">
                         + Trade Stock Market
@@ -640,22 +744,25 @@
                 </div>
 
                 <div class="w-full overflow-hidden">
-                  <table class="w-full table-fixed text-[9px] text-left text-slate-300">
+                  <div class="overflow-x-auto">
+                    <table class="w-full min-w-[1100px] text-xs text-left text-slate-300">
         <thead class="bg-slate-900 text-slate-400 uppercase font-semibold text-xs">
-            <tr>
-                <th class="p-2 w-[10%] whitespace-nowrap">Stock</th>
-                <th class="p-2 w-[25%]">Why Selected</th>
-                <th class="p-2 w-[10%] text-right whitespace-nowrap">Shares</th>
-                <th class="p-2 w-[14%] text-right whitespace-nowrap">Investment</th>
-                <th class="p-2 w-[15%] text-right whitespace-nowrap">Gross Div</th>
-                <th class="p-2 w-[10%] text-right whitespace-nowrap">Tax (10%)</th>
-                <th class="p-2 w-[16%] text-right whitespace-nowrap">Net Div</th>
-            </tr>
-        </thead>
+    <tr>
+        <th class="p-2">Stock</th>
+        <th class="p-2 text-right">Shares</th>
+        <th class="p-2 text-right">Avg Price</th>
+        <th class="p-2 text-right">Current Price</th>
+        <th class="p-2 text-right">Investment</th>
+        <th class="p-2 text-right">Market Value</th>
+        <th class="p-2 text-right">P&L</th>
+        <th class="p-2 text-right">Annual Dividend</th>
+        <th class="p-2 text-center">Action</th>
+    </tr>
+</thead>
 
-        <tbody id="ai-breakdown-body" class="divide-y divide-slate-800">
-            <!-- Dynamically generated -->
-        </tbody>
+        <tbody id="active-positions-body" class="divide-y divide-slate-800">
+    <!-- Dynamically generated -->
+</tbody>
     </table>
 </div>
             </div>
@@ -863,20 +970,56 @@
                 </div>
 
                 <!-- Calculation Summary -->
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-                    <div class="flex justify-between">
-                        <span class="text-slate-400">Order Value</span>
-                        <span id="trade-order-val" class="font-semibold text-slate-200">฿9,850.00</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-slate-400">Est. Commission (0.15%)</span>
-                        <span id="trade-comm-val" class="font-semibold text-slate-200">฿14.78</span>
-                    </div>
-                    <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold">
-                        <span class="text-slate-300">Total Required</span>
-                        <span id="trade-total-val" class="text-emerald-400">฿9,864.78</span>
-                    </div>
+<div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+    <div class="flex justify-between">
+        <span id="trade-order-label" class="text-slate-400">Order Value</span>
+        <span id="trade-order-val" class="font-semibold text-slate-200">฿9,850.00</span>
+    </div>
+
+    <div class="flex justify-between items-center">
+    <div class="flex items-center gap-1.5">
+        <span class="text-slate-400">Est. Commission (0.15%)</span>
+
+        <div class="info-wrapper relative">
+            <button
+                type="button"
+                onclick="event.stopPropagation(); toggleInfoPopover('info-trade-commission')"
+                class="w-4 h-4 rounded-full border border-slate-600 text-slate-400 hover:text-cyan-400 hover:border-cyan-400 text-[9px] font-bold flex items-center justify-center transition-all"
+            >
+                i
+            </button>
+
+            <div
+                id="info-trade-commission"
+                class="info-popover hidden absolute z-50 left-1/2 -translate-x-1/2 top-6 w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+            >
+                <div class="font-bold text-white mb-2">
+                    Commission Rate
                 </div>
+
+                <p class="leading-relaxed">
+                    ค่าคอมมิชชัน 0.15% เป็นอัตราสมมติที่ใช้สำหรับ
+                    จำลองต้นทุนการซื้อขายภายในระบบ
+                    ไม่ได้หมายถึงอัตราค่าธรรมเนียมปัจจุบัน
+                    ของโบรกเกอร์รายใดรายหนึ่ง
+                </p>
+
+                <div class="mt-3 pt-3 border-t border-slate-800 space-y-1 text-slate-400">
+                    <div>ซื้อ: มูลค่าซื้อ + ค่าคอมมิชชัน</div>
+                    <div>ขาย: มูลค่าขาย − ค่าคอมมิชชัน</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span id="trade-comm-val" class="font-semibold text-slate-200">฿14.78</span>
+</div>
+
+    <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold">
+        <span id="trade-total-label" class="text-slate-300">Total Required</span>
+        <span id="trade-total-val" class="text-emerald-400">฿9,864.78</span>
+    </div>
+</div>
             </div>
 
             <!-- Modal Action Footer -->
@@ -923,6 +1066,123 @@
     </div>
     <!-- END APP CONTENT -->
 
+    <!-- Transaction Detail Modal -->
+<div id="modal-transaction-detail"
+     class="hidden fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between p-5 border-b border-slate-800">
+
+            <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wider">
+                    Transaction Details
+                </div>
+
+                <h3 id="tx-detail-title"
+                    class="text-lg font-extrabold text-white mt-1">
+                    SELL ORDER
+                </h3>
+            </div>
+
+            <button
+                onclick="closeModal('modal-transaction-detail')"
+                class="text-slate-400 hover:text-white text-xl transition-colors">
+                ×
+            </button>
+
+        </div>
+
+        <!-- Transaction Summary -->
+        <div class="p-5 space-y-4">
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <div id="tx-detail-symbol"
+                         class="text-xl font-extrabold text-cyan-400">
+                        SIRI
+                    </div>
+
+                    <div id="tx-detail-shares"
+                         class="text-xs text-slate-400 mt-1">
+                        100 Shares
+                    </div>
+                </div>
+
+                <div id="tx-detail-badge"
+                     class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                    SELL
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 space-y-3">
+
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Time</span>
+                    <span id="tx-detail-time" class="text-slate-200">
+                        -
+                    </span>
+                </div>
+
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Execution Price</span>
+                    <span id="tx-detail-price" class="text-slate-200 font-semibold">
+                        -
+                    </span>
+                </div>
+
+                <div class="flex justify-between text-sm">
+                    <span id="tx-detail-gross-label" class="text-slate-500">
+                        Gross Proceeds
+                    </span>
+
+                    <span id="tx-detail-gross" class="text-slate-200 font-semibold">
+                        -
+                    </span>
+                </div>
+
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">
+                        Commission (0.15%)
+                    </span>
+
+                    <span id="tx-detail-commission" class="text-slate-200 font-semibold">
+                        -
+                    </span>
+                </div>
+
+                <div class="border-t border-slate-800 pt-3 flex justify-between">
+                    <span id="tx-detail-total-label"
+                          class="text-slate-300 font-bold">
+                        Net Proceeds
+                    </span>
+
+                    <span id="tx-detail-total"
+                          class="text-rose-400 font-extrabold text-lg">
+                        -
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-slate-800 flex justify-end">
+
+            <button
+                onclick="closeModal('modal-transaction-detail')"
+                class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all">
+                Close
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
     <script>
         // Login gate: only a @gmail.com address may enter
         function handleLogin(event) {
@@ -967,244 +1227,6 @@
         window.appState = windowState;
 
         // Top 10 High-Yield Thai Dividend Stocks Dataset
-        const thaiDividendStocks = [
-            {
-                symbol: 'TISCO',
-                name: 'Tisco Financial Group PCL',
-                price: 98.50,
-                change: 0.50,
-                changePct: 0.51,
-                yield: 7.87,
-                dps: 7.75,
-                xdDays: 12,
-                sector: 'Financials',
-                pe: 10.2,
-                payoutRatio: '85.4%',
-                riskLevel: 'LOW-MEDIUM',
-                riskColor: 'amber',
-                desc: 'Leading Thai financial holding company operating retail banking, auto loans, wealth management, and securities brokerage. Known for reliable high dividend payouts.',
-                riskPoints: [
-                    'Sustained high payout ratio (>85%) limits organic balance sheet reinvestment.',
-                    'Sensitive to auto loan non-performing loan (NPL) fluctuations during economic slowdowns.',
-                    'Low interest rate environment may slightly squeeze net interest margins (NIM).'
-                ]
-            },
-            {
-                symbol: 'SCB',
-                name: 'SCB X Public Company Ltd',
-                price: 114.50,
-                change: -1.00,
-                changePct: -0.87,
-                yield: 8.90,
-                dps: 10.19,
-                xdDays: 24,
-                sector: 'Financials',
-                pe: 9.1,
-                payoutRatio: '80.0%',
-                riskLevel: 'MEDIUM',
-                riskColor: 'amber',
-                desc: 'Major universal banking holding company undergoing digital transformation into financial technology and consumer finance services.',
-                riskPoints: [
-                    'Retail consumer loan credit risks amidst high Thai household debt levels.',
-                    'Fintech venture investments may experience regulatory or valuation headwind risks.',
-                    'Attractive valuation creates downside buffer for long-term income investors.'
-                ]
-            },
-            {
-                symbol: 'ADVANC',
-                name: 'Advanced Info Service PCL',
-                price: 242.00,
-                change: 2.00,
-                changePct: 0.83,
-                yield: 4.25,
-                dps: 10.28,
-                xdDays: 18,
-                sector: 'ICT',
-                pe: 22.1,
-                payoutRatio: '88.5%',
-                riskLevel: 'LOW',
-                riskColor: 'emerald',
-                desc: 'Thailand’s largest mobile network operator offering 5G, broadband fiber internet, and enterprise digital solutions.',
-                riskPoints: [
-                    'High capital expenditure requirements for 5G network expansion and spectrum licenses.',
-                    'Near-monopolistic market structure following telecom sector consolidation.',
-                    'Strong defensive cash flow generation even during macro recessions.'
-                ]
-            },
-            {
-                symbol: 'PTT',
-                name: 'PTT Public Company Ltd',
-                price: 33.75,
-                change: -0.25,
-                changePct: -0.74,
-                yield: 6.52,
-                dps: 2.20,
-                xdDays: 31,
-                sector: 'Energy',
-                pe: 10.8,
-                payoutRatio: '58.0%',
-                riskLevel: 'MEDIUM-HIGH',
-                riskColor: 'orange',
-                desc: 'State-owned oil & gas conglomerate covering exploration, natural gas transmission, petrochemicals, and renewable energy.',
-                riskPoints: [
-                    'Direct exposure to global crude oil, refining margins, and petrochemical price volatility.',
-                    'Government policy interventions on domestic energy pricing structure.',
-                    'Solid dividend coverage ratio provides safety buffer against energy sector cyclical downturns.'
-                ]
-            },
-            {
-                symbol: 'LH',
-                name: 'Land and Houses PCL',
-                price: 7.15,
-                change: 0.05,
-                changePct: 0.70,
-                yield: 7.95,
-                dps: 0.57,
-                xdDays: 5,
-                sector: 'Property',
-                pe: 13.5,
-                payoutRatio: '82.0%',
-                riskLevel: 'MEDIUM',
-                riskColor: 'amber',
-                desc: 'Top-tier Thai residential property developer focusing on single-detached houses and recurring rental income assets.',
-                riskPoints: [
-                    'Elevated bank mortgage rejection rates due to tight commercial bank lending standards.',
-                    'Benefit from valuable hotel, retail, and shopping mall investment assets in Thailand & USA.'
-                ]
-            },
-            {
-                symbol: 'ORI',
-                name: 'Origin Property PCL',
-                price: 6.80,
-                change: -0.10,
-                changePct: -1.45,
-                yield: 9.12,
-                dps: 0.62,
-                xdDays: 15,
-                sector: 'Property',
-                pe: 6.8,
-                payoutRatio: '52.0%',
-                riskLevel: 'HIGH',
-                riskColor: 'rose',
-                desc: 'Fast-growing residential condominium developer expanding into industrial logistics and hotel recurring assets.',
-                riskPoints: [
-                    'High financial leverage and debt-to-equity ratio during aggressive expansion phase.',
-                    'Condominium transfer delays or sluggish real estate sales in mid-tier segments.'
-                ]
-            },
-            {
-                symbol: 'RATCH',
-                name: 'Ratch Group PCL',
-                price: 30.50,
-                change: 0.00,
-                changePct: 0.00,
-                yield: 6.35,
-                dps: 1.94,
-                xdDays: 42,
-                sector: 'Energy',
-                pe: 12.0,
-                payoutRatio: '65.0%',
-                riskLevel: 'LOW-MEDIUM',
-                riskColor: 'amber',
-                desc: 'Major independent power producer with long-term Power Purchase Agreements (PPA) across Thailand and Asia-Pacific.',
-                riskPoints: [
-                    'Stable predictable revenues protected by long-term take-or-pay power contracts.',
-                    'Currency exchange rate fluctuations from international projects in Laos and Australia.'
-                ]
-            },
-            {
-                symbol: 'TU',
-                name: 'Thai Union Group PCL',
-                price: 14.80,
-                change: 0.10,
-                changePct: 0.68,
-                yield: 5.80,
-                dps: 0.86,
-                xdDays: 20,
-                sector: 'Food',
-                pe: 14.2,
-                payoutRatio: '60.0%',
-                riskLevel: 'MEDIUM',
-                riskColor: 'amber',
-                desc: 'World’s largest seafood manufacturer exporting canned tuna and frozen seafood products globally.',
-                riskPoints: [
-                    'Raw material tuna commodity cost fluctuations and freight shipping rates.',
-                    'Foreign currency exchange risk (USD/THB) on global export earnings.'
-                ]
-            },
-            {
-                symbol: 'EGCO',
-                name: 'Electricity Generating PCL',
-                price: 112.00,
-                change: -1.50,
-                changePct: -1.32,
-                yield: 5.80,
-                dps: 6.50,
-                xdDays: 28,
-                sector: 'Energy',
-                pe: 11.5,
-                payoutRatio: '55.0%',
-                riskLevel: 'LOW-MEDIUM',
-                riskColor: 'amber',
-                desc: 'First independent power producer in Thailand with diversified power portfolio including gas, hydro, and wind.',
-                riskPoints: [
-                    'Predictable cash flow backed by government utility PPAs.',
-                    'High interest rate environment increases refinancing costs for capital-intensive power projects.'
-                ]
-            }
-        ];
-        const SETHD_UNIVERSE = [
-    'AEONTS',
-    'AMATA',
-    'AP',
-    'BA',
-    'BAM',
-    'BBL',
-    'HMPRO',
-    'JMT',
-    'KBANK',
-    'KKP',
-    'KTB',
-    'KTC',
-    'LH',
-    'M',
-    'MEGA',
-    'PRM',
-    'PTT',
-    'PTTEP',
-    'QH',
-    'RATCH',
-    'RCL',
-    'SCB',
-    'SIRI',
-    'SPALI',
-    'TCAP',
-    'TISCO',
-    'TLI',
-    'TOA',
-    'TTB',
-    'WHA'
-];
-    const DIVIDEND_QUALITY_STOCKS = [
-    'AEONTS',
-    'AMATA',
-    'BBL',
-    'HMPRO',
-    'KBANK',
-    'KTC',
-    'M',
-    'MEGA',
-    'PRM',
-    'PTT',
-    'PTTEP',
-    'QH',
-    'RATCH',
-    'RCL',
-    'SIRI',
-    'TISCO',
-    'TOA',
-    'WHA'
-];
 
     function getXDStatus(stock) {
     const xdDate = stock.nextXDDate;
@@ -1269,7 +1291,17 @@ if (!xdDate) {
 
     return diffDays >= 0 ? diffDays : null;
 }
-        function calculateDividendYield(price, dps) {
+        // SETHD Universe used by Market Table and AI Portfolio
+const SETHD_UNIVERSE = [
+    'AEONTS','AMATA','AP','BA','BAM','BBL','HMPRO','JMT','KBANK','KKP',
+    'KTB','KTC','LH','M','MEGA','PRM','PTT','PTTEP','QH','RATCH','RCL',
+    'SCB','SIRI','SPALI','TCAP','TISCO','TLI','TOA','TTB','WHA'
+];
+
+// Stock dataset populated from /api/stocks
+let thaiDividendStocks = [];
+
+function calculateDividendYield(price, dps) {
     if (!price || !dps || price <= 0) return 0;
     return (dps / price) * 100;
 }
@@ -1549,10 +1581,6 @@ const changeColor = !hasChange
         ? 'text-emerald-400'
         : 'text-rose-400';
 const changeSign = isUp ? '+' : '';
-                
-                let riskBadgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-                if (stk.riskLevel.includes('LOW')) riskBadgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-                if (stk.riskLevel.includes('HIGH')) riskBadgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
 
                 html += `
                     <tr id="row-stk-${stk.symbol}" class="hover:bg-slate-800/40 transition-colors">
@@ -1594,12 +1622,6 @@ const changeSign = isUp ? '+' : '';
 </td>
 
     <td class="py-3.5 px-4 text-center">
-    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border bg-slate-900 text-slate-400 border-slate-800">
-        DATA PENDING
-    </span>
-</td>
-
-    <td class="py-3.5 px-4 text-center">
         <div class="flex items-center justify-center space-x-1.5">
             <button onclick="openStockDetailModal('${stk.symbol}')"
                 class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition-all"
@@ -1621,8 +1643,27 @@ const changeSign = isUp ? '+' : '';
         }
         
         function filterMarketTable() {
-            renderMarketTable();
-        }
+    const searchInput = document.getElementById('market-search');
+    const sectorFilter = document.getElementById('sector-filter');
+
+    const searchTerm = (searchInput?.value || '').trim().toLowerCase();
+    const selectedSector = sectorFilter?.value || 'ALL';
+
+    const filteredStocks = thaiDividendStocks.filter(stock => {
+        const matchesSearch =
+            !searchTerm ||
+            stock.symbol.toLowerCase().includes(searchTerm) ||
+            stock.name.toLowerCase().includes(searchTerm);
+
+        const matchesSector =
+            selectedSector === 'ALL' ||
+            stock.sector === selectedSector;
+
+        return matchesSearch && matchesSector;
+    });
+
+    renderMarketTable(filteredStocks);
+}
 
         // Live Scrolling SET Ticker Banner
         function renderLiveTicker() {
@@ -1779,6 +1820,11 @@ riskBadge.className =
                 actionBadge.innerText = 'BUY ORDER';
                 confirmBtn.className = 'px-6 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition-all';
                 confirmBtn.innerText = 'Confirm Buy Order';
+                
+                document.getElementById('trade-order-label').innerText = 'Order Value';
+                document.getElementById('trade-total-label').innerText = 'Total Cost';
+                document.getElementById('trade-total-val').className = 'text-emerald-400';
+            
             } else {
                 sellBtn.className = 'py-2 text-xs font-bold rounded-lg bg-rose-500 text-slate-950 transition-all';
                 buyBtn.className = 'py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all';
@@ -1786,6 +1832,10 @@ riskBadge.className =
                 actionBadge.innerText = 'SELL ORDER';
                 confirmBtn.className = 'px-6 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-rose-500/20 transition-all';
                 confirmBtn.innerText = 'Confirm Sell Order';
+
+                document.getElementById('trade-order-label').innerText = 'Gross Proceeds';
+                document.getElementById('trade-total-label').innerText = 'Net Proceeds';
+                document.getElementById('trade-total-val').className = 'text-rose-400';
             }
             calculateTradeTotal();
         }
@@ -1817,7 +1867,7 @@ riskBadge.className =
 
             const qty = parseInt(document.getElementById('trade-qty-input').value) || 0;
             const orderVal = qty * stk.price;
-            const comm = orderVal * 0.0015; // 0.15% brokerage commission
+            const comm = orderVal * 0.0015; // 0.15% simulation commission rate
             const total = window.appState.tradeSide === 'BUY' ? orderVal + comm : orderVal - comm;
 
             document.getElementById('trade-order-val').innerText = `฿${orderVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -1864,13 +1914,15 @@ riskBadge.className =
 
                 // Log Tx
                 window.appState.transactions.unshift({
-                    time: new Date().toLocaleTimeString(),
-                    type: 'BUY',
-                    symbol: symbol,
-                    shares: qty,
-                    price: stk.price,
-                    total: totalCost
-                });
+                time: new Date().toLocaleTimeString(),
+                type: 'BUY',
+                symbol: symbol,
+                shares: qty,
+                price: stk.price,
+                grossAmount: orderVal,
+                commission: comm,
+                total: totalCost
+            });
 
                 showToast(`Successfully bought ${qty.toLocaleString()} shares of ${symbol}!`, 'success');
 
@@ -1893,13 +1945,15 @@ riskBadge.className =
 
                 // Log Tx
                 window.appState.transactions.unshift({
-                    time: new Date().toLocaleTimeString(),
-                    type: 'SELL',
-                    symbol: symbol,
-                    shares: qty,
-                    price: stk.price,
-                    total: netProceeds
-                });
+                time: new Date().toLocaleTimeString(),
+                type: 'SELL',
+                symbol: symbol,
+                shares: qty,
+                price: stk.price,
+                grossAmount: orderVal,
+                commission: comm,
+                total: netProceeds
+            });
 
                 showToast(`Successfully sold ${qty.toLocaleString()} shares of ${symbol}!`, 'success');
             }
@@ -2212,9 +2266,9 @@ if (reinvestDividends) {
             }
 
             // Render Table Breakdown
-            const tbody = document.getElementById('ai-breakdown-body');
-            let tbodyHtml = '';
-            allocationItems.forEach(item => {
+                const tbody = document.getElementById('ai-breakdown-body');
+                let tbodyHtml = '';
+                allocationItems.forEach(item => {
                 
     tbodyHtml += `
         <tr>
@@ -2297,83 +2351,443 @@ if (reinvestDividends) {
         }
 
         // Execute One-Click Auto-Invest
-        function executeAIAutoInvest() {
-            const basket = window.appState.aiRecommendedBasket;
-            if (!basket) return;
+function executeAIAutoInvest() {
+    const basket = window.appState.aiRecommendedBasket;
+    if (!basket || !basket.items || basket.items.length === 0) return;
 
-            let totalRequired = 0;
-            basket.items.forEach(item => {
-                const comm = item.investment * 0.0015;
-                totalRequired += (item.investment + comm);
-            });
+    const cashAvailable = window.appState.cashBalance;
+    const COMMISSION_RATE = 0.0015;
 
-            if (totalRequired > window.appState.cashBalance) {
-                showToast(`Insufficient cash (฿${window.appState.cashBalance.toLocaleString()}) to execute full AI basket (฿${totalRequired.toLocaleString()}).`, 'error');
-                return;
-            }
+    // Create executable basket based on whole shares
+    const items = basket.items.map(item => ({
+        ...item,
+        shares: Math.floor(item.investment / item.price)
+    }));
 
-            // Execute trades sequentially
-            basket.items.forEach(item => {
-                const comm = item.investment * 0.0015;
-                const cost = item.investment + comm;
+    // Calculate actual investment + commission
+    items.forEach(item => {
+        item.investment = item.shares * item.price;
+        item.commission = item.investment * COMMISSION_RATE;
+        item.totalCost = item.investment + item.commission;
+    });
 
-                window.appState.cashBalance -= cost;
+    let totalRequired = items.reduce(
+        (sum, item) => sum + item.totalCost,
+        0
+    );
 
-                if (!window.appState.portfolio[item.symbol]) {
-                    window.appState.portfolio[item.symbol] = { shares: 0, avgPrice: 0 };
-                }
+    // Reduce shares until the basket fits within available cash
+    while (totalRequired > cashAvailable) {
+        const adjustableItems = items
+            .filter(item => item.shares > 0)
+            .sort((a, b) => b.totalCost - a.totalCost);
 
-                const prevShares = window.appState.portfolio[item.symbol].shares;
-                const prevCost = prevShares * window.appState.portfolio[item.symbol].avgPrice;
-                const newShares = prevShares + item.shares;
-                const newAvgPrice = (prevCost + item.investment) / newShares;
-
-                window.appState.portfolio[item.symbol].shares = newShares;
-                window.appState.portfolio[item.symbol].avgPrice = newAvgPrice;
-
-                // Log Tx
-                window.appState.transactions.unshift({
-                    time: new Date().toLocaleTimeString(),
-                    type: 'AI_AUTO_INVEST',
-                    symbol: item.symbol,
-                    shares: item.shares,
-                    price: item.price,
-                    total: cost
-                });
-            });
-
-            updatePortfolioHeaderSummary();
-            showToast('AI Portfolio Allocation Executed Successfully!', 'success');
-            switchTab('portfolio');
+        if (adjustableItems.length === 0) {
+            showToast(
+                'Unable to fit AI basket within available cash.',
+                'error'
+            );
+            return;
         }
 
+        const item = adjustableItems[0];
 
+        item.shares -= 1;
+        item.investment = item.shares * item.price;
+        item.commission = item.investment * COMMISSION_RATE;
+        item.totalCost = item.investment + item.commission;
 
-        function updatePortfolioHeaderSummary() {
-            let holdingsVal = 0;
+        totalRequired = items.reduce(
+            (sum, item) => sum + item.totalCost,
+            0
+        );
+    }
 
-            for (const symbol in window.appState.portfolio) {
-                const pos = window.appState.portfolio[symbol];
-                const stk = thaiDividendStocks.find(s => s.symbol === symbol);
-                if (stk && pos.shares > 0) {
-                    holdingsVal += (pos.shares * stk.price);
-                }
-            }
+    const executableItems = items.filter(item => item.shares > 0);
 
-            const totalPortfolioVal = window.appState.cashBalance + holdingsVal;
+    if (executableItems.length === 0) {
+        showToast(
+            'No shares can be purchased with the available cash.',
+            'error'
+        );
+        return;
+    }
 
-            // Nav header
-            document.getElementById('nav-cash-balance').innerText = `฿${window.appState.cashBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('nav-total-val').innerText = `฿${totalPortfolioVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    // Execute trades
+    executableItems.forEach(item => {
+        const cost = item.totalCost;
+
+        window.appState.cashBalance -= cost;
+
+        if (!window.appState.portfolio[item.symbol]) {
+            window.appState.portfolio[item.symbol] = {
+                shares: 0,
+                avgPrice: 0
+            };
         }
+
+        const position = window.appState.portfolio[item.symbol];
+
+        const prevShares = position.shares;
+        const prevCost = prevShares * position.avgPrice;
+        const newShares = prevShares + item.shares;
+
+        const newAvgPrice =
+            newShares > 0
+                ? (prevCost + item.investment) / newShares
+                : 0;
+
+        position.shares = newShares;
+        position.avgPrice = newAvgPrice;
+
+        // Log transaction
+        window.appState.transactions.unshift({
+    time: new Date().toLocaleTimeString(),
+    type: 'AI_AUTO_INVEST',
+    symbol: item.symbol,
+    shares: item.shares,
+    price: item.price,
+    grossAmount: item.investment,
+    commission: item.commission,
+    total: cost
+});
+    });
+
+    // Prevent tiny floating-point negative cash
+    if (window.appState.cashBalance < 0) {
+        window.appState.cashBalance = 0;
+    }
+
+    updatePortfolioHeaderSummary();
+    renderPortfolioHoldings();
+
+    showToast(
+        `AI Portfolio Allocation Executed Successfully! Total ฿${totalRequired.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`,
+        'success'
+    );
+
+    switchTab('portfolio');
+}
+
+function renderActivePositions() {
+    const tbody = document.getElementById('active-positions-body');
+    if (!tbody) return;
+
+    const portfolio = window.appState.portfolio || {};
+
+    const positions = Object.entries(portfolio)
+        .filter(([symbol, position]) => position && position.shares > 0);
+
+    if (positions.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" class="p-4 text-center text-slate-500 italic">
+                    No active stock positions.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    let html = '';
+
+    positions.forEach(([symbol, position]) => {
+        const stock = thaiDividendStocks.find(
+            s => s.symbol === symbol
+        );
+
+        if (!stock) return;
+
+        const shares = position.shares;
+        const avgPrice = position.avgPrice || 0;
+        const currentPrice = stock.price || 0;
+
+        const investment = shares * avgPrice;
+        const marketValue = shares * currentPrice;
+        const pnl = marketValue - investment;
+
+        const annualDividend =
+            shares * (stock.dps || 0);
+
+        const pnlClass =
+            pnl >= 0
+                ? 'text-emerald-400'
+                : 'text-red-400';
+
+        html += `
+            <tr class="hover:bg-slate-900/60 transition-colors">
+
+                <td class="p-2 font-bold text-white">
+                    <span class="text-cyan-400">${symbol}</span>
+                </td>
+
+                <td class="p-2 text-right text-slate-200 font-semibold">
+                    ${shares.toLocaleString('en-US')}
+                </td>
+
+                <td class="p-2 text-right text-slate-300">
+                    ฿${avgPrice.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-right text-slate-200">
+                    ฿${currentPrice.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-right text-slate-300">
+                    ฿${investment.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-right text-cyan-400 font-semibold">
+                    ฿${marketValue.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-right font-semibold ${pnlClass}">
+                    ${pnl >= 0 ? '+' : ''}
+                    ฿${pnl.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-right text-emerald-400 font-semibold">
+                    ฿${annualDividend.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-2 text-center">
+                    <button
+                        onclick="sellPortfolioStock('${symbol}')"
+                        class="px-2 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 text-[9px] font-semibold"
+                    >
+                        Sell
+                    </button>
+                </td>
+
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+}
+
+    function sellPortfolioStock(symbol) {
+    const position = window.appState.portfolio?.[symbol];
+
+    if (!position || position.shares <= 0) {
+        showToast(`No active position for ${symbol}.`, 'error');
+        return;
+    }
+
+    const stock = thaiDividendStocks.find(
+        s => s.symbol === symbol
+    );
+
+    if (!stock) {
+        showToast(`Market data for ${symbol} not found.`, 'error');
+        return;
+    }
+
+    const maxShares = position.shares;
+
+    const input = prompt(
+        `Sell ${symbol}\n\nAvailable shares: ${maxShares}\nCurrent price: ฿${stock.price.toFixed(2)}\n\nEnter shares to sell:`
+    );
+
+    if (input === null) return;
+
+    const sharesToSell = parseInt(input, 10);
+
+    if (!Number.isInteger(sharesToSell) || sharesToSell <= 0) {
+        showToast('Please enter a valid number of shares.', 'error');
+        return;
+    }
+
+    if (sharesToSell > maxShares) {
+        showToast(
+            `You only have ${maxShares.toLocaleString()} shares of ${symbol}.`,
+            'error'
+        );
+        return;
+    }
+
+    const price = stock.price;
+    const grossAmount = sharesToSell * price;
+
+    const COMMISSION_RATE = 0.0015;
+    const commission = grossAmount * COMMISSION_RATE;
+    const netAmount = grossAmount - commission;
+
+    position.shares -= sharesToSell;
+
+    if (position.shares === 0) {
+        delete window.appState.portfolio[symbol];
+    }
+
+    window.appState.cashBalance += netAmount;
+
+    window.appState.transactions.unshift({
+        time: new Date().toLocaleTimeString(),
+        type: 'SELL',
+        symbol: symbol,
+        shares: sharesToSell,
+        price: price,
+        total: netAmount
+    });
+
+    renderPortfolioHoldings();
+    renderTxHistory();
+    updatePortfolioHeaderSummary();
+
+    showToast(
+        `Sold ${sharesToSell.toLocaleString()} ${symbol} for ฿${netAmount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`,
+        'success'
+    );
+}
+
+// Update portfolio header summary
+function updatePortfolioHeaderSummary() {
+    let holdingsVal = 0;
+
+    for (const symbol in window.appState.portfolio) {
+        const pos = window.appState.portfolio[symbol];
+        const stk = thaiDividendStocks.find(
+            s => s.symbol === symbol
+        );
+
+        if (stk && pos.shares > 0) {
+            holdingsVal += pos.shares * stk.price;
+        }
+    }
+
+    const totalPortfolioVal =
+        window.appState.cashBalance + holdingsVal;
+
+    // Update navigation header
+    const cashEl = document.getElementById('nav-cash-balance');
+    const totalValEl = document.getElementById('nav-total-val');
+
+    if (cashEl) {
+        cashEl.innerText =
+            `฿${window.appState.cashBalance.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+    }
+
+    if (totalValEl) {
+        totalValEl.innerText =
+            `฿${totalPortfolioVal.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+    }
+}
 
         function renderPortfolioView() {
             renderPortfolioHoldings();
             renderTxHistory();
         }
 
+        function openTransactionDetail(index) {
+    const tx = window.appState.transactions[index];
+
+    if (!tx) return;
+
+    const isSell = tx.type === 'SELL';
+    const isAI = tx.type === 'AI_AUTO_INVEST';
+
+    document.getElementById('tx-detail-title').innerText =
+        isAI ? 'AI AUTO INVEST' : `${tx.type} ORDER`;
+
+    document.getElementById('tx-detail-symbol').innerText =
+        tx.symbol;
+
+    document.getElementById('tx-detail-shares').innerText =
+        `${tx.shares.toLocaleString()} Shares`;
+
+    document.getElementById('tx-detail-time').innerText =
+        tx.time;
+
+    document.getElementById('tx-detail-price').innerText =
+        `฿${tx.price.toFixed(2)}`;
+
+    document.getElementById('tx-detail-gross').innerText =
+        `฿${tx.grossAmount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+    document.getElementById('tx-detail-commission').innerText =
+        `฿${tx.commission.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+    document.getElementById('tx-detail-total').innerText =
+        `฿${tx.total.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+    // BUY / SELL labels
+    document.getElementById('tx-detail-gross-label').innerText =
+        isSell ? 'Gross Proceeds' : 'Order Value';
+
+    document.getElementById('tx-detail-total-label').innerText =
+        isSell ? 'Net Proceeds' : 'Total Cost';
+
+    // Badge
+    const badge = document.getElementById('tx-detail-badge');
+
+    if (isSell) {
+        badge.innerText = 'SELL';
+        badge.className =
+            'px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30';
+
+        document.getElementById('tx-detail-total').className =
+            'text-rose-400 font-extrabold text-lg';
+
+    } else {
+        badge.innerText = isAI ? 'AI' : 'BUY';
+        badge.className =
+            'px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+        document.getElementById('tx-detail-total').className =
+            'text-emerald-400 font-extrabold text-lg';
+    }
+
+    document
+        .getElementById('modal-transaction-detail')
+        .classList.remove('hidden');
+}
+
         function renderPortfolioHoldings() {
-            const tbody = document.getElementById('holdings-table-body');
+            const tbody = document.getElementById('active-positions-body');
+
+            console.log('=== renderPortfolioHoldings ===');
+            console.log('tbody:', tbody);
+            console.log('portfolio:', window.appState.portfolio);
+
             if (!tbody) return;
 
             let totalHoldingsCost = 0;
@@ -2383,6 +2797,8 @@ if (reinvestDividends) {
             let html = '';
             const portfolio = window.appState.portfolio;
             const symbols = Object.keys(portfolio);
+
+            console.log('symbols:', symbols);
 
             if (symbols.length === 0) {
                 tbody.innerHTML = `
@@ -2394,11 +2810,24 @@ if (reinvestDividends) {
                 `;
             } else {
                 symbols.forEach(symbol => {
-                    const pos = portfolio[symbol];
-                    if (pos.shares <= 0) return;
+                const pos = portfolio[symbol];
 
-                    const stk = thaiDividendStocks.find(s => s.symbol === symbol);
-                    if (!stk) return;
+                console.log('POSITION CHECK:', symbol, pos);
+
+                if (pos.shares <= 0) return;
+
+                const stk = thaiDividendStocks.find(s => s.symbol === symbol);
+
+                console.log('STOCK CHECK:', symbol, stk);
+
+console.log('DIV CHECK:', {
+    symbol,
+    shares: pos.shares,
+    stk: stk,
+    dps: stk?.dps
+});
+
+if (!stk) return;
 
                     const costVal = pos.shares * pos.avgPrice;
                     const mktVal = pos.shares * stk.price;
@@ -2473,34 +2902,79 @@ if (reinvestDividends) {
         }
 
         function renderTxHistory() {
-            const tbody = document.getElementById('tx-history-body');
-            if (!tbody) return;
+    const tbody = document.getElementById('tx-history-body');
+    if (!tbody) return;
 
-            const txs = window.appState.transactions;
-            if (txs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500 italic">No transactions executed yet.</td></tr>`;
-                return;
-            }
+    const txs = window.appState.transactions;
 
-            let html = '';
-            txs.forEach(tx => {
-                const isBuy = tx.type.includes('BUY') || tx.type.includes('AUTO');
-                const badgeClass = isBuy ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+    if (txs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="p-4 text-center text-slate-500 italic">
+                    No transactions executed yet.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    let html = '';
+
+    txs.forEach((tx, index) => {
+        const isSell = tx.type === 'SELL';
+        const isAI = tx.type === 'AI_AUTO_INVEST';
+
+        const badgeClass = isSell
+            ? 'bg-rose-500/20 text-rose-400 border-rose-500/30'
+            : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+
+        html += `
+            <tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
                 
-                html += `
-                    <tr>
-                        <td class="p-3 text-slate-400">${tx.time}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${tx.type}</span></td>
-                        <td class="p-3 font-bold text-white">${tx.symbol}</td>
-                        <td class="p-3 text-right text-slate-200">${tx.shares.toLocaleString()}</td>
-                        <td class="p-3 text-right text-slate-200">฿${tx.price.toFixed(2)}</td>
-                        <td class="p-3 text-right font-bold ${isBuy ? 'text-slate-200' : 'text-emerald-400'}">฿${tx.total.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-                    </tr>
-                `;
-            });
+                <td class="p-3 text-slate-400 whitespace-nowrap">
+                    ${tx.time}
+                </td>
 
-            tbody.innerHTML = html;
-        }
+                <td class="p-3">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">
+    ${isAI ? 'BUY · AI' : tx.type}
+</span>
+                </td>
+
+                <td class="p-3 font-bold text-white">
+                    ${tx.symbol}
+                </td>
+
+                <td class="p-3 text-right text-slate-200">
+                    ${tx.shares.toLocaleString()}
+                </td>
+
+                <td class="p-3 text-right text-slate-200">
+                    ฿${tx.price.toFixed(2)}
+                </td>
+
+                <td class="p-3 text-right font-bold text-slate-200">
+                    ฿${tx.total.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td class="p-3 text-center">
+                    <button
+                        onclick="openTransactionDetail(${index})"
+                        class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-400 text-[10px] font-bold transition-all"
+                    >
+                        View
+                    </button>
+                </td>
+
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+}
 
 
 
@@ -2607,6 +3081,28 @@ if (reinvestDividends) {
         menu.classList.toggle('hidden');
     }
 }
+
+    function toggleInfoPopover(id) {
+    const popover = document.getElementById(id);
+
+    if (!popover) return;
+
+    document.querySelectorAll('.info-popover').forEach(el => {
+        if (el.id !== id) {
+            el.classList.add('hidden');
+        }
+    });
+
+    popover.classList.toggle('hidden');
+}
+
+    document.addEventListener('click', function (event) {
+    if (!event.target.closest('.info-wrapper')) {
+        document.querySelectorAll('.info-popover').forEach(el => {
+            el.classList.add('hidden');
+        });
+    }
+});
 
     </script>
 </body>
