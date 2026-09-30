@@ -351,7 +351,7 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">฿</span>
-                                    <input type="number" id="ai-capital-input" value="100000" min="10000" step="5000" class="w-full bg-slate-950 text-emerald-400 font-bold text-lg pl-8 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500">
+                                    <input type="number" id="ai-capital-input" value="100000" min="10000" oninput="updateAITargetYieldHint()" class="w-full bg-slate-950 text-cyan-400 font-bold text-lg pl-8 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500">
                                 </div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mt-1">
                                     <span>Min ฿10,000</span>
@@ -366,9 +366,9 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">฿</span>
-                                    <input type="number" id="ai-target-income-input" value="7000" min="1000" step="500" class="w-full bg-slate-950 text-cyan-400 font-bold text-lg pl-8 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500">
+                                    <input type="number" id="ai-target-income-input" value="7000" min="1000" step="500" oninput="updateAITargetYieldHint()" class="w-full bg-slate-950 text-cyan-400 font-bold text-lg pl-8 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500">
                                 </div>
-                                <p class="text-xs text-slate-400 mt-1">
+                                <p id="ai-target-yield-hint" class="text-xs text-slate-400 mt-1">
                                     For ฿100,000 capital, ฿7,000 equals a 7.0% annual yield target.
                                 </p>
                             </div>
@@ -376,7 +376,7 @@
                             <!-- Investment Strategy Profile -->
                             <div>
                                 <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                                    Risk & Dividend Growth Profile
+                                    Investment Strategy Profile
                                 </label>
                                 <select
     id="ai-strategy-select"
@@ -384,28 +384,26 @@
     onchange="
         const desc = document.getElementById('strategy-description');
         if (this.value === 'BALANCED') {
-            desc.innerText = 'สมดุลระหว่าง Dividend Yield, P/E และระดับความเสี่ยง เพื่อสร้างพอร์ตปันผลระยะยาว';
+            desc.innerText = 'สมดุลระหว่าง Dividend Yield และขนาดบริษัท เพื่อสร้างพอร์ตปันผลระยะยาว';
         } else if (this.value === 'MAX_YIELD') {
-            desc.innerText = 'เน้นหุ้นที่มีอัตราผลตอบแทนเงินปันผลสูง โดยตัดหุ้นที่มีความเสี่ยงระดับ HIGH ออก';
+            desc.innerText = 'เน้นหุ้นที่มี Dividend Yield สูง เพื่อสร้างรายได้จากเงินปันผลในระยะยาว';
         } else if (this.value === 'CONSERVATIVE') {
-            desc.innerText = 'เน้นหุ้นที่มีความเสี่ยงต่ำถึงปานกลาง และให้ความสำคัญกับความสม่ำเสมอของธุรกิจและระดับ P/E';
+            desc.innerText = 'คัดเลือกหุ้นที่ผ่านเกณฑ์ Dividend Universe 2569 และจัดสรรพอร์ตโดยคำนึงถึง Dividend Yield และขนาดบริษัท';
         }
     "
 >
-    <option value="BALANCED">
-        Balanced Dividend Growth (Yield ~ 6.5% - 7.5%)
-    </option>
-
     <option value="MAX_YIELD">
-        Maximum Yield Focus (Yield > 7.5%)
-    </option>
-
-    <option value="CONSERVATIVE">
-        Low Risk Aristocrats (Yield ~ 5.5% - 6.5%)
-    </option>
+    Maximum Yield Focus
+</option>
+<option value="BALANCED">
+    Balanced Dividend Growth
+</option>
+<option value="CONSERVATIVE">
+    Dividend Quality
+</option>
 </select>
-                                <p id="strategy-description" class="text-[11px] text-slate-500 mt-2 leading-relaxed">
-    สมดุลระหว่าง Dividend Yield, P/E และระดับความเสี่ยง เพื่อสร้างพอร์ตปันผลระยะยาว
+                                <p id="strategy-description" class="text-xs text-slate-400 mt-1">
+    เน้นหุ้นที่มี Dividend Yield สูง เพื่อสร้างรายได้จากเงินปันผลในระยะยาว
 </p>
 <div class="mt-3 flex items-center gap-2">
     <input
@@ -650,7 +648,7 @@
                 <th class="p-2 w-[10%] text-right whitespace-nowrap">Shares</th>
                 <th class="p-2 w-[14%] text-right whitespace-nowrap">Investment</th>
                 <th class="p-2 w-[15%] text-right whitespace-nowrap">Gross Div</th>
-                <th class="p-2 w-[10%] text-right whitespace-nowrap">Tax</th>
+                <th class="p-2 w-[10%] text-right whitespace-nowrap">Tax (10%)</th>
                 <th class="p-2 w-[16%] text-right whitespace-nowrap">Net Div</th>
             </tr>
         </thead>
@@ -1187,7 +1185,27 @@
     'TTB',
     'WHA'
 ];
-    
+    const DIVIDEND_QUALITY_STOCKS = [
+    'AEONTS',
+    'AMATA',
+    'BBL',
+    'HMPRO',
+    'KBANK',
+    'KTC',
+    'M',
+    'MEGA',
+    'PRM',
+    'PTT',
+    'PTTEP',
+    'QH',
+    'RATCH',
+    'RCL',
+    'SIRI',
+    'TISCO',
+    'TOA',
+    'WHA'
+];
+
     function getXDStatus(stock) {
     const xdDate = stock.nextXDDate;
 
@@ -1463,6 +1481,8 @@ const yahooDataChanged =
             stock.yield = apiStock.dividendYield;
 
             stock.marketCap = apiStock.marketCap;
+            stock.pe = apiStock.pe;
+            stock.payoutRatio = apiStock.payoutRatio;
             stock.volume = apiStock.volume;
             stock.marketTime = apiStock.marketTime;
             stock.nextXDDate = apiStock.nextXDDate;
@@ -1673,7 +1693,11 @@ const changeSign = isUp ? '+' : '';
            document.getElementById('m-detail-symbol-box').innerText = stk.symbol;
 document.getElementById('m-detail-title').innerText = stk.name;
 document.getElementById('m-detail-sector').innerText =
-    `${stk.sector} Sector • P/E: Data Pending`;
+    `${stk.sector} Sector • P/E: ${
+        stk.pe !== null && stk.pe !== undefined
+            ? stk.pe.toFixed(2)
+            : 'Data Pending'
+    }`;
 
 document.getElementById('m-detail-price').innerText =
     stk.price !== null ? `฿${stk.price.toFixed(2)}` : 'Data Pending';
@@ -1682,7 +1706,9 @@ document.getElementById('m-detail-yield').innerText =
     stk.yield !== null ? `${stk.yield.toFixed(2)}%` : 'Data Pending';
 
 document.getElementById('m-detail-payout').innerText =
-    'Data Pending';
+    stk.payoutRatio !== null && stk.payoutRatio !== undefined
+        ? `${(stk.payoutRatio * 100).toFixed(2)}%`
+        : 'Not Available';
 
 const daysToXD = getDaysToXD(stk.nextXDDate);
 
@@ -1895,18 +1921,31 @@ riskBadge.className =
     const strategyDescriptionElement = document.getElementById('strategy-description');
 
     const descriptions = {
-        CONSERVATIVE:
-            'เน้นหุ้นที่มีความเสี่ยงต่ำถึงปานกลาง และให้ความสำคัญกับความสม่ำเสมอของธุรกิจและระดับ P/E',
+    CONSERVATIVE:
+        'คัดเลือกหุ้นที่ผ่านเกณฑ์ Dividend Universe 2569 และจัดสรรพอร์ตโดยคำนึงถึง Dividend Yield และขนาดบริษัท',
 
-        MAX_YIELD:
-            'เน้นหุ้นที่มีอัตราผลตอบแทนเงินปันผลสูง โดยตัดหุ้นที่มีความเสี่ยงระดับ HIGH ออก',
+    MAX_YIELD:
+        'เน้นหุ้นที่มี Dividend Yield สูง เพื่อสร้างรายได้จากเงินปันผลในระยะยาว',
 
-        BALANCED:
-            'สมดุลระหว่าง Dividend Yield, P/E และระดับความเสี่ยง เพื่อสร้างพอร์ตปันผลระยะยาว'
-    };
+    BALANCED:
+        'สมดุลระหว่าง Dividend Yield และขนาดบริษัท เพื่อสร้างพอร์ตปันผลระยะยาว'
+};
 
     strategyDescriptionElement.innerText = descriptions[strategy] || '';
 }
+    function updateAITargetYieldHint() {
+    const capital =
+        parseFloat(document.getElementById('ai-capital-input').value) || 100000;
+
+    const targetIncome =
+        parseFloat(document.getElementById('ai-target-income-input').value) || 7000;
+
+    const reqYield = (targetIncome / capital) * 100;
+
+    document.getElementById('ai-target-yield-hint').innerText =
+        `For ฿${capital.toLocaleString()} capital, ฿${targetIncome.toLocaleString()} equals a ${reqYield.toFixed(1)}% annual yield target.`;
+}
+
         function generateAIPortfolio() {
             const capital = parseFloat(document.getElementById('ai-capital-input').value) || 100000;
             const targetIncome = parseFloat(document.getElementById('ai-target-income-input').value) || 7000;
@@ -1918,6 +1957,10 @@ riskBadge.className =
 
             // Target yield required
             const reqYield = (targetIncome / capital) * 100;
+            const targetYieldHint = document.getElementById('ai-target-yield-hint');
+
+targetYieldHint.innerText =
+    `For ฿${capital.toLocaleString()} capital, ฿${targetIncome.toLocaleString()} equals a ${reqYield.toFixed(1)}% annual yield target.`;
 
             // Sort stocks based on strategy filter
             let candidates = thaiDividendStocks.filter(
@@ -1928,7 +1971,11 @@ riskBadge.className =
         stock.yield !== null
 );
             if (strategy === 'CONSERVATIVE') {
-    strategyDescription = 'เน้นหุ้นที่มี Dividend Yield และขนาดบริษัทสูง โดยใช้ข้อมูลตลาดล่าสุดจาก Yahoo Finance';
+    strategyDescription = 'คัดเลือกหุ้นที่ผ่านเกณฑ์ Dividend Universe 2569 และจัดสรรพอร์ตโดยคำนึงถึง Dividend Yield และขนาดบริษัท';
+
+                candidates = candidates.filter(stock =>
+    DIVIDEND_QUALITY_STOCKS.includes(stock.symbol)
+);
 
     candidates.sort((a, b) => {
         const scoreA = (a.yield * 0.6) + (Math.log10(a.marketCap || 1) * 0.4);
@@ -1938,11 +1985,11 @@ riskBadge.className =
     });
 
 } else if (strategy === 'MAX_YIELD') {
-    strategyDescription = 'เน้นหุ้นที่มี Dividend Yield สูง โดยใช้ข้อมูลล่าสุดจาก Yahoo Finance';
+    strategyDescription = 'เน้นหุ้นที่มี Dividend Yield สูง เพื่อสร้างรายได้จากเงินปันผลในระยะยาว';
 
     candidates.sort((a, b) => b.yield - a.yield);
             } else { // BALANCED
-    strategyDescription = 'สมดุลระหว่าง Dividend Yield และขนาดบริษัท โดยใช้ข้อมูลตลาดล่าสุดจาก Yahoo Finance';
+    strategyDescription = 'สมดุลระหว่าง Dividend Yield และขนาดบริษัท เพื่อสร้างพอร์ตปันผลระยะยาว';
 
     candidates.sort((a, b) => {
         const scoreA =
@@ -2012,11 +2059,48 @@ const weights = scores.map(score =>
         ? score / totalScore
         : 1 / scores.length
 );
+
+        const maxWeight = 0.40;
+
+let cappedWeights = weights.map(weight =>
+    Math.min(weight, maxWeight)
+);
+
+let remainingWeight =
+    1 - cappedWeights.reduce((sum, weight) => sum + weight, 0);
+
+while (remainingWeight > 0.000001) {
+    const uncappedIndexes = cappedWeights
+        .map((weight, idx) => weight < maxWeight ? idx : -1)
+        .filter(idx => idx !== -1);
+
+    if (uncappedIndexes.length === 0) {
+        break;
+    }
+
+    const extraWeight =
+        remainingWeight / uncappedIndexes.length;
+
+    uncappedIndexes.forEach(idx => {
+        cappedWeights[idx] =
+            Math.min(
+                cappedWeights[idx] + extraWeight,
+                maxWeight
+            );
+    });
+
+    remainingWeight =
+        1 - cappedWeights.reduce(
+            (sum, weight) => sum + weight,
+            0
+        );
+}
+
             let totalEstDiv = 0;
             const allocationItems = [];
 
             selectedBasket.forEach((stk, idx) => {
-                const allocMoney = capital * weights[idx];
+                const allocMoney = capital * cappedWeights[idx];
                 const shares = Math.floor(allocMoney / stk.price);
                 const actualInv = shares * stk.price;
                 const grossDiv = shares * stk.dps;
@@ -2031,7 +2115,7 @@ const weights = scores.map(score =>
                         price: stk.price,
                         changePct: stk.changePct,
                         daysToXD: getDaysToXD(stk.nextXDDate),
-                        weightPct: (weights[idx] * 100).toFixed(0),
+                        weightPct: (cappedWeights[idx] * 100).toFixed(0),
                         shares: shares,
                         investment: actualInv,
                         grossDiv: grossDiv,
@@ -2040,7 +2124,7 @@ const weights = scores.map(score =>
                         dps: stk.dps,
                         yield: stk.yield,
                     reason: strategy === 'CONSERVATIVE'
-    ? `เน้น Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
+    ? `ผ่านเกณฑ์ Dividend Universe 2569 พร้อมพิจารณา Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
     : strategy === 'MAX_YIELD'
         ? `เน้น Dividend Yield สูง ${stk.yield.toFixed(2)}%`
         : `สมดุลระหว่าง Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`

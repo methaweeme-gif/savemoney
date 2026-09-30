@@ -197,6 +197,8 @@ ttb มีแนวทางการดำเนินธุรกิจที�
 บริษัทมีธุรกิจที่เกี่ยวข้องกับการลงทุนของภาคอุตสาหกรรม การเติบโตของโลจิสติกส์ และการขยายตัวของฐานการผลิตในประเทศไทยและภูมิภาค`
 };
 
+const PAYOUT_RATIOS = {};
+
 const SETHD_UNIVERSE = [
     'AEONTS','AMATA','AP','BA','BAM','BBL','HMPRO','JMT','KBANK','KKP',
     'KTB','KTC','LH','M','MEGA','PRM','PTT','PTTEP','QH','RATCH','RCL',
@@ -241,6 +243,8 @@ const xdDataError =
                         nextXDDate: nextXDDate,
                         xdDataError: xdDataError,
                         marketCap: q.marketCap ?? null,
+                        pe: q.trailingPE ?? null,
+                        payoutRatio: q.payoutRatio ?? null,
                         volume: q.regularMarketVolume ?? null,
                         marketTime: q.regularMarketTime ?? null,
                         sector: profile?.assetProfile?.sector ||
