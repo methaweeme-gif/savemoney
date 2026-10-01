@@ -124,10 +124,6 @@
                         <i class="fa-solid fa-wallet text-emerald-400"></i>
                         <span>My Portfolio</span>
                     </button>
-                    <button id="nav-news" onclick="switchTab('news')" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-all flex items-center space-x-2">
-                        <i class="fa-solid fa-newspaper text-blue-400"></i>
-                        <span>Dividend News</span>
-                    </button>
                 </nav>
 
                 <!-- Quick Portfolio Mini Summary Card -->
@@ -163,9 +159,6 @@
             </button>
             <button id="mobile-nav-portfolio" onclick="switchTab('portfolio')" class="flex flex-col items-center text-xs text-slate-400 font-medium">
                 <i class="fa-solid fa-wallet text-emerald-400 text-base mb-0.5"></i> Portfolio
-            </button>
-            <button id="mobile-nav-news" onclick="switchTab('news')" class="flex flex-col items-center text-xs text-slate-400 font-medium">
-                <i class="fa-solid fa-newspaper text-blue-400 text-base mb-0.5"></i> News Hub
             </button>
         </div>
     </header>
@@ -795,59 +788,6 @@
 
         </section>
 
-
-        <!-- ================= PAGE 4: DIVIDEND NEWS HUB ================= -->
-        <section id="page-news" class="tab-page hidden space-y-6">
-            
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-blue-950/30 to-slate-900 p-6 rounded-2xl border border-blue-500/20 shadow-xl">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-                        <span>Thai Dividend Market News</span>
-                    </h1>
-                    <p class="text-slate-400 text-sm mt-1">
-                        ติดตามข่าวสารและประกาศสำคัญจากบริษัทจดทะเบียนในตลาดหลักทรัพย์ไทย ครอบคลุมการประกาศจ่ายเงินปันผล การขึ้นเครื่องหมาย XD ผลประกอบการรายไตรมาส และการเปลี่ยนแปลงสำคัญของบริษัท
-                    </p>
-                </div>
-
-                <div class="flex items-center space-x-2">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input type="text" id="news-search" oninput="renderNewsFeed()" placeholder="Search news articles..." class="bg-slate-950 text-slate-200 text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-blue-500 w-48 sm:w-60">
-                    </div>
-                </div>
-            </div>
-
-            
-<!-- News Category Filters -->
-<div class="flex flex-wrap gap-2 text-xs font-semibold">
-    <button onclick="setNewsCategory('ALL')" class="news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 shadow-md font-bold transition-all">
-        All Updates
-    </button>
-
-    <button onclick="setNewsCategory('DIVIDEND')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
-        Dividend News
-    </button>
-
-    <button onclick="setNewsCategory('EARNINGS')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
-        Financial Results
-    </button>
-
-    <button onclick="setNewsCategory('CORPORATE_ACTIONS')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
-        Corporate Actions
-    </button>
-
-    <button onclick="setNewsCategory('COMPANY')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
-        Company Announcements
-    </button>
-</div>
-
-            <!-- News Feed Grid -->
-            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamically populated news cards -->
-            </div>
-
-        </section>
-
     </main>
 
     <!-- ================= MODALS & POPUPS ================= -->
@@ -1047,67 +987,6 @@
         </div>
     </div>
 
-
-    <!-- NEWS READING DETAIL MODAL -->
-    <div id="modal-news" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-cardbg rounded-2xl border border-slate-800 w-full max-w-xl overflow-hidden shadow-2xl flex flex-col">
-            <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-                <span id="m-news-tag" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                    XD CALENDAR
-                </span>
-                <button onclick="closeModal('modal-news')" class="text-slate-400 hover:text-white p-2 text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            
-<div class="p-6 space-y-4">
-    <h3 id="m-news-title" class="text-xl font-bold text-white leading-snug"></h3>
-
-    <div class="flex items-center space-x-4 text-xs text-slate-400">
-        <span id="m-news-time"><i class="fa-regular fa-clock mr-1"></i> 10 mins ago</span>
-        <span id="m-news-source"><i class="fa-solid fa-building mr-1"></i> SET News Service</span>
-    </div>
-
-    <hr class="border-slate-800">
-
-    <div class="space-y-4">
-
-        
-<!-- News Content -->
-<div>
-    <h3
-        id="m-news-content-title"
-        class="text-base font-bold text-white mb-2"
-    >
-        Original Announcement
-    </h3>
-
-    <p
-        id="m-news-content"
-        class="text-sm text-slate-300 leading-relaxed"
-    ></p>
-</div>
-        <!-- Original Link -->
-        <a
-            id="m-news-original-link"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 text-xs font-bold transition-all"
-        >
-            Read Original Announcement
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </a>
-
-    </div>
-</div>
-            <div class="bg-slate-900 px-6 py-4 border-t border-slate-800 flex justify-end">
-                <button onclick="closeModal('modal-news')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs">Close</button>
-            </div>
-        </div>
-    </div>
-
-
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
@@ -1269,7 +1148,6 @@
             activeTab: 'market',
             selectedStockSymbol: null,
             tradeSide: 'BUY',
-            newsCategory: 'ALL',
             aiRecommendedBasket: null
         };
         window.appState = windowState;
@@ -1391,7 +1269,6 @@ function refreshDividendYields() {
 });
 
 loadYahooStockData();
-loadLiveNews();
 
 // Current SETHD Universe
 // Effective: 1 Jul 2026 - 31 Dec 2026
@@ -1413,84 +1290,6 @@ loadLiveNews();
     dataDate: 'Yahoo Finance (Delayed Market Data)',
     source: 'Yahoo Finance'
 };
-        // SET Dividend News & XD Calendar Articles Data
-        const newsData = [
-            {
-                id: 1,
-                category: 'XD_CALENDAR',
-                tag: 'XD Calendar Alert',
-                title: 'TISCO Announces Annual Dividend of ฿7.75 per Share, XD Date Set for April 24',
-                time: '15 mins ago',
-                source: 'SET News Desk',
-                summary: 'Tisco Financial Group confirms high dividend payout ratio of 85.4%. Shareholders holding stock before XD date will receive dividend on May 15.',
-                content: 'BANGKOK — Tisco Financial Group (TISCO) has officially notified the Stock Exchange of Thailand of its board approval for a full-year dividend payment of ฿7.75 per share. The ex-dividend (XD) date is scheduled for April 24, giving investors 12 days remaining to qualify. Analysts highlight TISCO as one of the most reliable high-yield financial stocks in SET HD index.'
-            },
-            {
-                id: 2,
-                category: 'DIVIDEND_ANNOUNCEMENT',
-                tag: 'Dividend Declaration',
-                title: 'SCB X Approves Record Dividend Yield Reaching 8.9% for FY2026',
-                time: '1 hour ago',
-                source: 'Thai Financial Chronicle',
-                summary: 'SCB X board votes to distribute ฿10.19 annual dividend following strong operational profit growth in retail banking and wealth divisions.',
-                content: 'SCB X Public Company Limited has declared its annual dividend distribution of ฿10.19 per share. At current trading price of ฿114.50, this represents an outstanding dividend yield of 8.90%. The management reaffirmed its commitment to maximizing equity return for long-term income investors while maintaining conservative capital adequacy buffers.'
-            },
-            {
-                id: 3,
-                category: 'MARKET_ANALYSIS',
-                tag: 'Market Strategy',
-                title: 'Bank of Thailand Interest Rate Outlook: Impact on Thai High Dividend Stocks',
-                time: '3 hours ago',
-                source: 'Cryp2B Wealth Research',
-                summary: 'Potential rate cuts by BOT could boost capital inflows into high dividend stocks like INTUCH, ADVANC, and RATCH as bond yields decline.',
-                content: 'As interest rate expectations lean toward potential rate cuts in late 2026, high dividend stocks in the Stock Exchange of Thailand are gaining significant attention. Yield-seeking institutional and retail investors are shifting funds away from government bonds into stable dividend aristocrats with yield spreads exceeding 400 basis points over Thai 10-year treasury yields.'
-            },
-            {
-                id: 4,
-                category: 'XD_CALENDAR',
-                tag: 'XD Calendar Alert',
-                title: 'Land and Houses (LH) Approves Final Dividend Payment with 5 Days Remaining Before XD',
-                time: '5 hours ago',
-                source: 'SET Disclosures',
-                summary: 'LH set to go XD in 5 days with expected dividend payout yielding 7.95% annually.',
-                content: 'Land and Houses PCL (LH) reminds shareholders that its upcoming XD date is only 5 days away. Investors looking to capture the upcoming dividend distribution must hold shares prior to the cutoff date. LH maintains a strong balance sheet supported by steady rental income from Terminal 21 shopping malls.'
-            },
-            {
-                id: 5,
-                category: 'DIVIDEND_ANNOUNCEMENT',
-                tag: 'Dividend Declaration',
-                title: 'INTUCH & ADVANC Announce Semi-Annual Dividend Payout Guidance',
-                time: '8 hours ago',
-                source: 'Telecom Business Weekly',
-                summary: 'INTUCH offers reliable 6.20% dividend yield as 5G network monetisation accelerates ADVANC cash flow generation.',
-                content: 'Intouch Holdings (INTUCH) and Advanced Info Service (ADVANC) released joint earnings guidance confirming strong free cash flow generation. INTUCH continues its 98% payout policy, delivering sustainable semi-annual cash dividends to investors.'
-            }
-        ];
-
-                let liveNewsData = [];
-
-                function formatNewsDate(date) {
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
-        const [day, month, year] = date.split('/').map(Number);
-        return new Date(year, month - 1, day).toLocaleDateString('en-US', {
-            month: 'long',
-            day: '2-digit',
-            year: 'numeric'
-        });
-    }
-
-    const parsedDate = new Date(date);
-
-    if (Number.isNaN(parsedDate.getTime())) {
-        return date;
-    }
-
-    return parsedDate.toLocaleDateString('en-US', {
-        month: 'long',
-        day: '2-digit',
-        year: 'numeric'
-    });
-}
         
         // Tab Switcher
         function switchTab(tabName) {
@@ -1529,7 +1328,6 @@ loadLiveNews();
 
             // Refresh tab specific views
             if (tabName === 'portfolio') renderPortfolioView();
-            if (tabName === 'news') renderNewsFeed();
             if (tabName === 'ai') updateAICashLabel();
         }
 
@@ -1538,7 +1336,6 @@ loadLiveNews();
             renderMarketTable();
             renderLiveTicker();
             updatePortfolioHeaderSummary();
-            renderNewsFeed();
             startLivePriceSimulation();
         });
 
@@ -3046,159 +2843,7 @@ if (!stk) return;
     });
 
     tbody.innerHTML = html;
-}
-
-
-
-        function setNewsCategory(cat) {
-    window.appState.newsCategory = cat;
-
-    document.querySelectorAll('.news-cat-btn').forEach(btn => {
-        btn.className =
-            'news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
-    });
-
-    const activeBtn = [...document.querySelectorAll('.news-cat-btn')]
-        .find(btn => btn.getAttribute('onclick')?.includes(`'${cat}'`));
-
-    if (activeBtn) {
-        activeBtn.className =
-            'news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 font-bold transition-all';
-    }
-
-    renderNewsFeed();
-}
-
-    async function loadLiveNews() {
-    try {
-        const response = await fetch('/api/news');
-
-        if (!response.ok) {
-            throw new Error(`News API HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        liveNewsData = (data.news || []).map(item => ({
-            id: item.id,
-            category: item.category,
-            tag: item.tag,
-            title: item.title,
-            time: formatNewsDate(item.date),
-            source: item.source,
-            summary: `${item.company} — ${item.tag}`,
-            content: item.title,
-            url: item.url,
-            symbol: item.symbol,
-            company: item.company
-        }));
-
-        console.log('Live news loaded:', liveNewsData.length);
-        console.log('Live news data:', liveNewsData);
-
-    } catch (error) {
-        console.error('Live News Error:', error);
-    }
-}
-
-        function renderNewsFeed() {
-            const container = document.getElementById('news-grid');
-            if (!container) return;
-
-            const searchQuery = (document.getElementById('news-search')?.value || '').toLowerCase();
-            const catFilter = window.appState.newsCategory;
-
-            const filtered = liveNewsData.filter(item => {
-    const hasValidLink =
-        item.url &&
-        item.url.startsWith('https://') &&
-        !item.url.includes('javascript:');
-
-    const matchesCategory =
-        catFilter === 'ALL' || item.category === catFilter;
-
-    const matchesSearch =
-        item.title.toLowerCase().includes(searchQuery) ||
-        item.summary.toLowerCase().includes(searchQuery) ||
-        (item.company || '').toLowerCase().includes(searchQuery) ||
-        (item.symbol || '').toLowerCase().includes(searchQuery);
-
-    return hasValidLink && matchesCategory && matchesSearch;
-});
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500">No news articles found.</div>`;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(item => {
-                const hasValidLink =
-                    item.url &&
-                    item.url.startsWith('https://') &&
-                    !item.url.includes('javascript:');
-                html += `
-                    <div ${hasValidLink ? `onclick='openNewsDetailModal(${JSON.stringify(item.id)})'` : ''} class="bg-cardbg p-5 rounded-2xl border border-slate-800 ${hasValidLink ? 'hover:border-blue-500/40 cursor-pointer' : 'opacity-75'} transition-all shadow-lg flex flex-col justify-between group">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="px-2.5 py-0.5 rounded-full font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                                    ${item.tag}
-                                </span>
-                                <span class="text-slate-500"><i class="fa-regular fa-clock mr-1"></i> ${item.time}</span>
-                            </div>
-                            <h3 class="font-bold text-white text-base group-hover:text-blue-400 transition-colors leading-snug">
-                                ${item.title}
-                            </h3>
-                            <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">
-                                ${item.summary}
-                            </p>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                            <span><i class="fa-solid fa-building text-[10px] mr-1"></i> ${item.source}</span>
-                            <span class="text-blue-400 group-hover:translate-x-1 transition-transform">
-    Read <i class="fa-solid fa-arrow-right text-[10px]"></i>
-</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        
-
-function openNewsDetailModal(newsId) {
-    const article = liveNewsData.find(n => n.id === newsId);
-    if (!article) return;
-
-    document.getElementById('m-news-tag').innerText = article.tag;
-    document.getElementById('m-news-title').innerText = article.title;
-
-    document.getElementById('m-news-time').innerHTML =
-        `<i class="fa-regular fa-clock mr-1"></i> ${article.time}`;
-
-    document.getElementById('m-news-source').innerHTML =
-        `<i class="fa-solid fa-building mr-1"></i> ${article.source}`;
-
-    document.getElementById('m-news-content-title').innerText =
-        'Original Announcement';
-
-    document.getElementById('m-news-content').innerText =
-        article.content || article.title;
-
-    const originalLink = document.getElementById('m-news-original-link');
-
-    if (article.url && article.url.startsWith('https://')) {
-        originalLink.href = article.url;
-        originalLink.classList.remove('hidden');
-    } else {
-        originalLink.classList.add('hidden');
-        originalLink.removeAttribute('href');
-    }
-
-    document.getElementById('modal-news').classList.remove('hidden');
-}
+}  
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
