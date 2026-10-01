@@ -193,9 +193,8 @@
             <!-- Header Banner -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                        <span>Top Thai Dividend Stocks Overview</span>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">SET High Dividend 30</span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Top Thai Dividend Stocks Overview
                     </h1>
                     <p class="text-sm text-slate-400 mt-1">
     ติดตามราคาหุ้น อัตราผลตอบแทนเงินปันผล วันขึ้นเครื่องหมาย XD และข้อมูลความเสี่ยงล่าสุด
@@ -217,16 +216,17 @@
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                         <input type="text" id="market-search" oninput="filterMarketTable()" placeholder="Search ticker or company..." class="bg-slate-950 text-slate-200 text-sm pl-9 pr-4 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
                     </div>
-                    <select id="sector-filter" onchange="filterMarketTable()" class="bg-slate-950 text-slate-200 text-sm px-3 py-2 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500">
-    <option value="ALL">All Sectors</option>
-    <option value="Financials">Financials / Banks</option>
-    <option value="Property">Property Development</option>
-    <option value="Energy">Energy & Utilities</option>
-    <option value="Commerce">Commerce</option>
-    <option value="Transport">Transportation & Logistics</option>
-    <option value="Food">Food & Consumer</option>
-    <option value="Industrial">Industrial / Materials</option>
-</select>
+                    <select id="sector-filter" onchange="filterMarketTable()" class="bg-slate-900 border border-slate-700 text-slate-300 rounded-xl px-3 py-2 text-sm">
+                        <option value="ALL">All Sectors</option>
+                        <option value="Financial Services">Financial Services</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Industrials">Industrials</option>
+                        <option value="Consumer Cyclical">Consumer Cyclical</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Energy">Energy</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Basic Materials">Basic Materials</option>
+                    </select>
                 </div>
             </div>
 
@@ -802,11 +802,10 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-blue-950/30 to-slate-900 p-6 rounded-2xl border border-blue-500/20 shadow-xl">
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-                        <span>Thai Dividend Market News & XD Radar</span>
-                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">SET Live Disclosures</span>
+                        <span>Thai Dividend Market News</span>
                     </h1>
                     <p class="text-slate-400 text-sm mt-1">
-                        Real-time updates on SET corporate dividend declarations, XD calendar alerts, quarterly earnings, and macro interest rate policy.
+                        ติดตามข่าวสารและประกาศสำคัญจากบริษัทจดทะเบียนในตลาดหลักทรัพย์ไทย ครอบคลุมการประกาศจ่ายเงินปันผล การขึ้นเครื่องหมาย XD ผลประกอบการรายไตรมาส และการเปลี่ยนแปลงสำคัญของบริษัท
                     </p>
                 </div>
 
@@ -818,13 +817,29 @@
                 </div>
             </div>
 
-            <!-- News Category Filters -->
-            <div class="flex flex-wrap gap-2 text-xs font-semibold">
-                <button onclick="setNewsCategory('ALL')" class="news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 shadow-md">All Updates</button>
-                <button onclick="setNewsCategory('XD_CALENDAR')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700">XD Calendar Alerts</button>
-                <button onclick="setNewsCategory('DIVIDEND_ANNOUNCEMENT')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700">Dividend Declarations</button>
-                <button onclick="setNewsCategory('MARKET_ANALYSIS')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700">Market & Tax Analysis</button>
-            </div>
+            
+<!-- News Category Filters -->
+<div class="flex flex-wrap gap-2 text-xs font-semibold">
+    <button onclick="setNewsCategory('ALL')" class="news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 shadow-md font-bold transition-all">
+        All Updates
+    </button>
+
+    <button onclick="setNewsCategory('DIVIDEND')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+        Dividend News
+    </button>
+
+    <button onclick="setNewsCategory('EARNINGS')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+        Financial Results
+    </button>
+
+    <button onclick="setNewsCategory('CORPORATE_ACTIONS')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+        Corporate Actions
+    </button>
+
+    <button onclick="setNewsCategory('COMPANY')" class="news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+        Company Announcements
+    </button>
+</div>
 
             <!-- News Feed Grid -->
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1044,15 +1059,48 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div class="p-6 space-y-4">
-                <h3 id="m-news-title" class="text-xl font-bold text-white leading-snug"></h3>
-                <div class="flex items-center space-x-4 text-xs text-slate-400">
-                    <span id="m-news-time"><i class="fa-regular fa-clock mr-1"></i> 10 mins ago</span>
-                    <span id="m-news-source"><i class="fa-solid fa-building mr-1"></i> SET News Service</span>
-                </div>
-                <hr class="border-slate-800">
-                <p id="m-news-body" class="text-sm text-slate-300 leading-relaxed"></p>
-            </div>
+            
+<div class="p-6 space-y-4">
+    <h3 id="m-news-title" class="text-xl font-bold text-white leading-snug"></h3>
+
+    <div class="flex items-center space-x-4 text-xs text-slate-400">
+        <span id="m-news-time"><i class="fa-regular fa-clock mr-1"></i> 10 mins ago</span>
+        <span id="m-news-source"><i class="fa-solid fa-building mr-1"></i> SET News Service</span>
+    </div>
+
+    <hr class="border-slate-800">
+
+    <div class="space-y-4">
+
+        
+<!-- News Content -->
+<div>
+    <h3
+        id="m-news-content-title"
+        class="text-base font-bold text-white mb-2"
+    >
+        Original Announcement
+    </h3>
+
+    <p
+        id="m-news-content"
+        class="text-sm text-slate-300 leading-relaxed"
+    ></p>
+</div>
+        <!-- Original Link -->
+        <a
+            id="m-news-original-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 text-xs font-bold transition-all"
+        >
+            Read Original Announcement
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+
+    </div>
+</div>
             <div class="bg-slate-900 px-6 py-4 border-t border-slate-800 flex justify-end">
                 <button onclick="closeModal('modal-news')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs">Close</button>
             </div>
@@ -1343,6 +1391,7 @@ function refreshDividendYields() {
 });
 
 loadYahooStockData();
+loadLiveNews();
 
 // Current SETHD Universe
 // Effective: 1 Jul 2026 - 31 Dec 2026
@@ -1418,7 +1467,30 @@ loadYahooStockData();
             }
         ];
 
+                let liveNewsData = [];
 
+                function formatNewsDate(date) {
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+        const [day, month, year] = date.split('/').map(Number);
+        return new Date(year, month - 1, day).toLocaleDateString('en-US', {
+            month: 'long',
+            day: '2-digit',
+            year: 'numeric'
+        });
+    }
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+        return date;
+    }
+
+    return parsedDate.toLocaleDateString('en-US', {
+        month: 'long',
+        day: '2-digit',
+        year: 'numeric'
+    });
+}
         
         // Tab Switcher
         function switchTab(tabName) {
@@ -2979,15 +3051,55 @@ if (!stk) return;
 
 
         function setNewsCategory(cat) {
-            window.appState.newsCategory = cat;
+    window.appState.newsCategory = cat;
 
-            document.querySelectorAll('.news-cat-btn').forEach(btn => {
-                btn.className = 'news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
-            });
-            event.target.className = 'news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 font-bold transition-all';
+    document.querySelectorAll('.news-cat-btn').forEach(btn => {
+        btn.className =
+            'news-cat-btn px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
+    });
 
-            renderNewsFeed();
+    const activeBtn = [...document.querySelectorAll('.news-cat-btn')]
+        .find(btn => btn.getAttribute('onclick')?.includes(`'${cat}'`));
+
+    if (activeBtn) {
+        activeBtn.className =
+            'news-cat-btn px-4 py-2 rounded-xl bg-blue-500 text-slate-950 font-bold transition-all';
+    }
+
+    renderNewsFeed();
+}
+
+    async function loadLiveNews() {
+    try {
+        const response = await fetch('/api/news');
+
+        if (!response.ok) {
+            throw new Error(`News API HTTP ${response.status}`);
         }
+
+        const data = await response.json();
+
+        liveNewsData = (data.news || []).map(item => ({
+            id: item.id,
+            category: item.category,
+            tag: item.tag,
+            title: item.title,
+            time: formatNewsDate(item.date),
+            source: item.source,
+            summary: `${item.company} — ${item.tag}`,
+            content: item.title,
+            url: item.url,
+            symbol: item.symbol,
+            company: item.company
+        }));
+
+        console.log('Live news loaded:', liveNewsData.length);
+        console.log('Live news data:', liveNewsData);
+
+    } catch (error) {
+        console.error('Live News Error:', error);
+    }
+}
 
         function renderNewsFeed() {
             const container = document.getElementById('news-grid');
@@ -2996,11 +3108,23 @@ if (!stk) return;
             const searchQuery = (document.getElementById('news-search')?.value || '').toLowerCase();
             const catFilter = window.appState.newsCategory;
 
-            const filtered = newsData.filter(item => {
-                const matchesCategory = catFilter === 'ALL' || item.category === catFilter;
-                const matchesSearch = item.title.toLowerCase().includes(searchQuery) || item.summary.toLowerCase().includes(searchQuery);
-                return matchesCategory && matchesSearch;
-            });
+            const filtered = liveNewsData.filter(item => {
+    const hasValidLink =
+        item.url &&
+        item.url.startsWith('https://') &&
+        !item.url.includes('javascript:');
+
+    const matchesCategory =
+        catFilter === 'ALL' || item.category === catFilter;
+
+    const matchesSearch =
+        item.title.toLowerCase().includes(searchQuery) ||
+        item.summary.toLowerCase().includes(searchQuery) ||
+        (item.company || '').toLowerCase().includes(searchQuery) ||
+        (item.symbol || '').toLowerCase().includes(searchQuery);
+
+    return hasValidLink && matchesCategory && matchesSearch;
+});
 
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500">No news articles found.</div>`;
@@ -3009,8 +3133,12 @@ if (!stk) return;
 
             let html = '';
             filtered.forEach(item => {
+                const hasValidLink =
+                    item.url &&
+                    item.url.startsWith('https://') &&
+                    !item.url.includes('javascript:');
                 html += `
-                    <div onclick="openNewsDetailModal(${item.id})" class="bg-cardbg p-5 rounded-2xl border border-slate-800 hover:border-blue-500/40 cursor-pointer transition-all shadow-lg flex flex-col justify-between group">
+                    <div ${hasValidLink ? `onclick='openNewsDetailModal(${JSON.stringify(item.id)})'` : ''} class="bg-cardbg p-5 rounded-2xl border border-slate-800 ${hasValidLink ? 'hover:border-blue-500/40 cursor-pointer' : 'opacity-75'} transition-all shadow-lg flex flex-col justify-between group">
                         <div class="space-y-3">
                             <div class="flex items-center justify-between text-xs">
                                 <span class="px-2.5 py-0.5 rounded-full font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
@@ -3027,7 +3155,9 @@ if (!stk) return;
                         </div>
                         <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-semibold">
                             <span><i class="fa-solid fa-building text-[10px] mr-1"></i> ${item.source}</span>
-                            <span class="text-blue-400 group-hover:translate-x-1 transition-transform">Read <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                            <span class="text-blue-400 group-hover:translate-x-1 transition-transform">
+    Read <i class="fa-solid fa-arrow-right text-[10px]"></i>
+</span>
                         </div>
                     </div>
                 `;
@@ -3036,20 +3166,39 @@ if (!stk) return;
             container.innerHTML = html;
         }
 
-        function openNewsDetailModal(newsId) {
-            const article = newsData.find(n => n.id === newsId);
-            if (!article) return;
+        
 
-            document.getElementById('m-news-tag').innerText = article.tag;
-            document.getElementById('m-news-title').innerText = article.title;
-            document.getElementById('m-news-time').innerHTML = `<i class="fa-regular fa-clock mr-1"></i> ${article.time}`;
-            document.getElementById('m-news-source').innerHTML = `<i class="fa-solid fa-building mr-1"></i> ${article.source}`;
-            document.getElementById('m-news-body').innerText = article.content;
+function openNewsDetailModal(newsId) {
+    const article = liveNewsData.find(n => n.id === newsId);
+    if (!article) return;
 
-            document.getElementById('modal-news').classList.remove('hidden');
-        }
+    document.getElementById('m-news-tag').innerText = article.tag;
+    document.getElementById('m-news-title').innerText = article.title;
 
+    document.getElementById('m-news-time').innerHTML =
+        `<i class="fa-regular fa-clock mr-1"></i> ${article.time}`;
 
+    document.getElementById('m-news-source').innerHTML =
+        `<i class="fa-solid fa-building mr-1"></i> ${article.source}`;
+
+    document.getElementById('m-news-content-title').innerText =
+        'Original Announcement';
+
+    document.getElementById('m-news-content').innerText =
+        article.content || article.title;
+
+    const originalLink = document.getElementById('m-news-original-link');
+
+    if (article.url && article.url.startsWith('https://')) {
+        originalLink.href = article.url;
+        originalLink.classList.remove('hidden');
+    } else {
+        originalLink.classList.add('hidden');
+        originalLink.removeAttribute('href');
+    }
+
+    document.getElementById('modal-news').classList.remove('hidden');
+}
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);

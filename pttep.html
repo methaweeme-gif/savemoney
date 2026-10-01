@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>(function(){"use strict";var __webpack_modules__={348:function(e,t,r){r.d(t,{IP:function(){return i},Pz:function(){return a},Sg:function(){return l},XV:function(){return _},_9:function(){return c},e:function(){return o},qQ:function(){return s},t9:function(){return n}});const o="eudaEnableAgent",n="eudaSyncLoad",_="eudaAgentVersion",a="eudaLoaderVersion",c="eudaForce",s="eudaClearText",i="eudaFailed",l="eudaMode"},405:function(e,t,r){r.d(t,{Pt:function(){return n}});let o=!1;function n(e){o=e}}},__webpack_module_cache__={};function __webpack_require__(e){var t=__webpack_module_cache__[e];if(void 0!==t)return t.exports;var r=__webpack_module_cache__[e]={exports:{}};return __webpack_modules__[e](r,r.exports,__webpack_require__),r.exports}__webpack_require__.d=function(e,t){for(var r in t)__webpack_require__.o(t,r)&&!__webpack_require__.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},__webpack_require__.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)};var __webpack_exports__={},_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__=__webpack_require__(348),_lib_service_worker_wrapper_js__WEBPACK_IMPORTED_MODULE_1__=__webpack_require__(405);(function(){let registerSWStarted=!1;const resourceBasePath="/678c37f1-fcea-354f-853d-32b794d02404",csmBasePath="/4359d65e-dd82-3237-8c34-3c0c315503df",getVersionIntervalSeconds="60",loaderVersion="1.2";localStorage.setItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.Pz,loaderVersion);const serviceWorkerUrl=`${resourceBasePath}/eudaapi/get-script/serviceworker`;let attempt=0,enableAgent=!1,syncLoad=!1,oldAgentVersion=!1,newAgentVersion=!1,agentVersion=!1,forceAgent=getBooleanFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__._9),clearText=getBooleanFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.qQ),agentLoaded=!1;function getBooleanFromLocalStorage(e){return"true"===getFromLocalStorage(e)}function getFromLocalStorage(e){return localStorage.getItem(e)}function loader(){const e=parseInt(localStorage.getItem("eudaRefreshPolicyInterval"));let t=3e4;e>0?t=1e3*e:parseInt(getVersionIntervalSeconds)>0&&(t=1e3*getVersionIntervalSeconds),captureConfig(),init().then(()=>{"serviceWorker"in navigator&&navigator.serviceWorker.addEventListener("message",function(e){"reload"===e.data.type&&location.reload()}),setTimeout(loader,t)}).catch(e=>{if(attempt<3)setTimeout(loader,t);else{const e=Math.floor(Date.now()/1e3)+86400;localStorage.setItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.IP,e.toString())}attempt++})}function captureConfig(e){enableAgent=getBooleanFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.e),syncLoad=getBooleanFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.t9),agentVersion=getFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.XV),forceAgent=getBooleanFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__._9),oldAgentVersion=agentVersion,e&&(enableAgent=e.enableAgent,syncLoad=e.syncLoad,newAgentVersion=e.agentVersion,agentVersion=newAgentVersion,controlServiceWorker(newAgentVersion).then(()=>{}),localStorage.setItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.XV,agentVersion),localStorage.setItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.e,enableAgent),localStorage.setItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.t9,syncLoad))}function init(){const e=getFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.IP);if(!(null!==e&&Date.now()-Number(e)<=0))return localStorage.removeItem(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.IP),new Promise(async(e,t)=>{syncLoad&&enableAgent?loadAgentCode().then(()=>loadConfigFromServer().then(()=>e()).catch(e=>t(e))).catch(e=>t(e)):loadConfigFromServer().then(()=>isAgentRequired()?loadAgentCode().then(()=>e()).catch(e=>t(e)):e()).catch(e=>t(e))})}function loadConfigFromServer(){return new Promise(async(e,t)=>{try{const r=await fetch(`${csmBasePath}/eudaapi/version`,{method:"POST",headers:{Accept:"application/json","Content-Type":"application/json"},body:JSON.stringify({location:location.href})});if(r.status>=400)return t(new Error("Bad response from server"));return captureConfig(await r.json()),e()}catch(e){return t(e)}})}function isAgentRequired(){return!!forceAgent||enableAgent}function loadAgentCodeAsync(e){return new Promise((t,r)=>{let o=0,n=setInterval(()=>{o++;let _=document.getElementsByTagName("head")[0];if(_){clearInterval(n);let r=document.createElement("script");return r.src=e,_.appendChild(r),agentLoaded=!0,t()}if(o>10)return clearInterval(n),console.info("couldn't load script no Head present"),r(new Error("couldn't load script no Head present"))},10)})}function loadAgentCodeSync(url){return new Promise((resolve,reject)=>{let xhr=new XMLHttpRequest;xhr.onreadystatechange=function(){if(this.readyState)return 200===this.status?(eval(xhr.responseText),agentLoaded=!0,resolve()):reject(new Error(`request returned status ${this.status}`))},xhr.open("GET",url,!1),xhr.send()})}function getModeArg(){let e="",t=getFromLocalStorage(_lib_local_storage_js__WEBPACK_IMPORTED_MODULE_0__.Sg);return t&&(e=`&mode=${encodeURIComponent(t)}`),e}function loadAgentCode(){return new Promise((e,t)=>{if(agentLoaded)return e();let r=`${resourceBasePath}/eudaapi/get-script/euda?ver=${agentVersion}${getModeArg()}`;(syncLoad?loadAgentCodeSync:loadAgentCodeAsync)(r).then(()=>e()).catch(e=>t(e))})}function compareAgentVersions(e){if(!oldAgentVersion)return!0;if(!e)return!1;return oldAgentVersion.substring(0,oldAgentVersion.lastIndexOf("."))<e.substring(0,e.lastIndexOf("."))}function registerServiceWorker(){return new Promise((e,t)=>{const r=setTimeout(()=>{t(new Error("service worker registration time out"))},3e4),o=agentVersion.substring(0,agentVersion.lastIndexOf("."));navigator.serviceWorker.register(`${serviceWorkerUrl}?v=${o}${getModeArg()}`,{scope:"/"}).then(t=>((0,_lib_service_worker_wrapper_js__WEBPACK_IMPORTED_MODULE_1__.Pt)(t),clearTimeout(r),e())).catch(e=>(clearTimeout(r),t(new Error(`service worker register failed: ${e}`))))})}function handleRegisterSW(e,t){registerServiceWorker().then(()=>(navigator.serviceWorker.ready.then(e=>{e.active&&e.active.postMessage({type:"FORCE_AGENT_VALUE",forceAgent:forceAgent})}).catch(e=>{console.warn("Failed to send force agent value to service worker:",e)}),registerSWStarted=!1,e())).catch(e=>(registerSWStarted=!1,t(e)))}function controlServiceWorker(e){return new Promise((t,r)=>{if(registerSWStarted)return t();const o="serviceWorker"in navigator,n=window.isSecureContext||"localhost"===location.hostname||"127.0.0.1"===location.hostname;if(!o||!n)return t();let _=compareAgentVersions(e);registerSWStarted=!0,navigator.serviceWorker.getRegistration("/").then(e=>e&&e.active?(e.active.postMessage({type:"FORCE_AGENT_VALUE",forceAgent:forceAgent}),_?handleRegisterSW(t,r):(registerSWStarted=!1,t())):enableAgent||forceAgent?handleRegisterSW(t,r):(registerSWStarted=!1,t())).catch(e=>(console.log(e),registerSWStarted=!1,r()))})}loader()})()})();
+//# sourceMappingURL=capture.bundle.js.map{}
+</script>
+
+    <!-- Made with love by www.optiwise.io | Optiwise Provides Data and Corporate Services Tools for Public Companies -->
+
+    <!-- OneTrust Cookies Consent Notice start for pttep.com -->
+    <script type="text/javascript" src="https://cdn-apac.onetrust.com/consent/45c3fb26-1b77-4bd3-93ec-9a10bdbea1cf/OtAutoBlock.js" ></script>
+    <script src="https://cdn-apac.onetrust.com/scripttemplates/otSDKStub.js" data-document-language="true" type="text/javascript" charset="UTF-8" data-domain-script="45c3fb26-1b77-4bd3-93ec-9a10bdbea1cf" ></script>
+    <script type="text/javascript">
+        function OptanonWrapper() { }
+    </script>
+    <!-- OneTrust Cookies Consent Notice end for pttep.com -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BL74349WNX"></script>
+   <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+
+       
+       gtag('config', "G-BL74349WNX");
+
+       
+       
+       gtag('config', "G-3182WJWN5N");
+
+   </script>
+
+
+    
+
+
+    
+
+
+
+    <title>
+        SET Announcement | PTTEP
+    </title>
+
+    <!--
+<link rel="apple-touch-icon" sizes="192x192" href="/storage/favicon-app.png">
+-->
+
+<link rel="shortcut icon" type="image/png" sizes="32x32"
+      href="https://www.pttep.com/storage/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:&#119;&#103;&#104;&#116;&#64;&#49;&#48;&#48;&#46;&#46;&#57;&#48;&#48;&#38;&#102;&#97;&#109;&#105;ly=Noto+Sans+Thai:&#119;&#103;&#104;&#116;&#64;&#49;&#48;&#48;&#46;&#46;&#57;&#48;&#48;&#38;&#102;&#97;&#109;&#105;ly=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.8.55/css/materialdesignicons.min.css"
+      integrity="sha512-x96qcyADhiw/CZY7QLOo7dB8i/REOEHZDhNfoDuJlyQ+yZzhdy91eAa4EkO7g3egt8obvLeJPoUKEKu5C5JYjA=="
+      crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="/assets/node.c180e.css"/>
+
+<link rel="stylesheet" href="/assets/vendor.0d297.css"/>
+<link rel="stylesheet" href="/assets/app.9b978.css"/>
+
+    
+    <meta charset="utf-8">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, shrink-to-fit=no">
+<meta name="format-detection" content="telephone=no">
+<!--
+<meta name="apple-mobile-web-app-title" content="Atlas CMS">
+<meta name="application-name" content="Atlas CMS">
+-->
+
+<meta name="csrf-token" content="YuW9Cgq2z474APuSzgVbMQMemRDyup9yXPZIK1sP">
+
+
+<link rel="canonical" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements"/>
+
+
+
+            <link rel="alternate" hreflang="en" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements"/>
+            <link rel="alternate" hreflang="th" href="https://www.pttep.com/th/investor-relations/newsroom/set-announcements"/>
+    
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="SET Announcement">
+<meta property="og:description" content="SET Announcement">
+<meta property="og:url" content="https://www.pttep.com/en/investor-relations/newsroom/set-announcements">
+<meta property="og:image" content="https://www.pttep.com/glide/assets/images/default/opengraph.webp?h=350&amp;fit=max&amp;fm=jpg&amp;t=1790837045">
+
+            <meta name="twitter:title" content="SET Announcement">
+<meta name="twitter:description" content="SET Announcement">
+<meta name="twitter:url" content="https://www.pttep.com/en/investor-relations/newsroom/set-announcements">
+<meta name="twitter:images0" content="https://www.pttep.com/glide/assets/images/default/opengraph.webp?h=350&amp;fit=max&amp;fm=jpg&amp;t=1790837045">
+
+<script>var __uzdbm_1 = "4a445efa-f79a-4c76-aea4-c820386983c7";var __uzdbm_2 = "YzI2NzIzZjAtYzU4ci00MTA1LTgzNzItM2ViYzJmYjhhMGRmJDIzLjk3LjYyLjEzMw==";var __uzdbm_3 = "7f90004a445efa-f79a-4c76-aea4-c820386983c71-17908371032210-0054594b52f1fa5ded310";var __uzdbm_4 = "false";var __uzdbm_5 = "uzmx";var __uzdbm_6 = "7fc00069cc05b7-29e2-49f7-ade3-31e60ecfcb531-17908371032210-00769a71bd014aa70d310";var __uzdbm_7 = "pttep.com";</script> <script>(function(w, d, e, u, c, g, a, b){ w["SSJSConnectorObj"] = {ss_cid : c, domain_info: "auto"}; a = d.createElement(e); a.async = true; a.src = u; b = d.getElementsByTagName(e)[0]; b.parentNode.insertBefore(a, b); })(window,document,"script","https://cdn.perfdrive.com/aperture/aperture.js","c58t","ssConf");</script></head>
+<body>
+
+
+
+
+
+<div id="vue-app" data-app>
+
+    <div v-cloak>
+
+        <main-header>
+    <div class="header__container">
+        <div class="header__wrapper">
+            <div class="header__logo-wrapper">
+                <a href="https://www.pttep.com/en/home" target="_self" class="header__logo">
+                    <img src="/storage/logo.svg" alt="PTTEP" class="header__img">
+                </a>
+            </div>
+            <div class="header__aside">
+                <div class="header__action">
+                    <a href="https://www.pttep.com/en/search" class="header__search">
+                        <i class="header__icon icon-search"></i>
+                    </a>
+
+
+
+                    <div class="language">
+                    <a class="language__item  active" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements">
+                                    EN
+                            </a>
+                    <a class="language__item  " href="https://www.pttep.com/th/investor-relations/newsroom/set-announcements">
+                                    ไทย
+                            </a>
+            </div>
+
+                    <div class="header__hamburger">
+                        <button class="header__hamburger-toggler navbar-toggler collapsed" type="button"
+                                data-toggle="collapse"
+                                data-target="#mainMenu" aria-controls="mainMpenu" aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="menu-wrapper collapse navbar-collapse " id="mainMenu">
+    <div class="menu-wrapper__menu">
+        <div class="menu menu--main navbar-nav" v-dropdown-toggle>
+            <ul class="menu__nav menu__nav--lv-1">
+                                                            <li class="menu__item menu__item--lv-1 nav-item d-xl-none">
+                            <a class="menu__link menu__link--lv-1 nav-link" href="https://www.pttep.com/en/home" target="_self">
+                                <span class="menu__title menu__title--lv-1">Home</span>
+                            </a>
+                        </li>
+                                                                                <li class="menu__item menu__item--lv-1 nav-item">
+                            <a class="menu__link menu__link--lv-1 nav-link menu__link--has-children" href="javascript:;">
+                                <span class="menu__title menu__title--lv-1">Our Company</span>
+                                <span class="menu__icon menu__icon--lv-1"></span>
+                            </a>
+                            <div class="menu__dropdown-menu menu__dropdown-menu--lv2 dropdown-menu">
+                                <ul class="menu__nav menu__nav--lv-2">
+                                                                                                                        <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/pttep-overview" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">PTTEP Overview</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/vision-mission-and-values" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Vision, Mission and Values</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/our-journey" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Our Journey</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/our-business" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Our Business</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Leadership and Organization</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/leadership/board-of-directors" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Board of Directors</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/leadership/leadership-team" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Leadership Team</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/our-company/leadership-and-organization/organization-structure" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Organization Structure</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Corporate Governance</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/our-company/corporate-governance/by-laws" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">By-Laws</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/our-company/corporate-governance/cg-and-business-ethics" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">CG and Business Ethics</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/leadership/board-of-directors" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">The Committee</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/our-company/corporate-governance/whistleblowing-regulation" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Whistleblowing Regulation</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/our-company/corporate-governance/cg-reporting" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">CG Reporting</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/ep-net-zero-2050" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">EP Net Zero 2050</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-company/technology-and-innovation" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Technology and Innovation</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/our-pride" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Award and Recognition</span>
+                                                </a>
+                                            </li>
+                                                                                                            </ul>
+                            </div>
+                        </li>
+                                                                                <li class="menu__item menu__item--lv-1 nav-item">
+                            <a class="menu__link menu__link--lv-1 nav-link" href="https://sustainability.pttep.com/en/home" target="_self">
+                                <span class="menu__title menu__title--lv-1">Sustainability</span>
+                            </a>
+                        </li>
+                                                                                <li class="menu__item menu__item--lv-1 nav-item">
+                            <a class="menu__link menu__link--lv-1 nav-link menu__link--has-children" href="javascript:;">
+                                <span class="menu__title menu__title--lv-1">News &amp; Media</span>
+                                <span class="menu__icon menu__icon--lv-1"></span>
+                            </a>
+                            <div class="menu__dropdown-menu menu__dropdown-menu--lv2 dropdown-menu">
+                                <ul class="menu__nav menu__nav--lv-2">
+                                                                                                                        <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/newsroom/press-releases" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Press Release</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/newsroom/announcements" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Announcement</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/newsroom/special-features" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Special Feature</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/newsroom/events" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Event</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Multimedia</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/multimedia/videos" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Video</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Publication</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/annual-reports" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Annual Report</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/document/fact-sheets" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Fact Sheet</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/document/newsletters" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Newsletter</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/document/others" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Others</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                            </ul>
+                            </div>
+                        </li>
+                                                                                <li class="menu__item menu__item--lv-1 nav-item">
+                            <a class="menu__link menu__link--lv-1 nav-link menu__link--has-children" href="javascript:;">
+                                <span class="menu__title menu__title--lv-1">Investor</span>
+                                <span class="menu__icon menu__icon--lv-1"></span>
+                            </a>
+                            <div class="menu__dropdown-menu menu__dropdown-menu--lv2 dropdown-menu">
+                                <ul class="menu__nav menu__nav--lv-2">
+                                                                                                                        <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/investor-relations/home" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Investor Overview</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Company&#039;s Performance</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/company-performance/financial-highlights" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Financial Highlights</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/quarterly-reports" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Quarterly Report</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/company-performance/credit-ratings" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Credit Ratings</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/company-performance/petroleum-proved-reserves-petroleum-production-and-sales-volume" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Petroleum Proved Reserves, Petroleum Production and Sales Volume</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">SET Announcement</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/investor-relations/stock-quote" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Stock Quote</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Shareholder Information</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/shareholder-information/major-shareholders" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Major Shareholders</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/shareholder-meetings" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Shareholder Meetings</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/shareholder-information/dividend-policy-and-payments" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Dividend Policy and Payments</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/shareholder-information/rights-of-shareholders" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Rights of Shareholders</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/investor-relations/bond-information" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Bond Information</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Report and Presentation</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/annual-reports" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Annual Report</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/presentations" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Presentation and Webcast</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/document/pttep-at-a-glance" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">PTTEP at a Glance</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/resource-center" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Resource Center</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/document/newsletters" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Newsletter</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/multimedia" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">Investor Multimedia</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/investor-relations/calendar" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Investor Calendar</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link menu__link--has-children"
+                                                   href="javascript:;" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Information Inquiry</span>
+                                                    <span class="menu__icon menu__icon--lv-2"></span>
+                                                </a>
+                                                <ul class="menu menu__lv3 navbar-nav">
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/information-inquiry/contact" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">IR Contact</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/information-inquiry/faq" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">FAQ</span>
+                                                            </a>
+                                                        </li>
+                                                                                                            <li class="menu__item menu__item--lv-3 nav-item">
+                                                            <a class="menu__link menu__link--lv-3 nav-link" href="https://www.pttep.com/en/investor-relations/information-inquiry/news-subscription" target="_self">
+                                                                <span class="menu__title menu__title--lv-3">IR News Subscription</span>
+                                                            </a>
+                                                        </li>
+                                                                                                    </ul>
+                                            </li>
+                                                                                                            </ul>
+                            </div>
+                        </li>
+                                                                                <li class="menu__item menu__item--lv-1 nav-item">
+                            <a class="menu__link menu__link--lv-1 nav-link menu__link--has-children" href="javascript:;">
+                                <span class="menu__title menu__title--lv-1">Career</span>
+                                <span class="menu__icon menu__icon--lv-1"></span>
+                            </a>
+                            <div class="menu__dropdown-menu menu__dropdown-menu--lv2 dropdown-menu">
+                                <ul class="menu__nav menu__nav--lv-2">
+                                                                                                                        <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/career/life-at-pttep" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Life at PTTEP</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://careers.pttep.com/" target="_blank">
+                                                    <span class="menu__title menu__title--lv-2">Apply for Jobs</span>
+                                                </a>
+                                            </li>
+                                                                                                                                                                <li class="menu__item menu__item--lv-2 nav-item">
+                                                <a class="menu__link menu__link--lv-2 nav-link" href="https://www.pttep.com/en/career/internship" target="_self">
+                                                    <span class="menu__title menu__title--lv-2">Internship</span>
+                                                </a>
+                                            </li>
+                                                                                                            </ul>
+                            </div>
+                        </li>
+                                                </ul>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</main-header>
+
+        <main>
+    <article>
+        <breadcrumb>
+        <a href="https://www.pttep.com/en/home" class="breadcrumb__logo">
+            <img src="/storage/logo.svg" alt="PTTEP" class="breadcrumb__img">
+        </a>
+        <div class="breadcrumb__nav">
+                                                <div class="breadcrumb__dropdown dropdown">
+                        <button class="breadcrumb__dropdown-toggle dropdown-toggle" type="button" id="investor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="breadcrumb__title">Investor</span>
+                            <span class="breadcrumb__icon"></span>
+                        </button>
+                        <div class="breadcrumb__dropdown-menu dropdown-menu" aria-labelledby="investor">
+                                                                                                                                                            <a href="https://www.pttep.com/en/our-company/pttep-overview" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Our Company
+                                    </a>
+                                                                                                                                <a href="https://sustainability.pttep.com/en/home" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Sustainability
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/newsroom/press-releases" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        News &amp; Media
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/home" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Investor
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/career/life-at-pttep" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Career
+                                    </a>
+                                                                                    </div>
+                    </div>
+                                                                <div class="breadcrumb__dropdown dropdown">
+                        <button class="breadcrumb__dropdown-toggle dropdown-toggle" type="button" id="set-announcements" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="breadcrumb__title">SET Announcement</span>
+                            <span class="breadcrumb__icon"></span>
+                        </button>
+                        <div class="breadcrumb__dropdown-menu dropdown-menu" aria-labelledby="set-announcements">
+                                                                                                <a href="https://www.pttep.com/en/investor-relations/home" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Investor Overview
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/company-performance/financial-highlights" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Company&#039;s Performance
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        SET Announcement
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/stock-quote" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Stock Quote
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/shareholder-information/major-shareholders" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Shareholder Information
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/bond-information" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Bond Information
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/document/annual-reports" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Report and Presentation
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/calendar" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Investor Calendar
+                                    </a>
+                                                                                                                                <a href="https://www.pttep.com/en/investor-relations/information-inquiry/contact" target="_self" class="breadcrumb__dropdown-item dropdown-item">
+                                        Information Inquiry
+                                    </a>
+                                                                                    </div>
+                    </div>
+                                    </div>
+    </breadcrumb>
+        <header class="page-header ">
+            <img src="https://www.pttep.com/storage/banner/set-announcements.webp" alt="SET Announcement" class="page-header__banner">
+        <div class="page-header__body">
+        <h1 class="page-header__title">SET Announcement</h1>
+    </div>
+</header>
+
+        <section class="section">
+                <div class="section__body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 mb-7">
+                                <form class="form form--filter" autocomplete="off" v-scroll-filter>
+    <div class="form-row">
+        <div class="form-group form-group--inline col-md-6 col-lg-5 col-xl-4 col-xxl-3">
+            <label class="form__label">Search:</label>
+            <div class="input-group">
+                <input type="text" name="keyword" class="form-control" placeholder="Keyword" value="">
+                <div class="input-group-append">
+                    <button class="btn" type="submit">
+                        <span class="btn__icon icon-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group--inline col-md-5 col-lg-4 col-xl-3 col-xxl-2">
+            <label class="form__label">Year:</label>
+            <select v-select name="year" class="form-control" onchange="this.form.submit()">
+                <option value="" selected>All</option>
+                                    <option value="2026" >
+                        2026
+                    </option>
+                                    <option value="2025" >
+                        2025
+                    </option>
+                                    <option value="2024" >
+                        2024
+                    </option>
+                                    <option value="2023" >
+                        2023
+                    </option>
+                                    <option value="2022" >
+                        2022
+                    </option>
+                                    <option value="2021" >
+                        2021
+                    </option>
+                                    <option value="2020" >
+                        2020
+                    </option>
+                                    <option value="2019" >
+                        2019
+                    </option>
+                                    <option value="2018" >
+                        2018
+                    </option>
+                                    <option value="2017" >
+                        2017
+                    </option>
+                                    <option value="2016" >
+                        2016
+                    </option>
+                                    <option value="2015" >
+                        2015
+                    </option>
+                            </select>
+        </div>
+    </div>
+</form>
+                            </div>
+                            <div class="col-12">
+                                                                    <div class="list-group list-group--set-announcement">
+                                                                                                                                    <a href="https://www.pttep.com/en/document/viewer/203990/changing-of-cfo"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">September 30, 2026</div>
+                                                        <h6 class="list-group__title">Changing of CFO</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/203959/invitation-to-shareholders-to-propose-agenda-items-and-director-nominees-for-the-2027-annual-general-shareholders-meeting-agm-in-advance"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">September 30, 2026</div>
+                                                        <h6 class="list-group__title">Invitation to Shareholders to Propose Agenda Items and Director Nominees for the 2027 Annual General Shareholders&#039; Meeting (AGM) in Advance</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/203507/dissolution-of-bind-systems-company-limited"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">September 16, 2026</div>
+                                                        <h6 class="list-group__title">Dissolution of Bind Systems Company Limited</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/203499/the-award-of-onshore-exploration-blocks-no-l1-66-and-l3-66-in-thailand"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">September 16, 2026</div>
+                                                        <h6 class="list-group__title">The Award of Onshore Exploration Blocks No. L1/66 and L3/66 in Thailand</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/203048/dissolution-of-ati-technologies-co-ltd"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">August 31, 2026</div>
+                                                        <h6 class="list-group__title">Dissolution of ATI Technologies Co., Ltd.</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/202952/signing-of-the-production-sharing-contract-and-the-gas-sales-agreement-for-block-a-18-01-in-the-malaysia-thailand-joint-development-area"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">August 27, 2026</div>
+                                                        <h6 class="list-group__title">Signing of the Production Sharing Contract and the Gas Sales Agreement for Block A-18-01 in the Malaysia-Thailand Joint Development Area</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/200874/appointment-of-chief-executive-officer-and-director"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">August 03, 2026</div>
+                                                        <h6 class="list-group__title">Appointment of Chief Executive Officer and Director</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/200865/payment-of-interim-dividend-for-the-first-half-of-2026"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">July 31, 2026</div>
+                                                        <h6 class="list-group__title">Payment of Interim Dividend for the first half of 2026</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/200867/management-discussion-and-analysis-quarter-2-ending-30-jun-2026"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">July 31, 2026</div>
+                                                        <h6 class="list-group__title">Management Discussion and Analysis Quarter 2 Ending 30 Jun 2026</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                <a href="https://www.pttep.com/en/document/viewer/200862/financial-performance-quarter-2-f45-reviewed"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">July 31, 2026</div>
+                                                        <h6 class="list-group__title">Financial Performance Quarter 2 (F45) (Reviewed)</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                                                                                                                                    <a href="javascript:;" data-toggle="modal"
+                                                       data-target="#financial-200863"
+                                                       class="list-group__item">
+                                                        <div class="list-group__body">
+                                                            <div class="list-group__date">July 31, 2026</div>
+                                                            <h6 class="list-group__title">Financial Statement Quarter 2/2026 (Reviewed)</h6>
+                                                        </div>
+                                                        <div class="list-group__btn-group btn-group">
+                                                            <div  class="list-group__btn btn btn--primary-sm">
+                                                                <span class="btn__title">Explore More</span>
+                                                                <span class="btn__icon btn__icon--arrow-right"></span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                                                                                                                                                                                                                                                    <a href="https://www.pttep.com/en/document/viewer/200856/reviewed-financial-statements-management-discussion-and-analysis-of-operating-results-for-the-second-quarter-of-2026-and-six-month-period-ended-30-june-2026"
+                                                   target="_blank"
+                                                   class="list-group__item">
+                                                    <div class="list-group__body">
+                                                        <div class="list-group__date">July 31, 2026</div>
+                                                        <h6 class="list-group__title">Reviewed Financial Statements, Management Discussion and Analysis of Operating Results for the Second Quarter of 2026 and Six-month Period ended 30 June 2026</h6>
+                                                    </div>
+                                                    <div class="list-group__btn-group btn-group">
+                                                        <div  class="list-group__btn btn btn--primary-sm">
+                                                            <span class="btn__title">Explore More</span>
+                                                            <span class="btn__icon btn__icon--arrow-right"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                                                                                        </div>
+                                                            </div>
+                            <div class="col-12">
+                                <nav>
+        <ul class="pagination">
+            
+                            <li class="page-item disabled">
+                    <a class="page-link page-link--prev" href="javascript:;">
+                        <i class="icon-back"></i>
+                    </a>
+                </li>
+            
+            
+            
+                
+                
+                
+                                    
+                                                    <li class="page-item active">
+                                <a class="page-link " href="javascript:;">1</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=2">2</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=3">3</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=4">4</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=5">5</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=6">6</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=7">7</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=8">8</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=9">9</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=10">10</a>
+                            </li>
+                        
+                                                
+                
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                
+                
+                            
+                
+                
+                
+                                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=57">57</a>
+                            </li>
+                        
+                    
+                                                    <li class="page-item">
+                                <a class="page-link" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=58">58</a>
+                            </li>
+                        
+                                                
+            
+            
+                <li class="page-item">
+                    <a class="page-link page-link--next" href="https://www.pttep.com/en/investor-relations/newsroom/set-announcements?page=2">
+                        <i class="icon-next"></i>
+                    </a>
+                </li>
+                    </ul>
+    </nav>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </article>
+</main>
+
+        <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="footer__top">
+                    <div class="footer__left">
+                        <a href="https://www.pttep.com/en/contact-us/news-subscription" target="_self" class="footer__btn btn btn--shortcut">
+                            <span class="btn__title">Subscribe to PTTEP News</span>
+                            <span class="btn__icon btn__icon--arrow-right"></span>
+                        </a>
+                        <div class="footer__title">Exploring endless possibilities with our subsidiaries:</div>
+<div class="footer__subsidiaries">
+            <div class="footer__item">
+                            <img src="https://www.pttep.com/storage/menu/logo-1.webp" alt="AI and Robotics Ventures" class="footer__icon">
+                        <a href="https://arv.co.th/" target="_blank" class="footer__btn btn btn--link">
+                <span class="btn__title">AI and Robotics Ventures</span>
+                <span class="btn__icon btn__icon--link-out"></span>
+            </a>
+        </div>
+            <div class="footer__item">
+                            <img src="https://www.pttep.com/storage/menu/logo-2.webp" alt="FutureTech Energy Ventures" class="footer__icon">
+                        <a href="https://www.ftev.com/Home" target="_blank" class="footer__btn btn btn--link">
+                <span class="btn__title">FutureTech Energy Ventures</span>
+                <span class="btn__icon btn__icon--link-out"></span>
+            </a>
+        </div>
+            <div class="footer__item">
+                            <img src="https://www.pttep.com/storage/menu/logo-3.webp" alt="Xplor Ventures" class="footer__icon">
+                        <a href="https://www.xplorventures.com/" target="_blank" class="footer__btn btn btn--link">
+                <span class="btn__title">Xplor Ventures</span>
+                <span class="btn__icon btn__icon--link-out"></span>
+            </a>
+        </div>
+    </div>
+                    </div>
+                    <div class="footer__center">
+                        <div class="footer__title">PTT Exploration and Production Public Company Limited</div>
+                        <address class="footer__address">
+                            555/1 Energy Complex Building A, Floors 19&ndash;36 Vibhavadi Rangsit Rd., Chatuchak, Bangkok, Thailand 10900
+                        </address>
+
+                        <div class="footer__media">
+                            <span class="footer__title">Phone :</span>
+                            <a href="tel:+66 (0) 2537 4000" class="footer__telephone" target="_self">
+                                <div class="footer__text">+66 (0) 2537 4000</div>
+                            </a>
+                        </div>
+                        <div class="footer__media">
+                            <span class="footer__title">Fax :</span>
+                            <a href="tel:+66 (0) 2537 4444" class="footer__fax" target="_self">
+                                <div class="footer__text">+66 (0) 2537 4444</div>
+                            </a>
+                        </div>
+                        <div class="footer__contact">
+                            <a href="https://www.pttep.com/en/contact-us"  target="_self" class="footer__btn btn btn--shortcut">
+                                <span class="btn__title">Contact Us</span>
+                                <span class="btn__icon btn__icon--arrow-right"></span>
+                            </a>
+                        </div>
+                        <div class="follow-us">
+    <div class="follow-us__headline">Follow Us :</div>
+    <div class="follow-us__body">
+        <a href="https://www.facebook.com/pttepplc/" target="_blank" class="follow-us__item">
+            <span class="follow-us__icon icon-facebook"></span>
+        </a>
+        <a href="https://www.linkedin.com/company/pttep/" target="_blank" class="follow-us__item">
+            <span class="follow-us__icon icon-linkedin"></span>
+        </a>
+        <a href="https://www.youtube.com/@pttepofficial" target="_blank" class="follow-us__item">
+            <span class="follow-us__icon icon-youtube"></span>
+        </a>
+    </div>
+</div>
+                    </div>
+                    <div class="footer__right">
+                        <div class="footer__title">Vendor Portal :</div>
+<div class="footer__vendor">
+            <a href="https://procurement.pttep.com/" target="_self" class="footer__btn btn btn--link">
+            <span class="btn__title">Procurement and Vendor Management</span>
+        </a>
+    </div>
+                        <div class="footer__policy-navigation">
+                            <ul class="menu menu--footer navbar-nav">
+            <li class="menu__nav-item nav-item">
+            <a class="manu__nav-link nav-link" href="https://www.pttep.com/en/privacy-notice-and-regulations/personal-data-protection-policy" target="_self">
+                <span class="menu__title">Privacy Notice and Regulations</span>
+            </a>
+        </li>
+            <li class="menu__nav-item nav-item">
+            <a class="manu__nav-link nav-link" href="https://www.pttep.com/en/terms-and-conditions" target="_self">
+                <span class="menu__title">Terms and Conditions</span>
+            </a>
+        </li>
+            <li class="menu__nav-item nav-item">
+            <a class="manu__nav-link nav-link" href="https://www.pttep.com/en/sitemap" target="_self">
+                <span class="menu__title">Sitemap</span>
+            </a>
+        </li>
+    </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer__bottom">
+                    <div class="footer__copyright">
+                        Copyright &copy; 2026 PTT Exploration and Production Public Company Limited. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <back-to-top></back-to-top>
+</footer>
+
+                                                                <div class="modal modal--financial-statement fade" id="financial-200863" tabindex="-1" role="dialog" aria-labelledby="financial-200863" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-button">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="far fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="list-group list-group--quarterly-result-modal">
+                    <h5 class="list-group__headline">
+                        Financial Statement Quarter 2/2026
+                    </h5>
+                    <div class="list-group__document">
+                        <div class="list-group__body">
+                                                            <div class="list-group__item">
+                                    <h6 class="list-group__title">Report of the Auditor</h6>
+                                    <div class="list-group__btn-group btn-group">
+                                        <a href="https://www.pttep.com/en/document/viewer/auditor-report/200863/financial-statement-quarter-2-2026-reviewed" target="_blank" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">View Document</span>
+                                            <span class="btn__icon btn__icon--view-document"></span>
+                                        </a>
+                                        <a href="https://hub.optiwise.io/en/documents/228301/download" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">Download</span>
+                                            <span class="btn__icon btn__icon--download"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                                                                        <div class="list-group__item">
+                                    <h6 class="list-group__title">Financial Statement</h6>
+                                    <div class="list-group__btn-group btn-group">
+                                        <a href="https://www.pttep.com/en/document/viewer/financial-statement/200863/financial-statement-quarter-2-2026-reviewed" target="_blank" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">View Document</span>
+                                            <span class="btn__icon btn__icon--view-document"></span>
+                                        </a>
+                                        <a href="https://hub.optiwise.io/en/documents/228302/download" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">Download</span>
+                                            <span class="btn__icon btn__icon--download"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                                                                        <div class="list-group__item">
+                                    <h6 class="list-group__title">Note to Financial Statement</h6>
+                                    <div class="list-group__btn-group btn-group">
+                                        <a href="https://www.pttep.com/en/document/viewer/note/200863/financial-statement-quarter-2-2026-reviewed" target="_blank" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">View Document</span>
+                                            <span class="btn__icon btn__icon--view-document"></span>
+                                        </a>
+                                        <a href="https://hub.optiwise.io/en/documents/228303/download" class="list-group__btn btn btn--secondary">
+                                            <span class="btn__title">Download</span>
+                                            <span class="btn__icon btn__icon--download"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                                                    
+    </div>
+</div>
+
+
+
+
+
+<script defer src="/assets/runtime.f9898.js"></script>
+
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" integrity="sha512-rCjfoab9CVKOH/w/T6GbBxnAH5Azhy4+q1EXW5XEURefHbIkRbQ++ZR+GBClo3/d3q583X/gO4FKmOFuhkKrdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+<!--//https://github.com/krux/postscribe-->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/postscribe/2.0.8/postscribe.min.js" integrity="sha512-7Fk6UB6/dMCS5WShqvC0d9PaaBPJqI8p0NKg24FDvfGXGLpOaxP2QpWwd8pcucE0YMMPny81mCqCWXsi95/90Q==" crossorigin="anonymous"></script>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data-1970-2030.min.js" integrity="sha512-ae875b70oSplY0gKnsUZyoB0F2ywdOn3pSKP5dBV6ZdBmtr5D54VYKXbMamjnGNA1IpvyF6v0tHuQUZv6rtiAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/&#101;&#99;&#104;&#97;&#114;&#116;&#115;&#64;&#53;&#46;&#52;&#46;&#50;&#47;&#100;&#105;&#115;&#116;/echarts.min.js" integrity="sha256-PRbDoi//4nBAaq7sIfxyRT3anw7tVuazUIAyHkk1Y5M=" crossorigin="anonymous"></script>
+
+
+<script defer src="/assets/node.12d73.js"></script>
+<script defer src="/assets/vendor.85cff.js"></script>
+<script defer src="/assets/app.9b565.js"></script>
+
+
+
+
+
+</body>
+</html>

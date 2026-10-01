@@ -205,6 +205,92 @@ const SETHD_UNIVERSE = [
     'SCB','SIRI','SPALI','TCAP','TISCO','TLI','TOA','TTB','WHA'
 ];
 
+    
+const COMPANY_IR_SOURCES = {
+    PTTEP: {
+        name: 'PTT Exploration and Production Public Company Limited',
+        url: 'https://www.pttep.com/en/investor-relations/newsroom/set-announcements'
+    },
+
+    TISCO: {
+        name: 'TISCO Financial Group Public Company Limited',
+        url: 'https://www.tisco.co.th/en/investorrelations/set-disclosure'
+    }
+};
+
+app.get('/api/news', async (req, res) => {
+    try {
+        // อ่านรายชื่อบริษัทจาก COMPANY_IR_SOURCES
+        const companies = Object.keys(COMPANY_IR_SOURCES);
+
+        // เรียกตัวดึงข่าวตามรูปแบบของแต่ละบริษัท
+        const results = await Promise.allSettled(
+            companies.map(symbol => {
+                if (symbol === 'TISCO') {
+                    return fetchTiscoAnnouncements();
+                }
+
+                return fetchCompanyAnnouncements(symbol);
+            })
+        );
+
+        // รวมข่าวจากบริษัทที่ดึงข้อมูลสำเร็จ
+        const news = results
+            .filter(result => result.status === 'fulfilled')
+            .flatMap(result => result.value);
+
+        // เก็บข้อผิดพลาดของแต่ละบริษัท
+        const errors = results
+            .map((result, index) => {
+                if (result.status === 'rejected') {
+                    return `${companies[index]}: ${result.reason.message}`;
+                }
+                return null;
+            })
+            .filter(Boolean);
+
+        // แปลงวันที่ข่าว
+        function parseNewsDate(date) {
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+                const [day, month, year] = date.split('/').map(Number);
+                return new Date(year, month - 1, day).getTime();
+            }
+
+            const timestamp = Date.parse(date);
+            return Number.isNaN(timestamp) ? 0 : timestamp;
+        }
+
+        // กำหนดวันย้อนหลัง 3 เดือน
+        const cutoffDate = new Date();
+        cutoffDate.setMonth(cutoffDate.getMonth() - 3);
+
+        // กรองข่าวย้อนหลัง 3 เดือน
+        const filteredNews = news.filter(item => {
+            return parseNewsDate(item.date) >= cutoffDate.getTime();
+        });
+
+        // เรียงข่าวจากใหม่ไปเก่า
+        filteredNews.sort(
+            (a, b) => parseNewsDate(b.date) - parseNewsDate(a.date)
+        );
+
+        res.json({
+            source: 'Company Investor Relations',
+            market: 'SET',
+            updatedAt: new Date().toISOString(),
+            count: filteredNews.length,
+            companies,
+            errors,
+            news: filteredNews
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+});
+
 app.get('/api/stocks', async (req, res) => {
     try {
         const results = await Promise.all(
@@ -404,6 +490,269 @@ if (!xdDate) {
         message: error.message
     };
 }
+}
+
+async function fetchCompanyAnnouncements(symbol) {
+    const source = COMPANY_IR_SOURCES[symbol];
+
+    if (!source) {
+        throw new Error(`No IR source configured for ${symbol}`);
+    }
+
+    const response = await fetch(source.url);
+
+    if (!response.ok) {
+        throw new Error(`${symbol} IR HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+    const news = [];
+
+    // Match each PTTEP announcement item
+    const itemRegex =
+        /<a\s+href="([^"]+)"[^>]*class="list-group__item"[^>]*>([\s\S]*?)<\/a>/gi;
+
+    const items = [...html.matchAll(itemRegex)];
+
+    for (const item of items) {
+        const url = item[1];
+        const block = item[2];
+
+        const dateMatch = block.match(
+            /<div\s+class="list-group__date">\s*([^<]+?)\s*<\/div>/i
+        );
+
+        const titleMatch = block.match(
+            /<h6\s+class="list-group__title">\s*([\s\S]*?)\s*<\/h6>/i
+        );
+
+        if (!dateMatch || !titleMatch) continue;
+
+        const date = dateMatch[1].trim();
+
+        const title = cleanAnnouncementTitle(
+            titleMatch[1]
+                .replace(/<[^>]+>/g, ' ')
+                .trim()
+        );
+
+        if (!title) continue;
+
+        const category = classifyNewsCategory(title);
+
+        news.push({
+            id: `${symbol}-${date}-${news.length}`,
+            symbol,
+            company: source.name,
+            category,
+            tag: categoryToTag(category),
+            title,
+            date,
+            source: `${source.name} Investor Relations`,
+            url: new URL(url, source.url).href
+        });
+    }
+
+    return deduplicateNews(news);
+}
+
+
+async function fetchTiscoAnnouncements() {
+    const symbol = 'TISCO';
+    const source = COMPANY_IR_SOURCES[symbol];
+
+    const response = await fetch(source.url);
+
+    if (!response.ok) {
+        throw new Error(`TISCO IR HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+    const news = [];
+
+    // Extract each announcement row from TISCO disclosure table
+    const rowRegex = /<tr\b[^>]*class=["'][^"']*wpdt-cell-row[^"']*["'][^>]*>([\s\S]*?)<\/tr>/gi;
+    const rows = [...html.matchAll(rowRegex)];
+
+    for (const row of rows) {
+        const block = row[1];
+
+        // Extract announcement title and document URL
+        const linkMatch = block.match(
+            /<a\b(?=[^>]*class=["'][^"']*wpdt-link-content)[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i
+        );
+
+        // Extract announcement date
+        const dateMatch = block.match(
+            /<span[^>]*>\s*(\d{2}\/\d{2}\/\d{4})\s*<\/span>/i
+        );
+
+        if (!linkMatch || !dateMatch) continue;
+
+        const url = linkMatch[1];
+
+        const title = cleanAnnouncementTitle(
+            linkMatch[2]
+                .replace(/<[^>]+>/g, ' ')
+                .trim()
+        );
+
+        const date = dateMatch[1];
+
+        if (!title) continue;
+
+        const category = classifyNewsCategory(title);
+
+        news.push({
+            id: `${symbol}-${date}-${news.length}`,
+            symbol,
+            company: source.name,
+            category,
+            tag: categoryToTag(category),
+            title,
+            date,
+            source: `${source.name} Investor Relations`,
+            url: new URL(url, 'https://www.tisco.co.th').href
+        });
+    }
+
+    return deduplicateNews(news);
+}
+
+function classifyNewsCategory(title) {
+    const text = title.toLowerCase();
+
+    // 1. Dividend News
+    if (
+        text.includes('dividend') ||
+        text.includes('xd') ||
+        text.includes('ex-dividend') ||
+        text.includes('interim dividend')
+    ) {
+        return 'DIVIDEND';
+    }
+
+    // 2. Earnings and Financial Results
+    if (
+        text.includes('financial statement') ||
+        text.includes('financial performance') ||
+        text.includes('management discussion') ||
+        text.includes('operating results') ||
+        text.includes('earnings') ||
+        text.includes('quarterly results') ||
+        text.includes('annual results') ||
+        text.includes('financial results')
+    ) {
+        return 'EARNINGS';
+    }
+
+    
+    // 3. Corporate Actions
+    if (
+        text.includes('capital increase') ||
+        text.includes('rights offering') ||
+        text.includes('share repurchase') ||
+        text.includes('share buyback') ||
+        text.includes('treasury shares') ||
+        text.includes('tender offer') ||
+        text.includes('acquisition') ||
+        text.includes('merger') ||
+        text.includes('business restructuring') ||
+        text.includes('change of director') ||
+        text.includes('changing of cfo') ||
+        text.includes('change of cfo') ||
+        text.includes('change of ceo') ||
+        text.includes('management change') ||
+        text.includes('change of auditor') ||
+        text.includes('appointment of') ||
+        text.includes('resignation of') ||
+        text.includes('cessation of')
+    ) {
+        return 'CORPORATE_ACTIONS';
+    }
+
+    // 4. General Company News
+    return 'COMPANY';
+}
+
+function categoryToTag(category) {
+    if (category === 'EARNINGS') {
+        return 'Financial Results';
+    }
+
+    if (category === 'DIVIDEND') {
+        return 'Dividend';
+    }
+
+    if (category === 'CORPORATE_ACTIONS') {
+        return 'Corporate Actions';
+    }
+
+    return 'Company Announcement';
+}
+
+function categoryToTag(category) {
+    if (category === 'EARNINGS') {
+        return 'Financial Results';
+    }
+
+    if (category === 'DIVIDEND') {
+        return 'Dividend';
+    }
+
+    return 'Company Announcement';
+}
+
+function cleanAnnouncementTitle(text) {
+    let title = text;
+
+    title = title
+        .replace(/&amp;/gi, '&')
+        .replace(/&#039;/gi, "'")
+        .replace(/&#39;/gi, "'")
+        .replace(/&quot;/gi, '"')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const noiseMarkers = [
+        'Subscribe to PTTEP News',
+        'Exploring endless possibilities',
+        'Explore More'
+    ];
+
+    for (const marker of noiseMarkers) {
+        const index = title.indexOf(marker);
+
+        if (index !== -1) {
+            title = title.substring(0, index).trim();
+        }
+    }
+
+    // Remove trailing punctuation
+    title = title.replace(/[\s,;:-]+$/g, '').trim();
+
+    if (title.length > 250) {
+        title = title.substring(0, 250).trim();
+    }
+
+    return title;
+}
+
+function deduplicateNews(news) {
+    const seen = new Set();
+
+    return news.filter(item => {
+        const key =
+            `${item.symbol}-${item.date}-${item.title}`;
+
+        if (seen.has(key)) {
+            return false;
+        }
+
+        seen.add(key);
+        return true;
+    });
 }
 
 const PORT = 3001;
