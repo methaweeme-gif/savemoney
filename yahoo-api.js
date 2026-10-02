@@ -291,6 +291,60 @@ app.get('/api/news', async (req, res) => {
     }
 });
 
+
+
+// API: SET HD Index - Daily Close
+app.get('/api/sethd-index', async (req, res) => {
+    try {
+        const chart = await yahooFinance.chart('^SETHD.BK', {
+            period1: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+            period2: new Date(),
+            interval: '1d'
+        });
+
+        const latest = chart.quotes?.[chart.quotes.length - 1];
+        const meta = chart.meta;
+
+        console.log('SETHD META:', meta);
+
+        const price = latest?.close ?? meta?.regularMarketPrice ?? null;
+        const previousClose = meta?.chartPreviousClose ?? null;
+
+        if (price === null) {
+            return res.status(404).json({
+                error: 'SET HD Index data not available'
+            });
+        }
+
+        const change = previousClose !== null
+            ? price - previousClose
+            : null;
+
+        const changePct = previousClose !== null && previousClose !== 0
+            ? (change / previousClose) * 100
+            : null;
+
+        res.json({
+            symbol: '^SETHD.BK',
+            name: 'SET High Dividend Index',
+            price,
+            previousClose,
+            change,
+            changePct,
+            date: latest?.date ?? meta?.regularMarketTime ?? null,
+            source: 'Yahoo Finance',
+            dataType: 'Daily Close'
+        });
+
+    } catch (error) {
+        console.error('SETHD Index Error:', error.message);
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+});
+
 app.get('/api/stocks', async (req, res) => {
     try {
         const results = await Promise.all(
@@ -302,14 +356,46 @@ let profile = null;
 
 try {
     profile = await yahooFinance.quoteSummary(`${symbol}.BK`, {
-    modules: ['assetProfile', 'summaryProfile']
-});
+        modules: ['assetProfile', 'summaryProfile', 'financialData', 'defaultKeyStatistics', 'summaryDetail']
+    });
 } catch (profileError) {
     console.error(symbol, 'Profile Error:', profileError.message);
 }
     console.log(symbol, 'Profile Sector:', profile?.assetProfile?.sector);
+    console.log(symbol, 'Payout Ratio:', profile?.defaultKeyStatistics?.payoutRatio);
+    if (symbol === 'TISCO') {
+    console.log('TISCO Key Statistics:', profile?.defaultKeyStatistics);
+}
+    if (symbol === 'TISCO') {
+    console.log('TISCO Financial Data:', profile?.financialData);
+}
 
 const xdResult = await getUpcomingXD(symbol);
+
+if (symbol === 'TISCO') {
+    try {
+        const allData = await yahooFinance.quoteSummary(`${symbol}.BK`, {
+            modules: 'all'
+        });
+
+        console.log(
+            'TISCO ALL PAYOUT RATIO:',
+            allData?.defaultKeyStatistics?.payoutRatio
+        );
+
+        console.log(
+            'TISCO SUMMARY DETAIL:',
+            allData?.summaryDetail
+        );
+    } catch (error) {
+        console.error('TISCO ALL MODULE ERROR:', error.message);
+    }
+}
+
+if (symbol === 'TISCO') {
+    console.log('TISCO EPS:', profile?.defaultKeyStatistics?.trailingEps);
+    console.log('TISCO Last Dividend:', profile?.defaultKeyStatistics?.lastDividendValue);
+}
 
 const nextXDDate =
     typeof xdResult === 'string' ? xdResult : null;
@@ -330,7 +416,7 @@ const xdDataError =
                         xdDataError: xdDataError,
                         marketCap: q.marketCap ?? null,
                         pe: q.trailingPE ?? null,
-                        payoutRatio: q.payoutRatio ?? null,
+                        payoutRatio: profile?.summaryDetail?.payoutRatio ?? null,
                         volume: q.regularMarketVolume ?? null,
                         marketTime: q.regularMarketTime ?? null,
                         sector: profile?.assetProfile?.sector ||
