@@ -1139,24 +1139,29 @@ tailwind.config = {
             </button>
 
             <div
-                id="info-trade-commission"
-                class="info-popover hidden absolute z-50 left-1/2 -translate-x-1/2 top-6 w-64 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
-            >
-                <div class="font-bold text-white mb-2">
-                    Commission Rate
-                </div>
+    id="info-trade-commission"
+    class="info-popover hidden absolute z-50 left-1/2 -translate-x-1/2 top-6 w-72 max-w-[calc(100vw-2rem)] bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+>
+    <div class="font-bold text-white mb-2">
+        Commission Rate
+    </div>
 
-                <p class="leading-relaxed">
-                    ค่าคอมมิชชัน 0.15% เป็นอัตราสมมติที่ใช้สำหรับ
-                    จำลองต้นทุนการซื้อขายภายในระบบ
-                    ไม่ได้หมายถึงอัตราค่าธรรมเนียมปัจจุบัน
-                    ของโบรกเกอร์รายใดรายหนึ่ง
-                </p>
+    <p class="leading-relaxed">
+        ค่าคอมมิชชัน 0.15% เป็นอัตราสมมติที่ใช้สำหรับ
+        จำลองต้นทุนการซื้อขายภายในระบบ
+        ไม่ได้หมายถึงอัตราค่าธรรมเนียมปัจจุบัน
+        ของโบรกเกอร์รายใดรายหนึ่ง
+    </p>
 
-                <div class="mt-3 pt-3 border-t border-slate-800 space-y-1 text-slate-400">
-                    <div>ซื้อ: มูลค่าซื้อ + ค่าคอมมิชชัน</div>
-                    <div>ขาย: มูลค่าขาย − ค่าคอมมิชชัน</div>
-                </div>
+                <div class="mt-3 pt-3 border-t border-slate-800 space-y-2 text-slate-400">
+    <div>Commission: 0.15% ของมูลค่าซื้อขาย</div>
+    <div>VAT: 7% ของค่าคอมมิชชัน</div>
+
+    <div class="pt-2 border-t border-slate-800 text-white leading-relaxed space-y-1">
+        <div>ซื้อ: มูลค่าซื้อ + ค่าคอมมิชชัน + VAT</div>
+        <div>ขาย: มูลค่าขาย − ค่าคอมมิชชัน − VAT</div>
+    </div>
+</div>
             </div>
         </div>
     </div>
