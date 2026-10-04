@@ -3162,9 +3162,9 @@ function executeAIAutoInvest() {
             });
 
         showToast(
-            `งบลงทุนไม่เพียงพอ\nต้องใช้ ${formatMoney(requiredAmount)}\nเงินสดที่มี ${formatMoney(cashAvailable)}\nเงินที่ขาด ${formatMoney(shortfall)}`,
-            'error'
-        );
+    `งบลงทุนไม่เพียงพอ ต้องใช้ ${formatMoney(requiredAmount)} เงินสดที่มี ${formatMoney(cashAvailable)} เงินที่ขาด ${formatMoney(shortfall)}`,
+    'error'
+);
 
         return;
     }
