@@ -1501,6 +1501,7 @@ function refreshDividendYields() {
 
 loadYahooStockData();
 loadXDData();
+loadYahooFundamentals();
 
 // Current SETHD Universe
 // Effective: 1 Jul 2026 - 31 Dec 2026
@@ -1615,14 +1616,27 @@ const yahooDataChanged =
             stock.dps = apiStock.dividendRate;
             stock.yield = apiStock.dividendYield;
 
-            stock.marketCap = apiStock.marketCap;
-            stock.pe = apiStock.pe;
-            stock.payoutRatio = apiStock.payoutRatio;
-            stock.volume = apiStock.volume;
-            stock.marketTime = apiStock.marketTime;
-            stock.sector = apiStock.sector;
-            stock.industry = apiStock.industry;
-            stock.desc = apiStock.description;
+            // Preserve Fundamentals data from the dedicated API
+stock.marketCap = apiStock.marketCap ?? stock.marketCap ?? null;
+stock.pe = apiStock.pe ?? stock.pe ?? null;
+stock.payoutRatio = apiStock.payoutRatio ?? stock.payoutRatio ?? null;
+
+// Only replace valid classification data
+if (apiStock.sector && apiStock.sector !== 'Unknown') {
+    stock.sector = apiStock.sector;
+}
+
+if (apiStock.industry && apiStock.industry !== 'Unknown') {
+    stock.industry = apiStock.industry;
+}
+
+if (apiStock.description) {
+    stock.desc = apiStock.description;
+}
+
+// Keep existing price data
+stock.volume = apiStock.volume;
+stock.marketTime = apiStock.marketTime;
         });
 
         console.log('Yahoo Finance data loaded:', result.count, 'stocks');
@@ -1642,9 +1656,74 @@ if (yahooDataChanged) {
         console.error('Yahoo Finance API Error:', error);
     }
 }
+
+// Load Company Fundamentals from dedicated API
+async function loadYahooFundamentals() {
+    try {
+        const response = await fetch(
+            'https://cryp2b-api.cryp2b-methawee.workers.dev/api/fundamentals'
+        );
+
+        if (!response.ok) {
+            throw new Error(`Fundamentals API Error: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (!Array.isArray(result.stocks)) {
+            throw new Error('Invalid Fundamentals API response');
+        }
+
+        let updatedCount = 0;
+
+        result.stocks.forEach(apiStock => {
+            const stock = thaiDividendStocks.find(
+                item => item.symbol === apiStock.symbol
+            );
+
+            if (!stock) return;
+
+            stock.marketCap = apiStock.marketCap ?? stock.marketCap ?? null;
+            stock.pe = apiStock.pe ?? stock.pe ?? null;
+            stock.payoutRatio = apiStock.payoutRatio ?? stock.payoutRatio ?? null;
+
+            if (apiStock.sector && apiStock.sector !== 'Unknown') {
+                stock.sector = apiStock.sector;
+            }
+
+            if (apiStock.industry && apiStock.industry !== 'Unknown') {
+                stock.industry = apiStock.industry;
+            }
+
+            if (apiStock.description) {
+                stock.desc = apiStock.description;
+            }
+
+            updatedCount++;
+        });
+
+        console.log(
+            'Yahoo Fundamentals loaded:',
+            updatedCount,
+            'stocks'
+        );
+
+        // Refresh views using the updated stock data
+        renderMarketTable();
+        renderLiveTicker();
+
+    } catch (error) {
+        console.error('Yahoo Fundamentals API Error:', error);
+    }
+}
+
 setInterval(() => {
     loadYahooStockData();
 }, 60 * 1000);
+// Refresh Fundamentals once every 24 hours
+setInterval(() => {
+    loadYahooFundamentals();
+}, 24 * 60 * 60 * 1000);
 
         async function loadXDData() {
     try {

@@ -1,4 +1,5 @@
 import { handleStocksRequest, handleXDRequest } from "./stocks-api.js";
+import { handleFundamentalsRequest } from "./fundamentals-api.js";
 const CACHE_KEY = "sethd-index-latest";
 const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 const CACHE_TTL_SECONDS = 90 * 24 * 60 * 60; // 90 days
@@ -119,6 +120,62 @@ export default {
         headers
       });
     }
+
+    if (url.pathname === "/api/fundamentals") {
+      const origin = request.headers.get("Origin");
+      let allowedOrigin = null;
+
+      try {
+        const originUrl = new URL(origin);
+        if (
+          originUrl.protocol === "https:" &&
+          (
+            originUrl.hostname === "cryp2b.pages.dev" ||
+            originUrl.hostname.endsWith(".app.github.dev")
+          )
+        ) {
+          allowedOrigin = origin;
+        }
+      } catch {}
+
+      const corsHeaders = {
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Vary": "Origin"
+      };
+
+      if (allowedOrigin) {
+        corsHeaders["Access-Control-Allow-Origin"] = allowedOrigin;
+      }
+
+      if (request.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: corsHeaders
+        });
+      }
+
+      if (request.method !== "GET") {
+        return Response.json(
+          { error: true, message: "Method not allowed" },
+          { status: 405, headers: corsHeaders }
+        );
+      }
+
+      const response = await handleFundamentalsRequest(env);
+      const headers = new Headers(response.headers);
+
+      for (const [key, value] of Object.entries(corsHeaders)) {
+        headers.set(key, value);
+      }
+
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers
+      });
+    }
+
 
     if (url.pathname === "/api/sethd-index") {
       const origin = request.headers.get("Origin");
