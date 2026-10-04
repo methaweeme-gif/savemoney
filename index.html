@@ -7,26 +7,32 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#ecfeff',
-                            100: '#cffaff',
-                            400: '#22d3ee',
-                            500: '#06b6d4',
-                            600: '#0891b2',
-                            900: '#164e63',
-                        },
-                        darkbg: '#0b0f19',
-                        cardbg: '#111827',
-                        borderbg: '#1f2937'
-                    }
-                }
+
+
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    50: '#ecfeff',
+                    100: '#cffaff',
+                    400: '#22d3ee',
+                    500: '#06b6d4',
+                    600: '#0891b2',
+                    900: '#164e63',
+                },
+                darkbg: '#0b0f19',
+                cardbg: '#111827',
+                borderbg: '#1f2937'
             }
         }
+    }
+}
+
+
+
+
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,7 +41,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
-        
+
         /* Custom Flash Animations for Live Price Updates */
         @keyframes flashGreen {
             0% { background-color: rgba(16, 185, 129, 0.35); }
@@ -47,7 +53,7 @@
         }
         .flash-up { animation: flashGreen 1.2s ease-out; }
         .flash-down { animation: flashRed 1.2s ease-out; }
-        
+
         /* Custom scrollbars */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #111827; }
@@ -93,7 +99,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
 
-                
+
                 <!-- Logo & Brand -->
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('market')">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20">
@@ -106,7 +112,7 @@
                         <span class="hidden sm:inline-block text-xs text-slate-400 ml-2 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
                             Thai Dividend Investment
                         </span>
-                        
+
                     </div>
                 </div>
 
@@ -151,7 +157,7 @@
     </span>
 
 </div>
-    <div class="text-[10px] text-slate-500 mt-1 text-right"> 
+    <div class="text-[10px] text-slate-500 mt-1 text-right">
     ข้อมูล: Yahoo Finance (Delayed Market Data) | SET
 </div>
                 </div>
@@ -175,7 +181,7 @@
 
     <!-- SET TICKER BANNER -->
     <div class="bg-slate-950 border-b border-slate-800 py-1.5 px-4 text-xs overflow-x-auto whitespace-nowrap scrollbar-none flex items-center space-x-6 text-slate-300">
-        
+
 <div class="flex items-center space-x-1.5 font-bold">
     <i class="fa-solid fa-bolt text-amber-400 text-xs"></i>
 
@@ -208,7 +214,7 @@
 
         <!-- ================= PAGE 1: DIVIDEND MARKET ================= -->
         <section id="page-market" class="tab-page space-y-6">
-            
+
             <!-- Header Banner -->
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
                 <div>
@@ -324,10 +330,10 @@
 </div>
         </section>
 
-        
+
         <!-- ================= PAGE 2: AI PORTFOLIO ALLOCATOR ================= -->
         <section id="page-ai" class="tab-page hidden space-y-6">
-            
+
             <div class="bg-gradient-to-r from-slate-900 via-cyan-950/30 to-slate-900 p-6 rounded-2xl border border-cyan-500/20 shadow-xl">
                 <div class="max-w-3xl">
                     <span class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-950 px-3 py-1 rounded-full border border-cyan-800">
@@ -388,6 +394,89 @@
                                     <span class="text-[11px] text-slate-400 font-semibold block uppercase">Net Div Yield</span>
                                     <span id="res-avg-yield" class="text-base font-bold text-cyan-400">7.25%</span>
                                 </div>
+
+<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 relative">
+    <div class="flex items-center gap-1.5">
+        <span class="text-[11px] text-slate-400 font-semibold uppercase">
+            Portfolio HHI
+        </span>
+<button
+    type="button"
+    onclick="event.stopPropagation(); toggleInfoPopover('info-portfolio-hhi')"
+    class="w-4 h-4 rounded-full border border-slate-500 text-slate-400 text-[10px] font-bold flex items-center justify-center cursor-pointer hover:text-cyan-400 hover:border-cyan-400"
+    aria-label="Portfolio HHI information"
+>
+    i
+</button>
+    </div>
+
+    <div
+        id="info-portfolio-hhi"
+        class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+    >
+        <div class="font-bold text-white mb-2">
+            Portfolio HHI
+        </div>
+        <p class="leading-relaxed">
+            HHI (Herfindahl-Hirschman Index) ใช้วัดระดับการกระจุกตัวของเงินลงทุนในหุ้นแต่ละตัวภายในพอร์ต
+        </p>
+        <div class="mt-3 pt-3 border-t border-slate-800">
+            <div class="font-semibold text-white mb-2">เกณฑ์การแปลผลของเว็บไซต์</div>
+            <p class="text-emerald-400">ต่ำกว่า 1,500 : กระจุกตัวต่ำ</p>
+            <p class="text-amber-400 mt-1">1,500–2,499 : กระจุกตัวปานกลาง</p>
+            <p class="text-red-400 mt-1">2,500 ขึ้นไป : กระจุกตัวสูง</p>
+        </div>
+        <p class="mt-3 pt-3 border-t border-slate-800 text-slate-500 leading-relaxed">
+            HHI วัดการกระจุกตัวของเงินลงทุน ไม่ได้วัดความเสี่ยงทั้งหมดของพอร์ต เกณฑ์ดังกล่าวเป็นเกณฑ์ประเมินภายในเว็บไซต์
+        </p>
+    </div>
+
+    <span id="res-hhi" class="text-base font-bold text-cyan-400">-</span>
+</div>
+
+<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 relative">
+    <div class="flex items-center gap-1.5">
+        <span class="text-[11px] text-slate-400 font-semibold block uppercase">
+            Concentration Risk
+        </span>
+        <button
+            type="button"
+           onclick="event.stopPropagation(); toggleInfoPopover('info-concentration-risk')"
+            class="w-4 h-4 rounded-full border border-slate-500 text-slate-400 text-[10px] font-bold flex items-center justify-center cursor-pointer hover:text-cyan-400 hover:border-cyan-400"
+            aria-label="Concentration Risk information"
+        >
+            i
+        </button>
+    </div>
+
+    <div
+        id="info-concentration-risk"
+        class="hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+    >
+        <div class="font-bold text-white mb-2">
+            Concentration Risk
+        </div>
+        <p class="leading-relaxed">
+            แสดงระดับความกระจุกตัวของเงินลงทุนในพอร์ต โดยอ้างอิงจากค่า Portfolio HHI
+        </p>
+
+        <div class="mt-3 pt-3 border-t border-slate-800">
+            <div class="font-semibold text-white mb-2">
+                เกณฑ์การแปลผลของเว็บไซต์
+            </div>
+            <p class="text-emerald-400">HHI ต่ำกว่า 1,500: กระจุกตัวต่ำ</p>
+            <p class="text-amber-400 mt-1">HHI 1,500–2,499: กระจุกตัวปานกลาง</p>
+            <p class="text-red-400 mt-1">HHI 2,500 ขึ้นไป: กระจุกตัวสูง</p>
+        </div>
+
+        <p class="mt-3 pt-3 border-t border-slate-800 text-slate-500 leading-relaxed">
+            เป็นการประเมินความกระจุกตัวเท่านั้น ไม่ได้สะท้อนความเสี่ยงทั้งหมด เช่น ความผันผวนหรือความเสี่ยงของธุรกิจแต่ละบริษัท
+        </p>
+    </div>
+
+    <span id="res-concentration" class="text-base font-bold text-amber-400">-</span>
+</div>
+
                                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
     <div class="flex items-center gap-1.5">
         <span class="text-[11px] text-slate-400 font-semibold uppercase">
@@ -402,29 +491,33 @@
             >
                 i
             </button>
+<div
+    id="info-dividend-calculation"
+    class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
+>
+    <div class="font-bold text-white mb-2">
+        Dividend Calculation
+    </div>
 
-            <div
-                id="info-dividend-calculation"
-                class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
-            >
-                <div class="font-bold text-white mb-2">
-                    Dividend Calculation
-                </div>
+    <p class="leading-relaxed">
+        ระบบคำนวณเงินปันผลโดยอ้างอิงจากจำนวนหุ้นที่ถือ
+        และเงินปันผลต่อหุ้น (DPS)
+    </p>
 
-                <p class="leading-relaxed">
-                    ระบบคำนวณเงินปันผลโดยอ้างอิงจากจำนวนหุ้นที่ถือ
-                    และเงินปันผลต่อหุ้น (DPS)
-                </p>
+    <div class="mt-3 pt-3 border-t border-slate-800 text-slate-400">
+        เงินปันผลต่อปี = จำนวนหุ้น × DPS
+    </div>
 
-                <div class="mt-3 pt-3 border-t border-slate-800 text-slate-400">
-                    เงินปันผลต่อปี = จำนวนหุ้น × DPS
-                </div>
+    <p class="mt-2 text-emerald-400 leading-relaxed">
+        Est. Annual Income แสดงรายได้ปันผลสุทธิ
+        หลังหักภาษี ณ ที่จ่าย 10% แล้ว
+    </p>
 
-                <p class="mt-2 text-slate-500 leading-relaxed">
-                    ตัวเลขเป็นค่าประมาณจากข้อมูลที่ใช้ในระบบจำลอง
-                    และเงินปันผลจริงอาจแตกต่างกัน
-                </p>
-            </div>
+    <p class="mt-2 text-slate-500 leading-relaxed">
+        ตัวเลขเป็นค่าประมาณจากข้อมูลที่ใช้ในระบบจำลอง
+        และเงินปันผลจริงอาจแตกต่างกัน
+    </p>
+</div>
         </div>
     </div>
 
@@ -502,10 +595,78 @@
     </span>
 </div>
                             </div>
-                        </div>
+</div>
 
-                        <!-- Chart & Breakdown Table -->
-                        <div class="space-y-6">
+
+<!-- Portfolio Risk Analysis -->
+<div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-4">
+    <div class="flex items-center justify-between">
+        <h4 class="text-sm font-bold text-white">
+            Portfolio Risk Analysis
+        </h4>
+
+        <span id="risk-analysis-badge"
+              class="text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30">
+            -
+        </span>
+    </div>
+
+    <!-- Concentration Risk -->
+    <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300">
+                Concentration Risk
+            </span>
+            <span id="risk-hhi-value" class="text-sm font-bold text-cyan-400">
+                HHI: -
+            </span>
+        </div>
+
+        <div id="risk-concentration-message"
+             class="text-xs text-slate-400 leading-relaxed">
+            รอข้อมูลการวิเคราะห์
+        </div>
+
+        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="risk-hhi-bar"
+                 class="h-full bg-red-500 rounded-full"
+                 style="width: 0%">
+            </div>
+        </div>
+
+        <div id="risk-top-three"
+             class="text-xs text-slate-400">
+            Top 3 Stocks: -
+        </div>
+    </div>
+
+    <!-- Dividend Sustainability -->
+    <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+        <span class="text-xs font-bold text-slate-300">
+            Dividend Sustainability
+        </span>
+
+        <div id="risk-payout-message"
+             class="text-xs text-slate-400 leading-relaxed">
+            รอข้อมูล Payout Ratio
+        </div>
+    </div>
+
+    <!-- Risk Consideration -->
+    <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-2">
+        <span class="text-xs font-bold text-amber-400">
+            Risk Consideration
+        </span>
+
+        <div id="risk-consideration-message"
+             class="text-xs text-slate-300 leading-relaxed">
+            ควรพิจารณาความเสี่ยงและข้อมูลพื้นฐานของหุ้นก่อนลงทุน
+        </div>
+    </div>
+</div>
+
+<!-- Chart & Breakdown Table -->
+<div class="space-y-6">
                             <!-- Pie Chart -->
                             <div class="bg-cardbg p-5 rounded-2xl border border-slate-800 flex flex-col items-center justify-center">
                                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 w-full text-left">Asset Weight Allocation</h4>
@@ -513,7 +674,7 @@
                                     <canvas id="aiChart"></canvas>
                                 </div>
                             </div>
-                            
+
                             <!-- Stock Basket Breakdown Table -->
                             <div class="bg-cardbg p-5 rounded-2xl border border-slate-800">
                                 <div class="flex items-center gap-1.5 mb-3">
@@ -589,7 +750,7 @@
                         <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-cyan-400"></i> Investment Goal Parameters
                         </h2>
-                        
+
                         <div class="space-y-4">
                             <!-- Capital Input -->
                             <div>
@@ -681,11 +842,11 @@
 
 
         <!-- ================= PAGE 3: INVESTOR PORTFOLIO ================= -->
-        <section id="page-portfolio" class="tab-page hidden space-y-6">
-            
+        <section id="page-portfolio" class="tab-page hidden space-y-3">
+
             <!-- Overall Portfolio KPI Header Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                
+
                 <!-- Total Value Card -->
                 <div class="bg-cardbg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
                     <div class="flex justify-between items-start">
@@ -790,6 +951,7 @@
     </table>
 </div>
             </div>
+</div>
 
             <!-- Transaction History Log -->
             <div class="bg-cardbg rounded-2xl border border-slate-800 shadow-xl p-6 space-y-4">
@@ -797,8 +959,8 @@
                     <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Transaction History
                 </h3>
                 <div class="overflow-x-auto">
-                    <table class="w-full min-w-[1300px] text-xs text-left text-slate-300">
-                        
+                    <table class="w-full min-w-[900px] text-xs text-left text-slate-300">
+
 <thead class="bg-slate-900 text-slate-400 uppercase font-semibold">
     <tr>
         <th class="p-3">Time</th>
@@ -1002,6 +1164,13 @@
     <span id="trade-comm-val" class="font-semibold text-slate-200">฿14.78</span>
 </div>
 
+<div class="flex justify-between items-center">
+    <span class="text-slate-400">VAT (7% of Commission)</span>
+    <span id="trade-vat-val" class="font-semibold text-slate-200">
+        ฿0.95
+    </span>
+</div>
+
     <div class="flex justify-between border-t border-slate-800 pt-2 text-sm font-bold">
         <span id="trade-total-label" class="text-slate-300">Total Required</span>
         <span id="trade-total-val" class="text-emerald-400">฿9,864.78</span>
@@ -1112,6 +1281,17 @@
                     </span>
                 </div>
 
+<div class="flex justify-between text-sm">
+    <span class="text-slate-500">
+        VAT (7% of Commission)
+    </span>
+
+    <span id="tx-detail-vat" class="text-slate-200 font-semibold">
+        -
+    </span>
+</div>
+
+
                 <div class="border-t border-slate-800 pt-3 flex justify-between">
                     <span id="tx-detail-total-label"
                           class="text-slate-300 font-bold">
@@ -1169,7 +1349,7 @@
     </script>
 
     <script>
-        
+
         // Initial 100,000 THB Capital State
         const INITIAL_CASH = 100000.00;
 
@@ -1199,7 +1379,7 @@
 if (!xdDate) {
     return {
         type: 'pending',
-        text: 'No Upcoming XD'
+        text: 'Not announced'
     };
 }
 
@@ -1320,6 +1500,7 @@ function refreshDividendYields() {
 });
 
 loadYahooStockData();
+loadXDData();
 
 // Current SETHD Universe
 // Effective: 1 Jul 2026 - 31 Dec 2026
@@ -1341,14 +1522,14 @@ loadYahooStockData();
     dataDate: 'Yahoo Finance (Delayed Market Data)',
     source: 'Yahoo Finance'
 };
-        
+
         // Tab Switcher
         function switchTab(tabName) {
             window.appState.activeTab = tabName;
-            
+
             // Hide all pages
             document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
-            
+
             // Show selected page
             const activePage = document.getElementById(`page-${tabName}`);
             if (activePage) activePage.classList.remove('hidden');
@@ -1396,7 +1577,9 @@ loadYahooStockData();
         let lastYahooSnapshot = null;
         async function loadYahooStockData() {
     try {
-        const response = await fetch('/api/stocks');
+        const response = await fetch(
+    'https://cryp2b-api.cryp2b-methawee.workers.dev/api/stocks'
+);
 
         if (!response.ok) {
             throw new Error(`API Error: ${response.status}`);
@@ -1437,8 +1620,6 @@ const yahooDataChanged =
             stock.payoutRatio = apiStock.payoutRatio;
             stock.volume = apiStock.volume;
             stock.marketTime = apiStock.marketTime;
-            stock.nextXDDate = apiStock.nextXDDate;
-            stock.xdDataError = apiStock.xdDataError;
             stock.sector = apiStock.sector;
             stock.industry = apiStock.industry;
             stock.desc = apiStock.description;
@@ -1464,6 +1645,49 @@ if (yahooDataChanged) {
 setInterval(() => {
     loadYahooStockData();
 }, 60 * 1000);
+
+        async function loadXDData() {
+    try {
+        const response = await fetch(
+            'https://cryp2b-api.cryp2b-methawee.workers.dev/api/xd'
+        );
+
+        if (!response.ok) {
+            throw new Error(`XD API Error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        let changed = false;
+
+        result.stocks.forEach(apiStock => {
+            const stock = thaiDividendStocks.find(
+                item => item.symbol === apiStock.symbol
+            );
+
+            if (!stock) return;
+
+            if (
+                stock.nextXDDate !== apiStock.nextXDDate ||
+                stock.xdDataError !== apiStock.xdDataError
+            ) {
+                changed = true;
+            }
+
+            stock.nextXDDate = apiStock.nextXDDate;
+            stock.xdDataError = apiStock.xdDataError;
+        });
+
+        console.log('XD data loaded:', result.count, 'stocks');
+
+        if (changed) {
+            renderMarketTable();
+            renderLiveTicker();
+            console.log('XD data changed → Market Table and Ticker updated');
+        }
+    } catch (error) {
+        console.error('XD API Error:', error);
+    }
+}
 
         function renderMarketTable() {
     console.log('renderMarketTable called');
@@ -1507,7 +1731,7 @@ const changeSign = isUp ? '+' : '';
     <td class="py-3.5 px-4">
         <div class="flex items-center space-x-3">
             <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-cyan-400 text-xs">
-                ${stk.symbol.substring(0,3)}
+                ${stk.symbol}
             </div>
             <div>
                 <div class="font-bold text-white text-base">${stk.symbol}</div>
@@ -1561,7 +1785,7 @@ const changeSign = isUp ? '+' : '';
 
             tbody.innerHTML = html;
         }
-        
+
         function filterMarketTable() {
     const searchInput = document.getElementById('market-search');
     const sectorFilter = document.getElementById('sector-filter');
@@ -1679,7 +1903,7 @@ document.getElementById('m-detail-xd').innerText =
 document.getElementById('m-detail-desc').innerText =
     stk.desc ?? 'Daily market and dividend data not yet available.';
 
-            
+
 // Risk badge styling
 const riskBadge = document.getElementById('m-detail-risk-badge');
 
@@ -1716,7 +1940,7 @@ riskBadge.innerText = riskLevel;
 riskBadge.className =
     `px-2.5 py-1 rounded-full text-xs font-bold border ${riskClass}`;
 
-            
+
 // Risk Points List
 const riskContainer = document.getElementById('m-detail-risk-points');
 let riskHtml = '';
@@ -1807,7 +2031,7 @@ if (pe !== null && pe !== undefined && Number.isFinite(pe) && pe > 0) {
 }
 
 riskContainer.innerHTML = riskHtml;
-            
+
 
             // Show Modal
             document.getElementById('modal-detail').classList.remove('hidden');
@@ -1851,11 +2075,11 @@ riskContainer.innerHTML = riskHtml;
                 actionBadge.innerText = 'BUY ORDER';
                 confirmBtn.className = 'px-6 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition-all';
                 confirmBtn.innerText = 'Confirm Buy Order';
-                
+
                 document.getElementById('trade-order-label').innerText = 'Order Value';
                 document.getElementById('trade-total-label').innerText = 'Total Cost';
                 document.getElementById('trade-total-val').className = 'text-emerald-400';
-            
+
             } else {
                 sellBtn.className = 'py-2 text-xs font-bold rounded-lg bg-rose-500 text-slate-950 transition-all';
                 buyBtn.className = 'py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all';
@@ -1892,19 +2116,52 @@ riskContainer.innerHTML = riskHtml;
             calculateTradeTotal();
         }
 
-        function calculateTradeTotal() {
-            const stk = thaiDividendStocks.find(s => s.symbol === window.appState.selectedStockSymbol);
-            if (!stk) return;
+function calculateTradeTotal() {
+    const stk = thaiDividendStocks.find(
+        s => s.symbol === window.appState.selectedStockSymbol
+    );
+    if (!stk) return;
 
-            const qty = parseInt(document.getElementById('trade-qty-input').value) || 0;
-            const orderVal = qty * stk.price;
-            const comm = orderVal * 0.0015; // 0.15% simulation commission rate
-            const total = window.appState.tradeSide === 'BUY' ? orderVal + comm : orderVal - comm;
+    const qty = parseInt(
+        document.getElementById('trade-qty-input').value
+    ) || 0;
 
-            document.getElementById('trade-order-val').innerText = `฿${orderVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('trade-comm-val').innerText = `฿${comm.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('trade-total-val').innerText = `฿${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        }
+    const orderVal = qty * stk.price;
+
+const comm = Math.round(orderVal * 0.0015 * 100) / 100;
+const vat = Math.round(comm * 0.07 * 100) / 100;
+
+const total = window.appState.tradeSide === 'BUY'
+    ? orderVal + comm + vat
+    : orderVal - comm - vat;
+
+    document.getElementById('trade-order-val').innerText =
+        `฿${orderVal.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+    document.getElementById('trade-comm-val').innerText =
+        `฿${comm.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+
+document.getElementById('trade-vat-val').innerText =
+    `฿${vat.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}`;
+
+
+
+    document.getElementById('trade-total-val').innerText =
+        `฿${total.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+}
+
 
         function executeTradeOrder() {
             const symbol = window.appState.selectedStockSymbol;
@@ -1922,7 +2179,8 @@ riskContainer.innerHTML = riskHtml;
             const side = window.appState.tradeSide;
 
             if (side === 'BUY') {
-                const totalCost = orderVal + comm;
+                const vat = comm * 0.07;
+const totalCost = orderVal + comm + vat;
                 if (totalCost > window.appState.cashBalance) {
                     showToast('เงินสดคงเหลือไม่เพียงพอสำหรับคำสั่งซื้อ กรุณาลดจำนวนหุ้นหรือเพิ่มเงินลงทุน', 'error');
                     return;
@@ -1930,7 +2188,7 @@ riskContainer.innerHTML = riskHtml;
 
                 // Execute Buy
                 window.appState.cashBalance -= totalCost;
-                
+
                 if (!window.appState.portfolio[symbol]) {
                     window.appState.portfolio[symbol] = { shares: 0, avgPrice: 0 };
                 }
@@ -1952,10 +2210,11 @@ riskContainer.innerHTML = riskHtml;
                 price: stk.price,
                 grossAmount: orderVal,
                 commission: comm,
+                vat: vat,
                 total: totalCost
             });
 
-                showToast(`Successfully bought ${qty.toLocaleString()} shares of ${symbol}!`, 'success');
+                showToast(`ซื้อหุ้น ${symbol} จำนวน ${qty.toLocaleString()} หุ้นเรียบร้อยแล้ว!`, 'success');
 
             } else { // SELL
                 const heldObj = window.appState.portfolio[symbol];
@@ -1966,27 +2225,31 @@ riskContainer.innerHTML = riskHtml;
                     return;
                 }
 
-                const netProceeds = orderVal - comm;
-                window.appState.cashBalance += netProceeds;
+const vat = comm * 0.07;
+const netProceeds = orderVal - comm - vat;
 
-                window.appState.portfolio[symbol].shares -= qty;
-                if (window.appState.portfolio[symbol].shares <= 0) {
-                    delete window.appState.portfolio[symbol];
-                }
+window.appState.cashBalance += netProceeds;
 
-                // Log Tx
-                window.appState.transactions.unshift({
-                time: new Date().toLocaleTimeString(),
-                type: 'SELL',
-                symbol: symbol,
-                shares: qty,
-                price: stk.price,
-                grossAmount: orderVal,
-                commission: comm,
-                total: netProceeds
-            });
+window.appState.portfolio[symbol].shares -= qty;
+if (window.appState.portfolio[symbol].shares <= 0) {
+    delete window.appState.portfolio[symbol];
+}
 
-                showToast(`Successfully sold ${qty.toLocaleString()} shares of ${symbol}!`, 'success');
+// Log Tx
+window.appState.transactions.unshift({
+    time: new Date().toLocaleTimeString(),
+    type: 'SELL',
+    symbol: symbol,
+    shares: qty,
+    price: stk.price,
+    grossAmount: orderVal,
+    commission: comm,
+    vat: vat,
+    total: netProceeds
+});
+
+
+                showToast(`ขายหุ้น ${symbol} จำนวน ${qty.toLocaleString()} หุ้นเรียบร้อยแล้ว!`, 'success');
             }
 
             closeModal('modal-trade');
@@ -2018,7 +2281,7 @@ riskContainer.innerHTML = riskHtml;
 
     strategyDescriptionElement.innerText = descriptions[strategy] || '';
 }
-    
+
 function updateAITargetYieldHint() {
     const capital =
         parseFloat(document.getElementById('ai-capital-input').value) || 100000;
@@ -2033,7 +2296,7 @@ function updateAITargetYieldHint() {
 }
 
         function generateAIPortfolio() {
-            
+
             const capitalInput = document.getElementById('ai-capital-input');
             const capital = Number(capitalInput.value);
 
@@ -2142,7 +2405,7 @@ candidates.sort((a, b) =>
 }
             strategyDescriptionElement.innerText = strategyDescription;
 
-            
+
 
 // Dynamically select stocks based on investment capital
 let minStockCount = 1;
@@ -2214,7 +2477,7 @@ if (selectedBasket.length === 0) {
     return;
 }
 
-            
+
 
 
 // Dynamic Weight Distribution based on stock scores
@@ -2281,6 +2544,15 @@ const positiveScores = scores.map(score =>
     Math.max(score, 0.000001)
 );
 
+
+// คำนวณ Concentration Risk ด้วย Herfindahl-Hirschman Index (HHI)
+// ใช้น้ำหนักพอร์ตที่จัดสรรจริงในรูปทศนิยม
+function calculatePortfolioHHI(weights) {
+    return weights.reduce((total, weight) => {
+        return total + Math.pow(weight, 2);
+    }, 0);
+}
+
 let cappedWeights = [];
 
 if (stockCount === 1) {
@@ -2343,6 +2615,28 @@ if (stockCount === 1) {
         }
     }
 }
+
+            // คำนวณความกระจุกตัวของพอร์ตด้วย Herfindahl-Hirschman Index (HHI)
+const portfolioHHI = cappedWeights.reduce(
+    (total, weight) => total + Math.pow(weight, 2),
+    0
+);
+
+const portfolioHHIScore = Math.round(portfolioHHI * 10000);
+
+let concentrationLevel = '';
+
+if (portfolioHHIScore < 1500) {
+    concentrationLevel = 'กระจุกตัวต่ำ';
+} else if (portfolioHHIScore < 2500) {
+    concentrationLevel = 'กระจุกตัวปานกลาง';
+} else {
+    concentrationLevel = 'กระจุกตัวสูง';
+}
+
+console.log('Portfolio HHI:', portfolioHHIScore);
+console.log('Concentration:', concentrationLevel);
+
             let totalEstDiv = 0;
             const allocationItems = [];
 
@@ -2353,7 +2647,7 @@ if (stockCount === 1) {
                 const grossDiv = shares * stk.dps;
                 const tax = grossDiv * dividendTaxRate;
                 const netDiv = grossDiv - tax;
-   
+
                 totalEstDiv += netDiv;
 
                 allocationItems.push({
@@ -2378,6 +2672,12 @@ if (stockCount === 1) {
         : `สมดุลระหว่าง Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
                 });
             });
+
+            // สรุปข้อมูลความกระจุกตัวของพอร์ต
+const portfolioRisk = {
+    hhi: portfolioHHIScore,
+    concentration: concentrationLevel
+};
 
             const overallAvgYield = (totalEstDiv / capital) * 100;
             let projectedYear3Income;
@@ -2420,12 +2720,13 @@ if (reinvestDividends) {
         Math.pow(1 + dividendGrowthRate, 20);
 }
             window.appState.aiRecommendedBasket = {
-                capital: capital,
-                targetIncome: targetIncome,
-                estIncome: totalEstDiv,
-                avgYield: overallAvgYield,
-                items: allocationItems
-            };
+    capital: capital,
+    targetIncome: targetIncome,
+    estIncome: totalEstDiv,
+    avgYield: overallAvgYield,
+    portfolioRisk: portfolioRisk,
+    items: allocationItems
+};
 
             // Render Results UI
             document.getElementById('ai-results-placeholder').classList.add('hidden');
@@ -2433,6 +2734,92 @@ if (reinvestDividends) {
 
             document.getElementById('res-capital').innerText = `฿${capital.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
             document.getElementById('res-avg-yield').innerText = `${overallAvgYield.toFixed(2)}%`;
+            // แสดงข้อมูลความกระจุกตัวของพอร์ต
+document.getElementById('res-hhi').innerText =
+    portfolioRisk.hhi.toLocaleString('en-US');
+
+document.getElementById('res-concentration').innerText =
+    portfolioRisk.concentration;
+
+
+// Portfolio Risk Analysis
+const riskBadge = document.getElementById('risk-analysis-badge');
+
+const riskItems = window.appState.aiRecommendedBasket.items || [];
+
+// 1. Top 3 stock concentration
+const topThreeStocks = [...riskItems]
+    .sort((a, b) => Number(b.weightPct) - Number(a.weightPct))
+    .slice(0, 3);
+
+const topThreeWeight = topThreeStocks.reduce(
+    (sum, item) => sum + Number(item.weightPct || 0),
+    0
+);
+
+// 2. Payout Ratio warning
+const highPayoutStocks = riskItems.filter(
+    item => Number(item.payoutRatio) > 1
+);
+
+// 3. HHI display
+document.getElementById('risk-hhi-value').innerText =
+    `HHI: ${portfolioRisk.hhi.toLocaleString('en-US')}`;
+
+document.getElementById('risk-concentration-message').innerText =
+    portfolioRisk.concentration;
+
+document.getElementById('risk-top-three').innerText =
+    `Top 3 Stocks: ${topThreeWeight.toFixed(2)}%`;
+
+// 4. HHI bar (scale 0–10,000)
+const hhiBar = document.getElementById('risk-hhi-bar');
+hhiBar.style.width = `${Math.min(portfolioRisk.hhi / 100, 100)}%`;
+
+if (portfolioRisk.hhi >= 2500) {
+    riskBadge.innerText = 'High Risk';
+    riskBadge.className =
+        'text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30';
+    hhiBar.className = 'h-full bg-red-500 rounded-full';
+} else if (portfolioRisk.hhi >= 1500) {
+    riskBadge.innerText = 'Moderate Risk';
+    riskBadge.className =
+        'text-xs font-bold px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30';
+    hhiBar.className = 'h-full bg-amber-500 rounded-full';
+} else {
+    riskBadge.innerText = 'Low Risk';
+    riskBadge.className =
+        'text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+    hhiBar.className = 'h-full bg-emerald-500 rounded-full';
+}
+
+// 5. Dividend Sustainability
+const payoutMessage = highPayoutStocks.length > 0
+    ? `ควรตรวจสอบ Payout Ratio ของ ${highPayoutStocks.map(item =>
+        `${item.symbol} (${(Number(item.payoutRatio) * 100).toFixed(2)}%)`
+      ).join(', ')} เนื่องจากสูงกว่า 100%`
+    : 'ไม่พบหุ้นที่มี Payout Ratio สูงกว่า 100% ในข้อมูลที่ระบบได้รับ';
+
+document.getElementById('risk-payout-message').innerText =
+    payoutMessage;
+
+// 6. Risk consideration
+const consideration = [];
+
+if (portfolioRisk.hhi >= 2500) {
+    consideration.push('พอร์ตมีการกระจุกตัวสูง ควรพิจารณาการกระจายการลงทุนเพิ่มเติม');
+}
+
+if (highPayoutStocks.length > 0) {
+    consideration.push('ควรตรวจสอบกำไร กระแสเงินสด และประวัติการจ่ายปันผลของหุ้นที่มี Payout Ratio สูง');
+}
+
+if (consideration.length === 0) {
+    consideration.push('ควรติดตามผลประกอบการ ความสามารถในการจ่ายปันผล และสัดส่วนการลงทุนอย่างสม่ำเสมอ');
+}
+
+document.getElementById('risk-consideration-message').innerText =
+    consideration.join('\n');
             document.getElementById('res-est-income').innerText = `฿${totalEstDiv.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year10-income').innerText = `฿${projectedYear10Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year3-income').innerText = `฿${projectedYear3Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -2459,7 +2846,7 @@ if (reinvestDividends) {
                 badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 mb-1';
             }
 
-            
+
 // Render Table Breakdown
 const tbody = document.getElementById('ai-breakdown-body');
 let tbodyHtml = '';
@@ -2618,80 +3005,88 @@ if (reasonContainer) {
         // Execute One-Click Auto-Invest
 function executeAIAutoInvest() {
     const basket = window.appState.aiRecommendedBasket;
-    if (!basket || !basket.items || basket.items.length === 0) return;
+    if (!basket || !Array.isArray(basket.items) || basket.items.length === 0) {
+        showToast('ไม่พบรายการหุ้นที่ AI แนะนำ กรุณาสร้างพอร์ตก่อน', 'error');
+        return;
+    }
 
-    const cashAvailable = window.appState.cashBalance;
+    const cashAvailable = Number(window.appState.cashBalance) || 0;
     const COMMISSION_RATE = 0.0015;
+    const VAT_RATE = 0.07;
 
-    // Create executable basket based on whole shares
-    const items = basket.items.map(item => ({
-        ...item,
-        shares: Math.floor(item.investment / item.price)
-    }));
+    if (cashAvailable <= 0) {
+        showToast('เงินสดคงเหลือไม่เพียงพอสำหรับการลงทุน', 'error');
+        return;
+    }
 
-    // Calculate actual investment + commission
-    items.forEach(item => {
-        item.investment = item.shares * item.price;
-        item.commission = item.investment * COMMISSION_RATE;
-        item.totalCost = item.investment + item.commission;
+    // คำนวณจำนวนหุ้นเต็ม พร้อมค่าคอมมิชชันและ VAT
+    const items = basket.items.map(item => {
+        const price = Number(item.price) || 0;
+        const shares = price > 0
+            ? Math.floor((Number(item.investment) || 0) / price)
+            : 0;
+
+        const investment = shares * price;
+        const commission = investment * COMMISSION_RATE;
+        const vat = commission * VAT_RATE;
+
+        return {
+            ...item,
+            price,
+            shares,
+            investment,
+            commission,
+            vat,
+            totalCost: investment + commission + vat
+        };
     });
 
-    let totalRequired = items.reduce(
-        (sum, item) => sum + item.totalCost,
-        0
-    );
+    const calculateTotal = () =>
+        items.reduce((sum, item) => sum + item.totalCost, 0);
 
-    // Reduce shares until the basket fits within available cash
-    while (totalRequired > cashAvailable) {
+    let totalRequired = calculateTotal();
+
+    // ลดจำนวนหุ้นจนกว่ามูลค่ารวม รวมค่าคอมมิชชันและ VAT จะไม่เกินเงินสด
+    while (totalRequired > cashAvailable + 0.000001) {
         const adjustableItems = items
             .filter(item => item.shares > 0)
             .sort((a, b) => b.totalCost - a.totalCost);
 
         if (adjustableItems.length === 0) {
-            showToast(
-                'Unable to fit AI basket within available cash.',
-                'error'
-            );
+            showToast('เงินสดไม่เพียงพอสำหรับซื้อหุ้นตามพอร์ต AI', 'error');
             return;
         }
 
         const item = adjustableItems[0];
-
         item.shares -= 1;
         item.investment = item.shares * item.price;
         item.commission = item.investment * COMMISSION_RATE;
-        item.totalCost = item.investment + item.commission;
+        item.vat = item.commission * VAT_RATE;
+        item.totalCost = item.investment + item.commission + item.vat;
 
-        totalRequired = items.reduce(
-            (sum, item) => sum + item.totalCost,
-            0
-        );
+        totalRequired = calculateTotal();
     }
 
-    
-const executableItems = items.filter(item => item.shares > 0);
+    const executableItems = items.filter(item => item.shares > 0);
 
-// Require all AI-selected stocks to be purchased
-if (executableItems.length !== basket.items.length) {
-    showToast(
-        `เงินลงทุนไม่เพียงพอสำหรับซื้อหุ้นครบ ${basket.items.length} ตัว กรุณาเพิ่มเงินลงทุนหรือสร้างพอร์ตใหม่`,
-        'error'
-    );
-    return;
-}
+    // ต้องซื้อหุ้นได้ครบทุกตัวที่ AI เลือก มิฉะนั้นยกเลิกทั้งรายการ
+    if (executableItems.length !== basket.items.length) {
+        showToast(
+            `เงินลงทุนไม่เพียงพอสำหรับซื้อหุ้นครบ ${basket.items.length} ตัว กรุณาเพิ่มเงินลงทุนหรือสร้างพอร์ตใหม่`,
+            'error'
+        );
+        return;
+    }
 
-if (totalRequired > cashAvailable) {
-    showToast(
-        'เงินสดไม่เพียงพอสำหรับการลงทุน',
-        'error'
-    );
-    return;
-}
+    // ตรวจสอบยอดเงินอีกครั้งก่อนทำรายการจริง
+    if (totalRequired > (Number(window.appState.cashBalance) || 0) + 0.000001) {
+        showToast('เงินสดไม่เพียงพอสำหรับการลงทุน', 'error');
+        return;
+    }
 
     // Execute trades
     executableItems.forEach(item => {
         const cost = item.totalCost;
-
         window.appState.cashBalance -= cost;
 
         if (!window.appState.portfolio[item.symbol]) {
@@ -2702,34 +3097,31 @@ if (totalRequired > cashAvailable) {
         }
 
         const position = window.appState.portfolio[item.symbol];
-
         const prevShares = position.shares;
         const prevCost = prevShares * position.avgPrice;
         const newShares = prevShares + item.shares;
 
-        const newAvgPrice =
-            newShares > 0
-                ? (prevCost + item.investment) / newShares
-                : 0;
-
         position.shares = newShares;
-        position.avgPrice = newAvgPrice;
+        position.avgPrice = newShares > 0
+            ? (prevCost + item.investment) / newShares
+            : 0;
 
-        // Log transaction
+        // บันทึกค่าคอมมิชชันและ VAT แยกในประวัติธุรกรรม
         window.appState.transactions.unshift({
-    time: new Date().toLocaleTimeString(),
-    type: 'AI_AUTO_INVEST',
-    symbol: item.symbol,
-    shares: item.shares,
-    price: item.price,
-    grossAmount: item.investment,
-    commission: item.commission,
-    total: cost
-});
+            time: new Date().toLocaleTimeString(),
+            type: 'AI_AUTO_INVEST',
+            symbol: item.symbol,
+            shares: item.shares,
+            price: item.price,
+            grossAmount: item.investment,
+            commission: item.commission,
+            vat: item.vat,
+            total: cost
+        });
     });
 
-    // Prevent tiny floating-point negative cash
-    if (window.appState.cashBalance < 0) {
+    // ป้องกันเศษค่าทศนิยมติดลบจากการคำนวณ
+    if (window.appState.cashBalance < 0 && window.appState.cashBalance > -0.000001) {
         window.appState.cashBalance = 0;
     }
 
@@ -2737,10 +3129,10 @@ if (totalRequired > cashAvailable) {
     renderPortfolioHoldings();
 
     showToast(
-        `AI Portfolio Allocation Executed Successfully! Total ฿${totalRequired.toLocaleString('en-US', {
+        `จัดพอร์ตลงทุนด้วย AI สำเร็จแล้ว! มูลค่ารวม ฿${totalRequired.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
-        })}`,
+        })} (รวมค่าคอมมิชชันและ VAT แล้ว)`,
         'success'
     );
 
@@ -3024,6 +3416,16 @@ function updatePortfolioHeaderSummary() {
             maximumFractionDigits: 2
         })}`;
 
+const vat = tx.commission * 0.07;
+
+document.getElementById('tx-detail-vat').innerText =
+    `฿${vat.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}`;
+
+
+
     // BUY / SELL labels
     document.getElementById('tx-detail-gross-label').innerText =
         isSell ? 'Gross Proceeds' : 'Order Value';
@@ -3205,7 +3607,7 @@ if (!stk) return;
 
         html += `
             <tr class="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
-                
+
                 <td class="p-3 text-slate-400 whitespace-nowrap">
                     ${tx.time}
                 </td>
@@ -3248,7 +3650,7 @@ if (!stk) return;
     });
 
     tbody.innerHTML = html;
-}  
+}
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -3281,7 +3683,8 @@ if (!stk) return;
     }
 }
 
-    function toggleInfoPopover(id) {
+
+function toggleInfoPopover(id) {
     const popover = document.getElementById(id);
 
     if (!popover) return;
@@ -3295,21 +3698,57 @@ if (!stk) return;
     popover.classList.toggle('hidden');
 }
 
-    document.addEventListener('click', function (event) {
-    if (!event.target.closest('.info-wrapper')) {
-        document.querySelectorAll('.info-popover').forEach(el => {
-            el.classList.add('hidden');
-        });
+// ปิดกล่องข้อมูลเมื่อคลิกด้านนอก
+document.addEventListener('click', function(event) {
+
+    // Concentration Risk
+    const concentration = document.getElementById('info-concentration-risk');
+    const concentrationButton = document.querySelector(
+        '[aria-label="Concentration Risk information"]'
+    );
+
+    if (
+        concentration &&
+        !concentration.contains(event.target) &&
+        !concentrationButton?.contains(event.target)
+    ) {
+        concentration.classList.add('hidden');
     }
+
+            // Portfolio HHI
+    const portfolioHHI = document.getElementById('info-portfolio-hhi');
+    const portfolioHHIButton = document.querySelector(
+        '[aria-label="Portfolio HHI information"]'
+    );
+
+    if (
+        portfolioHHI &&
+        !portfolioHHI.contains(event.target) &&
+        !portfolioHHIButton?.contains(event.target)
+    ) {
+        portfolioHHI.classList.add('hidden');
+    }
+
+    // กล่องข้อมูลอื่น เช่น Est. Annual Income
+    document.querySelectorAll('.info-wrapper').forEach(wrapper => {
+        if (!wrapper.contains(event.target)) {
+            wrapper.querySelectorAll('.info-popover').forEach(popover => {
+                popover.classList.add('hidden');
+            });
+        }
+    });
+
 });
 
     </script>
 </body>
-    
+
 <script>
 async function loadSETHDIndex() {
     try {
-        const response = await fetch('/api/sethd-index');
+        const response = await fetch(
+    'https://cryp2b-api.cryp2b-methawee.workers.dev/api/sethd-index'
+);
 
         if (!response.ok) {
             throw new Error('Unable to load SET HD Index');

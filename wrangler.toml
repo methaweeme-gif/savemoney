@@ -1,0 +1,8 @@
+name = "cryp2b-api"
+main = "cloudflare-worker/index.js"
+compatibility_date = "2026-10-02"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "STOCK_CACHE"
+id = "009ab5466b5846c9b69fcf711d4f396d"
