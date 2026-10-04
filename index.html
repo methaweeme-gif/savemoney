@@ -3084,8 +3084,15 @@ if (reasonContainer) {
         // Execute One-Click Auto-Invest
 function executeAIAutoInvest() {
     const basket = window.appState.aiRecommendedBasket;
+
     if (!basket || !Array.isArray(basket.items) || basket.items.length === 0) {
         showToast('ไม่พบรายการหุ้นที่ AI แนะนำ กรุณาสร้างพอร์ตก่อน', 'error');
+        return;
+    }
+
+    // ป้องกันการกดซื้อพอร์ตเดิมซ้ำ
+    if (basket.executed === true) {
+        showToast('พอร์ต AI นี้ดำเนินการลงทุนไปแล้ว กรุณาสร้างพอร์ตใหม่ก่อนลงทุนอีกครั้ง', 'error');
         return;
     }
 
@@ -3098,11 +3105,18 @@ function executeAIAutoInvest() {
         return;
     }
 
+    // คำนวณงบลงทุนที่ AI จัดสรรทั้งหมด
+    const requestedInvestment = basket.items.reduce((sum, item) => {
+        return sum + Math.max(0, Number(item.investment) || 0);
+    }, 0);
+
     // คำนวณจำนวนหุ้นเต็ม พร้อมค่าคอมมิชชันและ VAT
     const items = basket.items.map(item => {
         const price = Number(item.price) || 0;
+        const requestedAmount = Math.max(0, Number(item.investment) || 0);
+
         const shares = price > 0
-            ? Math.floor((Number(item.investment) || 0) / price)
+            ? Math.floor(requestedAmount / price)
             : 0;
 
         const investment = shares * price;
@@ -3120,52 +3134,51 @@ function executeAIAutoInvest() {
         };
     });
 
-    const calculateTotal = () =>
-        items.reduce((sum, item) => sum + item.totalCost, 0);
-
-    let totalRequired = calculateTotal();
-
-    // ลดจำนวนหุ้นจนกว่ามูลค่ารวม รวมค่าคอมมิชชันและ VAT จะไม่เกินเงินสด
-    while (totalRequired > cashAvailable + 0.000001) {
-        const adjustableItems = items
-            .filter(item => item.shares > 0)
-            .sort((a, b) => b.totalCost - a.totalCost);
-
-        if (adjustableItems.length === 0) {
-            showToast('เงินสดไม่เพียงพอสำหรับซื้อหุ้นตามพอร์ต AI', 'error');
-            return;
-        }
-
-        const item = adjustableItems[0];
-        item.shares -= 1;
-        item.investment = item.shares * item.price;
-        item.commission = item.investment * COMMISSION_RATE;
-        item.vat = item.commission * VAT_RATE;
-        item.totalCost = item.investment + item.commission + item.vat;
-
-        totalRequired = calculateTotal();
-    }
+    const totalRequired = items.reduce(
+        (sum, item) => sum + item.totalCost,
+        0
+    );
 
     const executableItems = items.filter(item => item.shares > 0);
 
-    // ต้องซื้อหุ้นได้ครบทุกตัวที่ AI เลือก มิฉะนั้นยกเลิกทั้งรายการ
+    // ต้องสามารถซื้อหุ้นได้ครบทุกตัวที่ AI เลือก
     if (executableItems.length !== basket.items.length) {
         showToast(
-            `เงินลงทุนไม่เพียงพอสำหรับซื้อหุ้นครบ ${basket.items.length} ตัว กรุณาเพิ่มเงินลงทุนหรือสร้างพอร์ตใหม่`,
+            'ไม่สามารถซื้อหุ้นได้ครบทุกตัวตามพอร์ต AI กรุณาตรวจสอบราคาและงบลงทุน',
             'error'
         );
         return;
     }
 
-    // ตรวจสอบยอดเงินอีกครั้งก่อนทำรายการจริง
-    if (totalRequired > (Number(window.appState.cashBalance) || 0) + 0.000001) {
-        showToast('เงินสดไม่เพียงพอสำหรับการลงทุน', 'error');
+    // ตรวจสอบงบ AI และยอดซื้อจริงรวมค่าธรรมเนียม
+    const requiredAmount = Math.max(requestedInvestment, totalRequired);
+    const shortfall = requiredAmount - cashAvailable;
+
+    if (shortfall > 0.000001) {
+        const formatMoney = amount =>
+            '฿' + amount.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+        showToast(
+            `งบลงทุนไม่เพียงพอ | ต้องใช้ ${formatMoney(requiredAmount)} | มี ${formatMoney(cashAvailable)} | ขาด ${formatMoney(shortfall)}`,
+            'error'
+        );
+
         return;
     }
 
-    // Execute trades
+    // ตรวจสอบเงินสดอีกครั้งก่อนเริ่มทำรายการ
+    if (totalRequired > (Number(window.appState.cashBalance) || 0) + 0.000001) {
+        showToast('เงินสดไม่เพียงพอเมื่อรวมค่าคอมมิชชันและ VAT', 'error');
+        return;
+    }
+
+    // Execute trades หลังผ่านการตรวจสอบงบทั้งหมดแล้วเท่านั้น
     executableItems.forEach(item => {
         const cost = item.totalCost;
+
         window.appState.cashBalance -= cost;
 
         if (!window.appState.portfolio[item.symbol]) {
@@ -3203,6 +3216,9 @@ function executeAIAutoInvest() {
     if (window.appState.cashBalance < 0 && window.appState.cashBalance > -0.000001) {
         window.appState.cashBalance = 0;
     }
+
+    // ทำเครื่องหมายว่าพอร์ตนี้ถูกลงทุนแล้ว
+    basket.executed = true;
 
     updatePortfolioHeaderSummary();
     renderPortfolioHoldings();
