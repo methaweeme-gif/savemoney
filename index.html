@@ -3162,7 +3162,7 @@ function executeAIAutoInvest() {
             });
 
         showToast(
-            `งบลงทุนไม่เพียงพอ | ต้องใช้ ${formatMoney(requiredAmount)} | มี ${formatMoney(cashAvailable)} | ขาด ${formatMoney(shortfall)}`,
+            `งบลงทุนไม่เพียงพอ\nต้องใช้ ${formatMoney(requiredAmount)}\nเงินสดที่มี ${formatMoney(cashAvailable)}\nเงินที่ขาด ${formatMoney(shortfall)}`,
             'error'
         );
 
@@ -3752,24 +3752,47 @@ if (!stk) return;
             if (modal) modal.classList.add('hidden');
         }
 
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
 
-            const toast = document.createElement('div');
-            const bgClass = type === 'success' ? 'bg-emerald-500 text-slate-950 font-bold' : type === 'error' ? 'bg-rose-500 text-white font-bold' : 'bg-slate-800 text-white';
-            const icon = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
+    const toast = document.createElement('div');
 
-            toast.className = `px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center space-x-2.5 transition-all transform translate-y-2 pointer-events-auto ${bgClass}`;
-            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i><span>${message}</span>`;
+    const bgClass = type === 'success'
+        ? 'bg-emerald-500 text-slate-950 font-bold'
+        : type === 'error'
+            ? 'bg-rose-500 text-white font-bold'
+            : 'bg-slate-800 text-white';
 
-            container.appendChild(toast);
+    const icon = type === 'success'
+        ? 'fa-circle-check'
+        : type === 'error'
+            ? 'fa-circle-exclamation'
+            : 'fa-circle-info';
 
-            setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
+    toast.className = `px-4 py-3 rounded-xl shadow-2xl text-xs flex items-start space-x-2.5 transition-all transform translate-y-2 pointer-events-auto ${bgClass}`;
+
+    const iconElement = document.createElement('i');
+    iconElement.className = `fa-solid ${icon} text-base mt-0.5`;
+    iconElement.setAttribute('aria-hidden', 'true');
+
+    const messageElement = document.createElement('span');
+    messageElement.className = 'whitespace-pre-line leading-relaxed';
+    messageElement.textContent = String(message);
+
+    toast.appendChild(iconElement);
+    toast.appendChild(messageElement);
+
+    container.appendChild(toast);
+
+    const duration = String(message).includes('\n') ? 5000 : 3500;
+
+    setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
         function toggleLanguageMenu() {
     const menu = document.getElementById('language-menu');
 
