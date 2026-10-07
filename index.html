@@ -2636,19 +2636,6 @@ if (reinvestDividends) {
 // Dividend Sustainability
 const riskItems = window.appState.aiRecommendedBasket.items || [];
 
-const highPayoutStocks = riskItems.filter(
-    item => Number(item.payoutRatio) > 1
-);
-
-const payoutMessage = highPayoutStocks.length > 0
-    ? `ควรตรวจสอบ Payout Ratio ของ ${highPayoutStocks.map(item =>
-        `${item.symbol} (${(Number(item.payoutRatio) * 100).toFixed(2)}%)`
-      ).join(', ')} เนื่องจากสูงกว่า 100%`
-    : 'ไม่พบหุ้นที่มี Payout Ratio สูงกว่า 100% ในข้อมูลที่ระบบได้รับ';
-
-document.getElementById('risk-payout-message').innerText =
-    payoutMessage;
-
             document.getElementById('res-est-income').innerText = `฿${totalEstDiv.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year10-income').innerText = `฿${projectedYear10Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year3-income').innerText = `฿${projectedYear3Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
