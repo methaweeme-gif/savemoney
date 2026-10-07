@@ -395,89 +395,7 @@ tailwind.config = {
                                     <span id="res-avg-yield" class="text-base font-bold text-cyan-400">7.25%</span>
                                 </div>
 
-<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 relative">
-    <div class="flex items-center gap-1.5">
-        <span class="text-[11px] text-slate-400 font-semibold uppercase">
-            Portfolio HHI
-        </span>
-<button
-    type="button"
-    onclick="event.stopPropagation(); toggleInfoPopover('info-portfolio-hhi')"
-    class="w-4 h-4 rounded-full border border-slate-500 text-slate-400 text-[10px] font-bold flex items-center justify-center cursor-pointer hover:text-cyan-400 hover:border-cyan-400"
-    aria-label="Portfolio HHI information"
->
-    i
-</button>
-    </div>
-
-    <div
-        id="info-portfolio-hhi"
-        class="info-popover hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
-    >
-        <div class="font-bold text-white mb-2">
-            Portfolio HHI
-        </div>
-        <p class="leading-relaxed">
-            HHI (Herfindahl-Hirschman Index) ใช้วัดระดับการกระจุกตัวของเงินลงทุนในหุ้นแต่ละตัวภายในพอร์ต
-        </p>
-        <div class="mt-3 pt-3 border-t border-slate-800">
-            <div class="font-semibold text-white mb-2">เกณฑ์การแปลผลของเว็บไซต์</div>
-            <p class="text-emerald-400">ต่ำกว่า 1,500 : กระจุกตัวต่ำ</p>
-            <p class="text-amber-400 mt-1">1,500–2,499 : กระจุกตัวปานกลาง</p>
-            <p class="text-red-400 mt-1">2,500 ขึ้นไป : กระจุกตัวสูง</p>
-        </div>
-        <p class="mt-3 pt-3 border-t border-slate-800 text-slate-500 leading-relaxed">
-            HHI วัดการกระจุกตัวของเงินลงทุน ไม่ได้วัดความเสี่ยงทั้งหมดของพอร์ต เกณฑ์ดังกล่าวเป็นเกณฑ์ประเมินภายในเว็บไซต์
-        </p>
-    </div>
-
-    <span id="res-hhi" class="text-base font-bold text-cyan-400">-</span>
-</div>
-
-<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 relative">
-    <div class="flex items-center gap-1.5">
-        <span class="text-[11px] text-slate-400 font-semibold block uppercase">
-            Concentration Risk
-        </span>
-        <button
-            type="button"
-           onclick="event.stopPropagation(); toggleInfoPopover('info-concentration-risk')"
-            class="w-4 h-4 rounded-full border border-slate-500 text-slate-400 text-[10px] font-bold flex items-center justify-center cursor-pointer hover:text-cyan-400 hover:border-cyan-400"
-            aria-label="Concentration Risk information"
-        >
-            i
-        </button>
-    </div>
-
-    <div
-        id="info-concentration-risk"
-        class="hidden absolute z-50 left-0 top-6 w-72 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl p-4 text-xs text-slate-300"
-    >
-        <div class="font-bold text-white mb-2">
-            Concentration Risk
-        </div>
-        <p class="leading-relaxed">
-            แสดงระดับความกระจุกตัวของเงินลงทุนในพอร์ต โดยอ้างอิงจากค่า Portfolio HHI
-        </p>
-
-        <div class="mt-3 pt-3 border-t border-slate-800">
-            <div class="font-semibold text-white mb-2">
-                เกณฑ์การแปลผลของเว็บไซต์
-            </div>
-            <p class="text-emerald-400">HHI ต่ำกว่า 1,500: กระจุกตัวต่ำ</p>
-            <p class="text-amber-400 mt-1">HHI 1,500–2,499: กระจุกตัวปานกลาง</p>
-            <p class="text-red-400 mt-1">HHI 2,500 ขึ้นไป: กระจุกตัวสูง</p>
-        </div>
-
-        <p class="mt-3 pt-3 border-t border-slate-800 text-slate-500 leading-relaxed">
-            เป็นการประเมินความกระจุกตัวเท่านั้น ไม่ได้สะท้อนความเสี่ยงทั้งหมด เช่น ความผันผวนหรือความเสี่ยงของธุรกิจแต่ละบริษัท
-        </p>
-    </div>
-
-    <span id="res-concentration" class="text-base font-bold text-amber-400">-</span>
-</div>
-
-                                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+<div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
     <div class="flex items-center gap-1.5">
         <span class="text-[11px] text-slate-400 font-semibold uppercase">
             Est. Annual Income
@@ -598,49 +516,8 @@ tailwind.config = {
 </div>
 
 
-<!-- Portfolio Risk Analysis -->
+<!-- Dividend Sustainability -->
 <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-4">
-    <div class="flex items-center justify-between">
-        <h4 class="text-sm font-bold text-white">
-            Portfolio Risk Analysis
-        </h4>
-
-        <span id="risk-analysis-badge"
-              class="text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30">
-            -
-        </span>
-    </div>
-
-    <!-- Concentration Risk -->
-    <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-300">
-                Concentration Risk
-            </span>
-            <span id="risk-hhi-value" class="text-sm font-bold text-cyan-400">
-                HHI: -
-            </span>
-        </div>
-
-        <div id="risk-concentration-message"
-             class="text-xs text-slate-400 leading-relaxed">
-            รอข้อมูลการวิเคราะห์
-        </div>
-
-        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-            <div id="risk-hhi-bar"
-                 class="h-full bg-red-500 rounded-full"
-                 style="width: 0%">
-            </div>
-        </div>
-
-        <div id="risk-top-three"
-             class="text-xs text-slate-400">
-            Top 3 Stocks: -
-        </div>
-    </div>
-
-    <!-- Dividend Sustainability -->
     <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
         <span class="text-xs font-bold text-slate-300">
             Dividend Sustainability
@@ -649,18 +526,6 @@ tailwind.config = {
         <div id="risk-payout-message"
              class="text-xs text-slate-400 leading-relaxed">
             รอข้อมูล Payout Ratio
-        </div>
-    </div>
-
-    <!-- Risk Consideration -->
-    <div class="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-2">
-        <span class="text-xs font-bold text-amber-400">
-            Risk Consideration
-        </span>
-
-        <div id="risk-consideration-message"
-             class="text-xs text-slate-300 leading-relaxed">
-            ควรพิจารณาความเสี่ยงและข้อมูลพื้นฐานของหุ้นก่อนลงทุน
         </div>
     </div>
 </div>
@@ -2629,14 +2494,6 @@ const positiveScores = scores.map(score =>
 );
 
 
-// คำนวณ Concentration Risk ด้วย Herfindahl-Hirschman Index (HHI)
-// ใช้น้ำหนักพอร์ตที่จัดสรรจริงในรูปทศนิยม
-function calculatePortfolioHHI(weights) {
-    return weights.reduce((total, weight) => {
-        return total + Math.pow(weight, 2);
-    }, 0);
-}
-
 let cappedWeights = [];
 
 if (stockCount === 1) {
@@ -2700,27 +2557,6 @@ if (stockCount === 1) {
     }
 }
 
-            // คำนวณความกระจุกตัวของพอร์ตด้วย Herfindahl-Hirschman Index (HHI)
-const portfolioHHI = cappedWeights.reduce(
-    (total, weight) => total + Math.pow(weight, 2),
-    0
-);
-
-const portfolioHHIScore = Math.round(portfolioHHI * 10000);
-
-let concentrationLevel = '';
-
-if (portfolioHHIScore < 1500) {
-    concentrationLevel = 'กระจุกตัวต่ำ';
-} else if (portfolioHHIScore < 2500) {
-    concentrationLevel = 'กระจุกตัวปานกลาง';
-} else {
-    concentrationLevel = 'กระจุกตัวสูง';
-}
-
-console.log('Portfolio HHI:', portfolioHHIScore);
-console.log('Concentration:', concentrationLevel);
-
             let totalEstDiv = 0;
             const allocationItems = [];
 
@@ -2756,12 +2592,6 @@ console.log('Concentration:', concentrationLevel);
         : `สมดุลระหว่าง Dividend Yield ${stk.yield.toFixed(2)}% และขนาดบริษัทจาก Market Cap`
                 });
             });
-
-            // สรุปข้อมูลความกระจุกตัวของพอร์ต
-const portfolioRisk = {
-    hhi: portfolioHHIScore,
-    concentration: concentrationLevel
-};
 
             const overallAvgYield = (totalEstDiv / capital) * 100;
             let projectedYear3Income;
@@ -2808,7 +2638,6 @@ if (reinvestDividends) {
     targetIncome: targetIncome,
     estIncome: totalEstDiv,
     avgYield: overallAvgYield,
-    portfolioRisk: portfolioRisk,
     items: allocationItems
 };
 
@@ -2818,66 +2647,13 @@ if (reinvestDividends) {
 
             document.getElementById('res-capital').innerText = `฿${capital.toLocaleString('en-US', {maximumFractionDigits: 0})}`;
             document.getElementById('res-avg-yield').innerText = `${overallAvgYield.toFixed(2)}%`;
-            // แสดงข้อมูลความกระจุกตัวของพอร์ต
-document.getElementById('res-hhi').innerText =
-    portfolioRisk.hhi.toLocaleString('en-US');
-
-document.getElementById('res-concentration').innerText =
-    portfolioRisk.concentration;
-
-
-// Portfolio Risk Analysis
-const riskBadge = document.getElementById('risk-analysis-badge');
-
+// Dividend Sustainability
 const riskItems = window.appState.aiRecommendedBasket.items || [];
 
-// 1. Top 3 stock concentration
-const topThreeStocks = [...riskItems]
-    .sort((a, b) => Number(b.weightPct) - Number(a.weightPct))
-    .slice(0, 3);
-
-const topThreeWeight = topThreeStocks.reduce(
-    (sum, item) => sum + Number(item.weightPct || 0),
-    0
-);
-
-// 2. Payout Ratio warning
 const highPayoutStocks = riskItems.filter(
     item => Number(item.payoutRatio) > 1
 );
 
-// 3. HHI display
-document.getElementById('risk-hhi-value').innerText =
-    `HHI: ${portfolioRisk.hhi.toLocaleString('en-US')}`;
-
-document.getElementById('risk-concentration-message').innerText =
-    portfolioRisk.concentration;
-
-document.getElementById('risk-top-three').innerText =
-    `Top 3 Stocks: ${topThreeWeight.toFixed(2)}%`;
-
-// 4. HHI bar (scale 0–10,000)
-const hhiBar = document.getElementById('risk-hhi-bar');
-hhiBar.style.width = `${Math.min(portfolioRisk.hhi / 100, 100)}%`;
-
-if (portfolioRisk.hhi >= 2500) {
-    riskBadge.innerText = 'High Risk';
-    riskBadge.className =
-        'text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30';
-    hhiBar.className = 'h-full bg-red-500 rounded-full';
-} else if (portfolioRisk.hhi >= 1500) {
-    riskBadge.innerText = 'Moderate Risk';
-    riskBadge.className =
-        'text-xs font-bold px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30';
-    hhiBar.className = 'h-full bg-amber-500 rounded-full';
-} else {
-    riskBadge.innerText = 'Low Risk';
-    riskBadge.className =
-        'text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
-    hhiBar.className = 'h-full bg-emerald-500 rounded-full';
-}
-
-// 5. Dividend Sustainability
 const payoutMessage = highPayoutStocks.length > 0
     ? `ควรตรวจสอบ Payout Ratio ของ ${highPayoutStocks.map(item =>
         `${item.symbol} (${(Number(item.payoutRatio) * 100).toFixed(2)}%)`
@@ -2887,23 +2663,6 @@ const payoutMessage = highPayoutStocks.length > 0
 document.getElementById('risk-payout-message').innerText =
     payoutMessage;
 
-// 6. Risk consideration
-const consideration = [];
-
-if (portfolioRisk.hhi >= 2500) {
-    consideration.push('พอร์ตมีการกระจุกตัวสูง ควรพิจารณาการกระจายการลงทุนเพิ่มเติม');
-}
-
-if (highPayoutStocks.length > 0) {
-    consideration.push('ควรตรวจสอบกำไร กระแสเงินสด และประวัติการจ่ายปันผลของหุ้นที่มี Payout Ratio สูง');
-}
-
-if (consideration.length === 0) {
-    consideration.push('ควรติดตามผลประกอบการ ความสามารถในการจ่ายปันผล และสัดส่วนการลงทุนอย่างสม่ำเสมอ');
-}
-
-document.getElementById('risk-consideration-message').innerText =
-    consideration.join('\n');
             document.getElementById('res-est-income').innerText = `฿${totalEstDiv.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year10-income').innerText = `฿${projectedYear10Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('res-year3-income').innerText = `฿${projectedYear3Income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -3830,34 +3589,6 @@ function toggleInfoPopover(id) {
 
 // ปิดกล่องข้อมูลเมื่อคลิกด้านนอก
 document.addEventListener('click', function(event) {
-
-    // Concentration Risk
-    const concentration = document.getElementById('info-concentration-risk');
-    const concentrationButton = document.querySelector(
-        '[aria-label="Concentration Risk information"]'
-    );
-
-    if (
-        concentration &&
-        !concentration.contains(event.target) &&
-        !concentrationButton?.contains(event.target)
-    ) {
-        concentration.classList.add('hidden');
-    }
-
-            // Portfolio HHI
-    const portfolioHHI = document.getElementById('info-portfolio-hhi');
-    const portfolioHHIButton = document.querySelector(
-        '[aria-label="Portfolio HHI information"]'
-    );
-
-    if (
-        portfolioHHI &&
-        !portfolioHHI.contains(event.target) &&
-        !portfolioHHIButton?.contains(event.target)
-    ) {
-        portfolioHHI.classList.add('hidden');
-    }
 
     // กล่องข้อมูลอื่น เช่น Est. Annual Income
     document.querySelectorAll('.info-wrapper').forEach(wrapper => {
