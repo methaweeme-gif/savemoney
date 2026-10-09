@@ -3349,7 +3349,8 @@ if (!stk) return;
                     const mktVal = pos.shares * stk.price;
                     const pnlVal = mktVal - costVal;
                     const pnlPct = (pnlVal / costVal) * 100;
-                    const estAnnualDiv = pos.shares * stk.dps;
+                    const grossAnnualDiv = pos.shares * stk.dps;
+                    const estAnnualDiv = grossAnnualDiv * (1 - 0.10);
 
                     totalHoldingsCost += costVal;
                     totalHoldingsMarketVal += mktVal;
