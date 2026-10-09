@@ -443,6 +443,15 @@ tailwind.config = {
         ฿7,250
     </span>
 </div>
+
+<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 mt-3">
+    <span class="text-[11px] text-slate-400 font-semibold block uppercase">
+        Current Portfolio Est. Net Dividend
+    </span>
+    <span id="res-current-portfolio-income" class="text-base font-bold text-sky-400">
+        ฿0.00
+    </span>
+</div>
 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
     <span class="text-[11px] text-slate-400 font-semibold block uppercase">Year 3 Est. Net Dividend</span>
     <span id="res-year3-income" class="text-base font-bold text-emerald-400">฿0</span>
@@ -3396,6 +3405,10 @@ if (!stk) return;
             document.getElementById('port-total-val').innerText = `฿${totalPortVal.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
             document.getElementById('port-cash-val').innerText = `฿${window.appState.cashBalance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
             document.getElementById('port-div-val').innerText = `฿${totalAnnualDividend.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+            const currentPortfolioIncomeEl = document.getElementById('res-current-portfolio-income');
+            if (currentPortfolioIncomeEl) {
+                currentPortfolioIncomeEl.innerText = `฿${totalAnnualDividend.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+            }
 
             // P&L Card dynamic colors & icons
             const pnlValEl = document.getElementById('port-pnl-val');
